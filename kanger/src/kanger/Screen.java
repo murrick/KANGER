@@ -11,8 +11,8 @@ import kanger.primitives.*;
 import jline.ConsoleReader;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
+//import java.awt.datatransfer.Clipboard;
+//import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,10 @@ import java.util.Scanner;
  */
 public class Screen {
 
-    public static boolean LINE_EDITOR_ENABLE =
-            System.getProperties().getProperty("kanger.disable.line.editor") == null
-                    || System.getProperties().getProperty("kanger.disable.line.editor").equals("false");
+    public static boolean LINE_EDITOR_ENABLE = false;
+	
+     //       System.getProperties().getProperty("kanger.disable.line.editor") == null
+     //               || System.getProperties().getProperty("kanger.disable.line.editor").equals("false");
 
     public static void session(Mind mind) {
         boolean stop = false;
@@ -180,9 +181,9 @@ public class Screen {
 //                                reader.getHistory().getHistoryList().remove(0);
 //                                reader.getHistory().addToHistory(line);
                             } else {
-                                StringSelection selec = new StringSelection(line);
-                                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                                clipboard.setContents(selec, selec);
+                               // StringSelection selec = new StringSelection(line);
+                               // Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                               // clipboard.setContents(selec, selec);
                             }
 
                             Boolean res = mind.getAnalyser().query(line, false);

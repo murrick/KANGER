@@ -26,7 +26,7 @@ public class SysOp {
     private SysOp next = null;
 //    private boolean registered = false;
 
-    public SysOp(Mind mind) {
+    public SysOp(final Mind mind) {
         proc = new IRunnable() {
             @Override
             public Object run(List<Argument> arg) throws RuntimeErrorException {
@@ -175,7 +175,7 @@ public class SysOp {
     public String asString() {
         String str = "=" + name + "(";
         if (params.isEmpty()) {
-            str += (range > 0 ? range : "") + ")";
+            str += (range > 0 ? range + "" : "") + ")";
         } else {
             String par = "";
             int i = 0;
