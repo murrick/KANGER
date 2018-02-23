@@ -20,6 +20,8 @@ public class Predicates {
         /// Системные предикаты
         {
             put("_eq(2)", new SysOp(LibMode.PREDICATE, "_eq", 2, new IRunnable() {
+                
+                @Override
                 public Object run(List<Argument> arg) {
                     int i = -1;
                     if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {

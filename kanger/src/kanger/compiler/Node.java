@@ -16,7 +16,6 @@ public class Node {
     private Node right = null;          /* Правый элемент */
     private Node down = null;           /* Нижний элемент */
     private Node branch = null;         /* Вложенный элемент */
-    private int pos = 0;                // Ссылка на строку редактора
 
     public Domain getD() {
         return d;
@@ -50,15 +49,15 @@ public class Node {
         this.branch = branch;
     }
 
-    public Node clone() {
-        Node n = null;
-        for (Node p = this; p != null; p = p.getDown()) {
-            Node x = new Node();
-            x.setD(p.getD());
-            x.setDown(n);
-            n = x;
-        }
-        return n;
-    }
+//    public Node clone() {
+//        Node n = null;
+//        for (Node p = this; p != null; p = p.getDown()) {
+//            Node x = new Node();
+//            x.setD(p.getD());
+//            x.setDown(n);
+//            n = x;
+//        }
+//        return n;
+//    }
 
 }
