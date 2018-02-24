@@ -14,20 +14,15 @@ import java.io.IOException;
 public class Tree {
 
     private Domain d = null;        // Домен
-    //    private int cuted = 0;          // Признак закрытия ветки
-//    private boolean closed = false; //
-    private boolean used = false;   //
-    private Tree right = null;      // Вправо
-    private Tree down = null;       // Вниз
+    private boolean closed = false;   //
+    private Tree next = null;      // Впр
 
     public Tree() {
     }
 
     public Tree(DataInputStream dis, Mind mind) throws IOException {
-//        cuted = dis.readInt();
         int flags = dis.readInt();
-//        closed = (flags & 0x0001) != 0;
-        used = (flags & 0x0002) != 0;
+        closed = (flags & 0x0002) != 0;
         long id = dis.readLong();
         d = (Domain) mind.getDomains().get(id);
     }
@@ -40,80 +35,31 @@ public class Tree {
         this.d = d;
     }
 
-//    public boolean isClosed() {
-//        return closed;
-//    }
-//
-//    public void setClosed(boolean closed) {
-//        this.closed = closed;
-//    }
-
-    public boolean isUsed() {
-        return used;
+    public boolean isClosed() {
+        return closed;
     }
 
-    public void setUsed(boolean used) {
-        this.used = used;
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
-    public Tree getRight() {
-        return right;
+    public Tree getNext() {
+        return next;
     }
 
-    public void setRight(Tree right) {
-        this.right = right;
+    public void setNext(Tree right) {
+        this.next = right;
     }
-
-    public Tree getDown() {
-        return down;
-    }
-
-    public void setDown(Tree down) {
-        this.down = down;
-    }
-
-//    public int getCuted() {
-//        return cuted;
-//    }
-//
-//    public void setCuted(int cuted) {
-//        this.cuted = cuted;
-//    }
-
-    public Tree cloneDown() {
-        Tree n = null;
-        for (Tree p = this; p != null; p = p.getDown()) {
-            Tree x = new Tree();
-            x.setD(p.getD());
-            x.setDown(n);
-            n = x;
-        }
-        return n;
-    }
-
-    public Tree appendDown(Tree nn) {
-        Tree n = this;
-        while (n.getDown() != null) {
-            n = n.getDown();
-        }
-        n.setDown(nn);
-        return this;
-    }
-
-    public Tree appendRight(Tree nn) {
-        Tree n = this;
-        while (n.getRight() != null) {
-            n = n.getRight();
-        }
-        n.setRight(nn);
-        return this;
-    }
+	
+	public Tree clone() {
+		Tree t = new Tree();
+		t.closed = false;
+		t.d = d;
+		return t;
+	}
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
-//        dos.writeInt(cuted);
-        int flags = //(closed ? 0x0001 : 0)
-//                |
-                (used ? 0x0002 : 0);
+        int flags = (closed ? 0x0002 : 0);
         dos.writeInt(flags);
         dos.writeLong(d.getId());
     }

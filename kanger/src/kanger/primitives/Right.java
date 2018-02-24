@@ -30,28 +30,13 @@ public class Right {
         int flags = dis.readInt();
         cst = (flags & 0x0001) != 0;
         orig = dis.readUTF();
-
         int width = dis.readInt();
         t = null;
         Tree a = null, b = null;
         while (width-- > 0) {
-            int height = dis.readInt();
-            Tree c = null, d;
-            while (height-- > 0) {
-                d = new Tree(dis, mind);
-                if (c == null) {
-                    b = d;
-                } else {
-                    c.setDown(d);
-                }
-                c = d;
-            }
-            if (a == null) {
-                t = b;
-            } else {
-                a.setRight(b);
-            }
-            a = b;
+			Tree d = new Tree(dis, mind);
+			d.setNext(t);
+			t = d;
         }
     }
 
@@ -110,33 +95,19 @@ public class Right {
         dos.writeUTF(orig);
 
         int width = 0;
-        for (Tree r = t; r != null; r = r.getRight()) {
+        for (Tree r = t; r != null; r = r.getNext()) {
             ++width;
         }
         dos.writeInt(width);
-        for (Tree r = t; r != null; r = r.getRight()) {
-            int height = 0;
-            for (Tree q = r; q != null; q = q.getDown()) {
-                ++height;
-            }
-            dos.writeInt(height);
-            for (Tree q = r; q != null; q = q.getDown()) {
-                q.writeCompiledData(dos);
-            }
+        for (Tree r = t; r != null; r = r.getNext()) {
+			r.writeCompiledData(dos);
+
         }
     }
 
-    public int getWidth() {
+    public int size() {
         int cnt = 0;
-        for (Tree x = t; x != null; x = x.getRight()) {
-            ++cnt;
-        }
-        return cnt;
-    }
-
-    public int getHeight() {
-        int cnt = 0;
-        for (Tree x = t; x != null; x = x.getDown()) {
+        for (Tree x = t; x != null; x = x.getNext()) {
             ++cnt;
         }
         return cnt;
@@ -148,7 +119,7 @@ public class Right {
             return false;
         } else {
             Right r = (Right) o;
-            if (r.getHeight() != getHeight() || r.getWidth() != getWidth()) {
+            if (r.size() != size()) {
                 return false;
             }
             for (Tree h1 = t, h2 = r.t; h1 != null && h2 != null; h1 = h1.getRight(), h2 = h2.getRight()) {
