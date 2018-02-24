@@ -2,6 +2,7 @@ package kanger.stores;
 
 import kanger.Screen;
 import kanger.primitives.LogEntry;
+import kanger.primitives.Right;
 import kanger.primitives.Tree;
 import kanger.enums.LogMode;
 
@@ -17,7 +18,7 @@ public class LogStore {
     private List<LogEntry> root = null;
     private boolean enableLogging = true;
 
-    public LogEntry add(LogMode m, Tree t) {
+    public LogEntry add(LogMode m, Right r) {
         if (!enableLogging) {
             return null;
         }
@@ -26,7 +27,7 @@ public class LogStore {
             root.add(new LogEntry(LogMode.ANALIZER, "LOG START AT " + new Date(System.currentTimeMillis()) + " --"));
         }
         LogEntry log = null;
-        List<List<String>> net = Screen.formatTree(t);
+        List<List<String>> net = Screen.formatTree(r);
         for (int i = 0; i < net.get(0).size(); ++i) {
             String s = "";
             for (int k = 0; k < net.size(); ++k) {

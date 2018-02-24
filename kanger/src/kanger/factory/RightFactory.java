@@ -2,7 +2,6 @@ package kanger.factory;
 
 import kanger.Mind;
 import kanger.primitives.Right;
-import kanger.primitives.Tree;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -26,7 +25,7 @@ public class RightFactory {
 
     public Right add() {
         Right p = new Right();
-        p.setRd(++cRight);
+        p.setId(++cRight);
         p.setNext(root);
         root = p;
         current = p;
@@ -35,7 +34,7 @@ public class RightFactory {
 
     public Right get(long rd) {
         for (Right r = root; r != null; r = r.getNext()) {
-            if (r.getRd() == rd) {
+            if (r.getId() == rd) {
                 return r;
             }
         }
@@ -62,7 +61,7 @@ public class RightFactory {
         current = c;
         return current;
 //        for(Right r = root; r != null; r = r.getNext()) {
-//            if(r.getRd() == (Long)objects[0]) {
+//            if(r.getId() == (Long)objects[0]) {
 //                current = r;
 //                return r;
 //            }

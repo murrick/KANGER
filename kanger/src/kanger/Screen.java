@@ -536,15 +536,15 @@ public class Screen {
 
     //
 //
-    public static List<List<String>> formatTree(Tree tt) {
+    public static List<List<String>> formatTree(Right r) {
         List<List<String>> list = new ArrayList<>();
         int depth = 0;
-        for (Tree t = tt; t != null; t = t.getRight()) {
+        for (Tree t : r.getTree()) {
             List<String> v = new ArrayList<>();
             list.add(v);
             int len = 0;
-            for (Tree p = t; p != null; p = p.getDown()) {
-                String s = p.getD().toString();
+            for (Domain d : t.getSequence()) {
+                String s = d.toString();
                 len = Math.max(len, s.length());
                 v.add(s);
             }
@@ -571,8 +571,8 @@ public class Screen {
         return list;
     }
 
-    public static void showTree(Tree t) {
-        List<List<String>> net = formatTree(t);
+    public static void showTree(Right r) {
+        List<List<String>> net = formatTree(r);
         if (net.size() > 0 && net.get(0).size() > 0) {
             for (int i = 0; i < net.get(0).size(); ++i) {
                 for (int k = 0; k < net.size(); ++k) {
@@ -590,10 +590,10 @@ public class Screen {
 //        int i = 0;
         for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
             if (showTree || r.getOrig().isEmpty()) {
-                System.out.printf("\n -- Right %03d: %s\n", r.getRd(), r.getOrig());
-                showTree(r.getT());
+                System.out.printf("\n -- Right %03d: %s\n", r.getId(), r.getOrig());
+                showTree(r);
             } else {
-                System.out.printf("Right %03d: %s\n", r.getRd(), r.getOrig());
+                System.out.printf("Right %03d: %s\n", r.getId(), r.getOrig());
             }
         }
     }

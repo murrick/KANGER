@@ -5,7 +5,6 @@ import kanger.enums.Enums;
 import kanger.enums.LogMode;
 import kanger.exception.ParseErrorException;
 import kanger.exception.RuntimeErrorException;
-import kanger.exception.TValueOutOfOrver;
 import kanger.primitives.*;
 
 import java.util.ArrayList;
@@ -52,16 +51,19 @@ public class Analiser {
     private boolean compareRights(Right r1, Right r2) {
         //mind.release();
         // Последовательно сравниваем все ветки двух правил
-        for (Tree t1 = r1.getT(); t1 != null; t1 = t1.getRight()) {
-            for (Tree t2 = r2.getT(); t2 != null; t2 = t2.getRight()) {
+        for (Tree t1 : r1.getTree()) {
+            for (Tree t2 : r2.getTree()) {
                 // Сравнение двух ветвей
                 boolean result = false;
-                for (Tree d1 = t1; !result && d1 != null; d1 = d1.getDown()) {
-                    for (Tree d2 = t2; !result && d2 != null; d2 = d2.getDown()) {
-                        if (d1.getD().getCuted() == 0 && d2.getD().getCuted() == 0
-                                && d1.getD().isAntc() != d2.getD().isAntc()
-                                && d1.getD().getP().equals(d2.getD().getP())) {
-                            if (compareDomains(d1.getD(), d2.getD(), 0)) {
+                for (Domain d1 : t1.getSequence()) {
+                    if(result) {
+                        break;
+                    }
+                    for (Domain d2 : t2.getSequence()) {
+                        if (d1.getCuted() == 0 && d2.getCuted() == 0
+                                && d1.isAntc() != d2.isAntc()
+                                && d1.getP().equals(d2.getP())) {
+                            if (compareDomains(d1, d2, 0)) {
 //                                d1.setCuted(1);
 //                                d2.setCuted(1);
                                 result = true;
@@ -71,24 +73,24 @@ public class Analiser {
                 }
 
                 if (result) {
-                    for (Tree d1 = t1; d1 != null; d1 = d1.getDown()) {
-                        if (d1.getD().getCuted() == 0) {
-                            d1.getD().setCuted(2);
+                    for (Domain d1 : t1.getSequence()) {
+                        if (d1.getCuted() == 0) {
+                            d1.setCuted(2);
                         }
                     }
-                    for (Tree d2 = t2; d2 != null; d2 = d2.getDown()) {
-                        if (d2.getD().getCuted() == 0) {
-                            d2.getD().setCuted(2);
+                    for (Domain d2 : t2.getSequence()) {
+                        if (d2.getCuted() == 0) {
+                            d2.setCuted(2);
                         }
                     }
                 }
             }
         }
 
-        for (Tree t1 = r1.getT(); t1 != null; t1 = t1.getRight()) {
+        for (Tree t1 : r1.getTree()) {
             boolean closed = false;
-            for (Tree d1 = t1; d1 != null; d1 = d1.getDown()) {
-                if (d1.getD().getCuted() != 0) {
+            for (Domain d1 : t1.getSequence()) {
+                if (d1.getCuted() != 0) {
                     closed = true;
                     break;
                 }
@@ -98,10 +100,10 @@ public class Analiser {
             }
         }
 
-        for (Tree t2 = r2.getT(); t2 != null; t2 = t2.getRight()) {
+        for (Tree t2 : r2.getTree()) {
             boolean closed = false;
-            for (Tree d2 = t2; d2 != null; d2 = d2.getDown()) {
-                if (d2.getD().getCuted() != 0) {
+            for (Domain d2 : t2.getSequence()) {
+                if (d2.getCuted() != 0) {
                     closed = true;
                     break;
                 }
@@ -268,7 +270,7 @@ public class Analiser {
                     Right r = (Right) mind.compileLine(line);
                     if (r != null) {
                         mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
-                        mind.getLog().add(LogMode.ANALIZER, r.getT());
+                        mind.getLog().add(LogMode.ANALIZER, r);
                         mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
                         if (analiser(true)) {
@@ -346,7 +348,7 @@ public class Analiser {
                             Right r = (Right) mind.compileLine(invert(line));
                             if (r != null) {
                                 mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
-                                mind.getLog().add(LogMode.ANALIZER, r.getT());
+                                mind.getLog().add(LogMode.ANALIZER, r);
                                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
                                 if (analiser(false)) {
@@ -383,7 +385,7 @@ public class Analiser {
                         Right r = (Right) mind.compileLine(line);
                         if (r != null) {
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
-                            mind.getLog().add(LogMode.ANALIZER, r.getT());
+                            mind.getLog().add(LogMode.ANALIZER, r);
                             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
 
@@ -406,7 +408,7 @@ public class Analiser {
                                     if (killedRights.size() != 0) {
                                         mind.getLog().add(LogMode.SAVED, "Rights deleted:");
                                         for (Right rr : killedRights) {
-                                            mind.getLog().add(LogMode.SAVED, String.format("\tRight %03d: \t%s", rr.getRd(), rr.getOrig()));
+                                            mind.getLog().add(LogMode.SAVED, String.format("\tRight %03d: \t%s", rr.getId(), rr.getOrig()));
                                         }
                                     }
                                     mind.getLog().add(LogMode.ANALIZER, "SUCCESS: Deleted solves: " + mind.getHypotesisStore().size());

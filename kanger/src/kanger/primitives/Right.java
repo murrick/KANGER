@@ -5,6 +5,10 @@ import kanger.Mind;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -13,55 +17,34 @@ import java.io.IOException;
  */
 public class Right {
 
-    private Tree t = null;              // Ссылка на дерево правила
-//    private int pos = 0;                // Editor line reference
-    private long rd = -1;               // ID Правила
-    private boolean cst = false;        // Правило содержит константы
-    private Right next = null;          // Следующее правило
-    private String orig = "";           // Оригинальная строка
+    private List<Tree> tree = new ArrayList<>();      // Ссылка на дерево правила
+    private long id = -1;                       // ID Правила
+    private Right next = null;                  // Следующее правило
+    private String orig = "";                   // Оригинальная строка
 
 
     public Right() {
     }
 
     public Right(DataInputStream dis, Mind mind) throws IOException {
-        rd = dis.readLong();
-//        pos = dis.readInt();
-        int flags = dis.readInt();
-        cst = (flags & 0x0001) != 0;
+        id = dis.readLong();
         orig = dis.readUTF();
-        int width = dis.readInt();
-        t = null;
-        Tree a = null, b = null;
-        while (width-- > 0) {
-			Tree d = new Tree(dis, mind);
-			d.setNext(t);
-			t = d;
+        int count = dis.readInt();
+        while (count-- > 0) {
+			tree.add(new Tree(dis, mind));
         }
     }
 
-    public Tree getTree() {
-        return t;
+    public List<Tree> getTree() {
+        return tree;
     }
 
-    public void setTree(Tree t) {
-        this.t = t;
+    public long getId() {
+        return id;
     }
 
-    public long getRd() {
-        return rd;
-    }
-
-    public void setRd(long rd) {
-        this.rd = rd;
-    }
-
-    public boolean isCst() {
-        return cst;
-    }
-
-    public void setCst(boolean cst) {
-        this.cst = cst;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Right getNext() {
@@ -72,14 +55,6 @@ public class Right {
         this.next = next;
     }
 
-//    public int getPos() {
-//        return pos;
-//    }
-//
-//    public void setPos(int pos) {
-//        this.pos = pos;
-//    }
-//
     public String getOrig() {
         return orig;
     }
@@ -89,46 +64,41 @@ public class Right {
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
-        dos.writeLong(rd);
-//        dos.writeInt(pos);
-        dos.writeInt(cst ? 0x0001 : 0);
+        dos.writeLong(id);
         dos.writeUTF(orig);
-
-        int width = 0;
-        for (Tree r = t; r != null; r = r.getNext()) {
-            ++width;
-        }
-        dos.writeInt(width);
-        for (Tree r = t; r != null; r = r.getNext()) {
+        dos.writeInt(tree.size());
+        for (Tree r : tree) {
 			r.writeCompiledData(dos);
 
         }
     }
 
     public int size() {
-        int cnt = 0;
-        for (Tree x = t; x != null; x = x.getNext()) {
-            ++cnt;
-        }
-        return cnt;
+        return tree.size();
+    }
+
+    public Tree cloneTree(Tree t) {
+        Tree x = t.clone();
+        tree.add(x);
+        return x;
     }
 	
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !(o instanceof Right)) {
-            return false;
-        } else {
-            Right r = (Right) o;
-            if (r.size() != size()) {
-                return false;
-            }
-            for (Tree h1 = t, h2 = r.t; h1 != null && h2 != null; h1 = h1.getNext(), h2 = h2.getNext()) {
-				if (!h1.getD().equals(h2.getD())) {
-					return false;
-				}
-
-            }
-            return true;
-        }
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (o == null || !(o instanceof Right)) {
+//            return false;
+//        } else {
+//            Right r = (Right) o;
+//            if (r.size() != size()) {
+//                return false;
+//            }
+//            for () {
+//				if (!h1.getD().equals(h2.getD())) {
+//					return false;
+//				}
+//
+//            }
+//            return true;
+//        }
+//    }
 }

@@ -176,10 +176,10 @@ public class TVariable {
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);
-        dos.writeLong(right.getRd());
+        dos.writeLong(right.getId());
 //        dos.writeInt(owner);
         dos.writeLong(area == null ? -1 : area.getId());
-        dos.writeLong(right == null ? -1 : right.getRd());
+        dos.writeLong(right == null ? -1 : right.getId());
         dos.writeUTF(name);
     }
 

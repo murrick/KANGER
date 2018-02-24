@@ -23,13 +23,13 @@ public class Parser {
             new Operation("<<", "_bitleft", 3, 2, 0, false, false), new Operation(">>", "_bitright", 3, 2, 0, false, false), new Operation("&", "_bitand", 3, 2, 0, false, false),
             new Operation("^", "_bitxor", 3, 2, 0, false, false), new Operation("|", "_bitor", 3, 2, 0, false, false),
             new Operation(",", "", 6, 2, 0, false, false),
-        /* 2 */ new Operation("~", "", 10, 1, 1, false, false),
+        /* 2 */
         /* 3 */ new Operation("<", "_lr", 11, 2, 0, false, false), new Operation("<=", "_le", 11, 2, 0, false, false), new Operation(">", "_gr", 11, 2, 0, false, false), new Operation(">=", "_ge", 11, 2, 0, false, false),
         /* 4 */ new Operation("==", "_eq", 12, 2, 0, false, false), new Operation("=", "_eq", 12, 2, 0, false, false), new Operation("!=", "_ne", 12, 2, 0, false, false), new Operation("<>", "_ne", 12, 2, 0, false, false),
         /* 5 */ new Operation("&&", "&", 13, 2, 0, false, true),
         /* 6 */ new Operation("||", "|", 14, 2, 0, false, true),
         /* 7 */ new Operation("->", "}", 15, 2, 0, false, true),
-        /* 8 */ new Operation("@", "", 16, 1, 1, true, false), new Operation("$", "", 16, 1, 1, true, false),
+        /* 8 */ new Operation("@", "", 16, 1, 1, true, false), new Operation("$", "", 16, 1, 1, true, false), new Operation("~", "", 16, 1, 1, false, false),
             new Operation("", "", 0, 0, 0, false, false),};
 
     public static boolean isDelimiter(int ch) {

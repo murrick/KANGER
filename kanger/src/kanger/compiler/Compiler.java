@@ -32,7 +32,9 @@ public class Compiler {
 //        NodeFactory n = new NodeFactory();
 //        buildNet(n, root, antc, Node.STILL);
 //        t = recurseTree(n.getRoot());
-        Tree t = buildNet(r, root, antc, new HashMap<String, Argument>());
+        Tree t = new Tree();
+        r.getTree().add(t);
+        buildNet(r, t, root, antc, new HashMap<String, Argument>());
         mind.resetDummy();
 
 //        r.setT(t);
@@ -58,66 +60,77 @@ public class Compiler {
         return r;
     }
 
-    private Tree buildNet(Right r, PTree root, boolean antc, Map<String, Argument> replacements) throws ParseErrorException {
+    private List<Tree> buildNet(Right r, Tree t, PTree root, boolean antc, Map<String, Argument> replacements) throws ParseErrorException {
+        List<Tree> list = new ArrayList<>();
         switch (root.getName().charAt(0)) {
             case Enums.NOT:
-                return buildNet(r, root.getLeft(), !antc, replacements);
+                list.addAll(buildNet(r, t, root.getLeft(), !antc, replacements));
+                break;
 
             case Enums.AQN:
-            case Enums.PQN: {
-					compileQuantor(root, antc, replacements);
-					return buildNet(r, root.getRight(), antc, replacements);
-				}
+            case Enums.PQN:
+                compileQuantor(root, antc, replacements);
+                list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
+                break;
 
             case Enums.CON:
-            case Enums.COMMA: {
-					Tree lt = buildNet(r, root.getLeft(), antc, replacements);
-					Tree rt = buildNet(r, root.getRight(), antc, replacements);
-					if (antc) {
-						return merge(lt, rt);
-					} else {
-						lt.appendRight(rt);
-						return lt;
-					}
-				}
+            case Enums.COMMA:
+                if (antc) {
+                    Tree x = r.cloneTree(t);
+                    list.addAll(buildNet(r, t, root.getLeft(), antc, replacements));
+                    list.addAll(buildNet(r, x, root.getRight(), antc, replacements));
+                    list.add(x);
+                } else {
+                    list.addAll(buildNet(r, t, root.getLeft(), antc, replacements));
+                    List<Tree> tmp = new ArrayList<>();
+                    for(Tree x : list) {
+                        tmp.addAll(buildNet(r, x, root.getRight(), antc, replacements));
+                    }
+                    list.addAll(tmp);
+                    list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
+                }
+                break;
 
-            case Enums.DIS: {
-					Tree lt = buildNet(r, root.getLeft(), antc, replacements);
-					Tree rt = buildNet(r, root.getRight(), antc, replacements);
-					if (!antc) {
-						return merge(lt, rt);
-					} else {
-						lt.appendRight(rt);
-						return lt;
-					}
-				}
+            case Enums.DIS:
+                Tree x = r.cloneTree(t);
+                list.addAll(buildNet(r, t, root.getLeft(), antc, replacements));
+                list.addAll(buildNet(r, x, root.getRight(), antc, replacements));
+                list.add(x);
+                break;
 
-            case Enums.IMP: {
-					Tree lt = buildNet(r, root.getLeft(), !antc, replacements);
-					Tree rt = buildNet(r, root.getRight(), antc, replacements);
-					if (!antc) {
-						return merge(lt, rt);
-					} else {
-						lt.appendRight(rt);
-						return lt;
-					}
-				}
+            case Enums.IMP:
+                if (antc) {
+                    list.addAll(buildNet(r, t, root.getLeft(), !antc, replacements));
+                    List<Tree> tmp = new ArrayList<>();
+                    for(Tree z : list) {
+                        tmp.addAll(buildNet(r, z, root.getRight(), antc, replacements));
+                    }
+                    list.addAll(tmp);
+                    list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
+                } else {
+                    x = r.cloneTree(t);
+                    list.addAll(buildNet(r, t, root.getLeft(), !antc, replacements));
+                    list.addAll(buildNet(r, x, root.getRight(), antc, replacements));
+                    list.add(x);
+                }
+                break;
 
-            case Enums.LB: {
-					if (root.getLeft() == null) {
-						return buildNet(r, root.getRight(), antc, replacements);
-					} else {
-						return compilePredicate(r, root, antc, replacements);
-					}
-				}
+            case Enums.LB:
+                if (root.getLeft() == null) {
+                    list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
+                } else {
+                    compilePredicate(t, root, antc, replacements);
+                }
+                break;
 
             default: {
-					return compilePredicate(r, aroot, antc, replacements);
-				}
+                compilePredicate(t, root, antc, replacements);
+            }
         }
+        return list;
     }
 
-    private void compileQuantor(PTree root, boolean antc, Map<String,Argument> replacements) throws ParseErrorException {
+    private void compileQuantor(PTree root, boolean antc, Map<String, Argument> replacements) throws ParseErrorException {
         if (replacements.containsKey(root.getLeft().getName())) {
             throw new ParseErrorException(root.getPos(), ParseError.AVAR);
         }
@@ -132,10 +145,7 @@ public class Compiler {
         replacements.put(root.getLeft().getName(), p);
     }
 
-    private Tree compilePredicate(Right r, PTree root, boolean antc, Map<String,Argument> replacements) {
-		if (r.getTree() == null) {
-			r.setTree(new Tree());
-		}
+    private Tree compilePredicate(Tree t, PTree root, boolean antc, Map<String, Argument> replacements) {
         List<Argument> arg = new ArrayList<>();
         Predicate pred = null;
         if (root.isSystem()) {
@@ -149,21 +159,8 @@ public class Compiler {
             parseArgs(arg, root.getRight(), 1, replacements);
             pred = mind.getPredicates().add(root.getLeft().getName(), arg.size());
         }
-        t.setD(mind.getDomains().add(pred, antc, arg, mind.getRights().getRoot()));
+        t.getSequence().add(mind.getDomains().add(pred, antc, arg, mind.getRights().getRoot()));
         return t;
-    }
-
-    private Tree merge(Tree lt, Tree rt) {
-        Tree root = null;
-        for (Tree l = lt; l != null; l = l.getRight()) {
-            for (Tree r = rt; r != null; r = r.getRight()) {
-                Tree t = l.cloneDown();
-                t.appendDown(r.cloneDown());
-                t.setRight(root);
-                root = t;
-            }
-        }
-        return root;
     }
 
     private void parseArgs(List<Argument> arg, PTree root, int level, Map<String, Argument> replacements) {
@@ -199,7 +196,7 @@ public class Compiler {
         } else {
             Argument t;
             if ((t = replacements.get(root.getName())) == null) {
-				t = new Argument(mind.getTerms().add(root.getName()));
+                t = new Argument(mind.getTerms().add(root.getName()));
             }
             arg.add(t);
         }

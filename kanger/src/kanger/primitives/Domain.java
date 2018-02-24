@@ -19,12 +19,10 @@ import java.util.List;
 public class Domain {
 
     private Predicate p = null;                             // Ссылка на описатель предиката
-    private List<Argument> l = new ArrayList<>();   // Массив подстановочных переменных
+    private List<Argument> l = new ArrayList<>();           // Массив подстановочных переменных
     private boolean antc = true;                            // ! или ?
-//    private boolean loged = false;                          // Писать в лог-файл
-//    private boolean cst = false;                            // Правило содержит константы
     private int cuted = 0;                                  // Флаг активности
-    private Right right;                                   // Ссылка на правило
+    private Right right;                                    // Ссылка на правило
     private long id = -1;                                   // id домена
     private Domain next = null;                             // Следующий элемент
 
@@ -191,7 +189,7 @@ public class Domain {
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);
-        dos.writeLong(right.getRd());
+        dos.writeLong(right.getId());
         dos.writeInt(cuted);
         int flags = (antc ? 0x0001 : 0);
 //                | (loged ? 0x0002 : 0)

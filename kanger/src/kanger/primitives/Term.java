@@ -197,7 +197,7 @@ public class Term implements Comparable {
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);
-        dos.writeLong(right.getRd());
+        dos.writeLong(right.getId());
         dos.writeInt(type.ordinal());
         switch (type) {
             case DATE:
