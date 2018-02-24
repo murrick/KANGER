@@ -40,11 +40,11 @@ public class Right {
         }
     }
 
-    public Tree getT() {
+    public Tree getTree() {
         return t;
     }
 
-    public void setT(Tree t) {
+    public void setTree(Tree t) {
         this.t = t;
     }
 
@@ -112,7 +112,7 @@ public class Right {
         }
         return cnt;
     }
-
+	
     @Override
     public boolean equals(Object o) {
         if (o == null || !(o instanceof Right)) {
