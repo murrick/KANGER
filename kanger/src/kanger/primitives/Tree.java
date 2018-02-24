@@ -13,9 +13,10 @@ import java.io.IOException;
  */
 public class Tree {
 
-    private Domain d = null;        // Домен
-    private boolean closed = false;   //
-    private Tree next = null;      // Впр
+    private Domain d = null;        	// Домен
+    private boolean closed = false;   	//
+    private Tree next = null;      		// Вп
+	private Object source = null;		// Указатель на PTree в процессе компиляции
 
     public Tree() {
     }
@@ -51,10 +52,13 @@ public class Tree {
         this.next = right;
     }
 	
-	public Tree clone() {
+	public Tree clone(Right r, Object source) {
 		Tree t = new Tree();
 		t.closed = false;
 		t.d = d;
+		t.source = source;
+		t.setNext(r.getTree());
+		r.setTree(t);
 		return t;
 	}
 

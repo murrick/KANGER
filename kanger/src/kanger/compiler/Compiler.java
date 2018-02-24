@@ -35,7 +35,7 @@ public class Compiler {
         Tree t = buildNet(r, root, antc, new HashMap<String, Argument>());
         mind.resetDummy();
 
-        r.setT(t);
+//        r.setT(t);
 
 //        mind.getCalculator().recalculate(-13);
         /*
