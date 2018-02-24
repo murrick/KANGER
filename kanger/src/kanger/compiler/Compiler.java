@@ -30,11 +30,11 @@ public class Compiler {
         Right r = mind.getRights().add();
 
 //        NodeFactory n = new NodeFactory();
-//        buildNet(n, root, antc, Node.STILL);
+//        construct(n, root, antc, Node.STILL);
 //        t = recurseTree(n.getRoot());
         Tree t = new Tree();
         r.getTree().add(t);
-        buildNet(r, t, root, antc, new HashMap<String, Argument>());
+        construct(r, t, root, antc, new HashMap<String, Argument>(), new ArrayList<Tree>());
         mind.resetDummy();
 
 //        r.setT(t);
@@ -60,64 +60,63 @@ public class Compiler {
         return r;
     }
 
-    private List<Tree> buildNet(Right r, Tree t, PTree root, boolean antc, Map<String, Argument> replacements) throws ParseErrorException {
+    private void construct(Right r, Tree t, PTree root, boolean antc, Map<String, Argument> replacements, List<Tree> clones) throws ParseErrorException {
         List<Tree> list = new ArrayList<>();
+        List<Tree> tmp = new ArrayList<>();
         switch (root.getName().charAt(0)) {
             case Enums.NOT:
-                list.addAll(buildNet(r, t, root.getLeft(), !antc, replacements));
+                construct(r, t, root.getLeft(), !antc, replacements, list);
                 break;
 
             case Enums.AQN:
             case Enums.PQN:
                 compileQuantor(root, antc, replacements);
-                list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
+                construct(r, t, root.getRight(), antc, replacements, list);
                 break;
 
             case Enums.CON:
             case Enums.COMMA:
                 if (antc) {
                     Tree x = r.cloneTree(t);
-                    list.addAll(buildNet(r, t, root.getLeft(), antc, replacements));
-                    list.addAll(buildNet(r, x, root.getRight(), antc, replacements));
                     list.add(x);
+                    construct(r, t, root.getLeft(), antc, replacements, list);
+                    construct(r, x, root.getRight(), antc, replacements, list);
                 } else {
-                    list.addAll(buildNet(r, t, root.getLeft(), antc, replacements));
-                    List<Tree> tmp = new ArrayList<>();
-                    for(Tree x : list) {
-                        tmp.addAll(buildNet(r, x, root.getRight(), antc, replacements));
+                    construct(r, t, root.getLeft(), antc, replacements, list);
+                    for (Tree x : list) {
+                        construct(r, x, root.getRight(), antc, replacements, tmp);
                     }
+                    construct(r, t, root.getRight(), antc, replacements, tmp);
                     list.addAll(tmp);
-                    list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
                 }
                 break;
 
             case Enums.DIS:
                 Tree x = r.cloneTree(t);
-                list.addAll(buildNet(r, t, root.getLeft(), antc, replacements));
-                list.addAll(buildNet(r, x, root.getRight(), antc, replacements));
                 list.add(x);
+                construct(r, t, root.getLeft(), antc, replacements, list);
+                construct(r, x, root.getRight(), antc, replacements, list);
                 break;
 
             case Enums.IMP:
                 if (antc) {
-                    list.addAll(buildNet(r, t, root.getLeft(), !antc, replacements));
-                    List<Tree> tmp = new ArrayList<>();
-                    for(Tree z : list) {
-                        tmp.addAll(buildNet(r, z, root.getRight(), antc, replacements));
+                    construct(r, t, root.getLeft(), !antc, replacements, list);
+                    for (Tree z : list) {
+                        construct(r, z, root.getRight(), antc, replacements, tmp);
                     }
+                    construct(r, t, root.getRight(), antc, replacements, tmp);
                     list.addAll(tmp);
-                    list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
                 } else {
                     x = r.cloneTree(t);
-                    list.addAll(buildNet(r, t, root.getLeft(), !antc, replacements));
-                    list.addAll(buildNet(r, x, root.getRight(), antc, replacements));
                     list.add(x);
+                    construct(r, t, root.getLeft(), !antc, replacements, list);
+                    construct(r, x, root.getRight(), antc, replacements, list);
                 }
                 break;
 
             case Enums.LB:
                 if (root.getLeft() == null) {
-                    list.addAll(buildNet(r, t, root.getRight(), antc, replacements));
+                    construct(r, t, root.getRight(), antc, replacements, list);
                 } else {
                     compilePredicate(t, root, antc, replacements);
                 }
@@ -127,7 +126,7 @@ public class Compiler {
                 compilePredicate(t, root, antc, replacements);
             }
         }
-        return list;
+        clones.addAll(list);
     }
 
     private void compileQuantor(PTree root, boolean antc, Map<String, Argument> replacements) throws ParseErrorException {
