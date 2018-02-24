@@ -57,9 +57,14 @@ public class Analiser {
                 boolean result = false;
                 for (Domain d1 : t1.getSequence()) {
                     if(result) {
+                        t1.setClosed(true);
                         break;
                     }
                     for (Domain d2 : t2.getSequence()) {
+                        if(result) {
+                            t2.setClosed(true);
+                            break;
+                        }
                         if (d1.getCuted() == 0 && d2.getCuted() == 0
                                 && d1.isAntc() != d2.isAntc()
                                 && d1.getP().equals(d2.getP())) {
@@ -87,33 +92,31 @@ public class Analiser {
             }
         }
 
+        boolean closed = true;
         for (Tree t1 : r1.getTree()) {
-            boolean closed = false;
-            for (Domain d1 : t1.getSequence()) {
-                if (d1.getCuted() != 0) {
-                    closed = true;
-                    break;
-                }
-            }
-            if (!closed) {
-                return false;
+            if(!t1.isClosed()) {
+                closed = false;
+                break;
             }
         }
 
+        if(closed) {
+            return true;
+        }
+
+        closed = true;
         for (Tree t2 : r2.getTree()) {
-            boolean closed = false;
-            for (Domain d2 : t2.getSequence()) {
-                if (d2.getCuted() != 0) {
-                    closed = true;
-                    break;
-                }
-            }
-            if (!closed) {
-                return false;
+            if(!t2.isClosed()) {
+                closed = false;
+                break;
             }
         }
 
-        return true;
+        if(closed) {
+            return true;
+        }
+
+        return false;
     }
 
     public boolean analiser(boolean logging) {
