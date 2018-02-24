@@ -122,12 +122,11 @@ public class Right {
             if (r.size() != size()) {
                 return false;
             }
-            for (Tree h1 = t, h2 = r.t; h1 != null && h2 != null; h1 = h1.getRight(), h2 = h2.getRight()) {
-                for (Tree v1 = h1, v2 = h2; v1 != null && v2 != null; v1 = v1.getDown(), v2 = v2.getDown()) {
-                    if (!v1.getD().equals(v2.getD())) {
-                        return false;
-                    }
-                }
+            for (Tree h1 = t, h2 = r.t; h1 != null && h2 != null; h1 = h1.getNext(), h2 = h2.getNext()) {
+				if (!h1.getD().equals(h2.getD())) {
+					return false;
+				}
+
             }
             return true;
         }
