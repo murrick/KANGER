@@ -30,9 +30,16 @@ public class Analiser {
         if (level >= d1.getPredicate().getRange()) {
             d1.setUsed(true);
             d2.setUsed(true);
-            mind.getLog().add(LogMode.ANALIZER, "Equals:");
-            mind.getLog().add(LogMode.ANALIZER, "\t" + d1.toString());
-            mind.getLog().add(LogMode.ANALIZER, "\t" + d2.toString());
+//            if(d1.isInitiated() || d2.isInitiated()) {
+                mind.getSolutions().add(d1.toString());
+//                mind.getLog().add(LogMode.ANALIZER, "Equals:");
+//                mind.getLog().add(LogMode.ANALIZER, "\t" + d1.toString());
+//                mind.getLog().add(LogMode.ANALIZER, "\t" + d2.toString());
+                for(Argument a : d1.getArguments()) {
+                    if(a.isTSet())
+                    mind.getValues().add(a.getT().getName() + "=" + a.getValue());
+                }
+//            }
             return true;
         } else {
             for (int i = 0; i <= level; ++i) {
@@ -40,6 +47,7 @@ public class Analiser {
                     if (!d1.get(i).setValue(d2.get(i).getValue())) {
                         return false;
                     } else {
+//                        d2.getRight().setActive(true);
                         d1.get(i).getT().setSolve(d2);
                         d1.setInitiated(true);
                     }
@@ -47,6 +55,7 @@ public class Analiser {
                     if (!d2.get(i).setValue(d1.get(i).getValue())) {
                         return false;
                     } else {
+//                        d1.getRight().setActive(true);
                         d2.get(i).getT().setSolve(d1);
                         d2.setInitiated(true);
                     }
@@ -139,14 +148,28 @@ public class Analiser {
         boolean result = false;
 
 //        mind.release();
-        mind.clearQueryStatus();
 
-        for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
-            for (Right r2 = r1.getNext(); r2 != null; r2 = r2.getNext()) {
-                if (compareRights(r1, r2)) {
-                    result = true;
+        mind.getActiveRights().clear();
+
+        List<Right> list = new ArrayList<>();
+        for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
+            list.add(0, r);
+        }
+
+        for(int i=0; i<list.size(); ++i) {
+            mind.clearQueryStatus();
+
+            for (Right r1 : list) {
+                for (Right r2 = r1.getNext(); r2 != null; r2 = r2.getNext()) {
+                    if (compareRights(r1, r2)) {
+                        result = true;
+                    }
                 }
             }
+
+            Right r = list.get(0);
+            list.remove(0);
+            list.add(r);
         }
         return result;
     }
@@ -389,6 +412,7 @@ public class Analiser {
 
                                 if (analiser(false)) {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
+                                    logResult();
                                     res = false;
                                 } else if (!isInsertion) {
                                     storeHypo();
@@ -414,8 +438,6 @@ public class Analiser {
                         //mind.release();
 //                        mind.release();
 //                        analiser();
-                        mind.getSolutions().reset();
-                        mind.getValues().reset();
                         mind.release();
                         //analiser();
 
@@ -427,6 +449,9 @@ public class Analiser {
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                             mind.getLog().add(LogMode.ANALIZER, r);
                             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
+
+                            mind.getSolutions().reset();
+                            mind.getValues().reset();
 
 
 //                            if (!isInsertion) {
@@ -455,6 +480,7 @@ public class Analiser {
 
                                 } else {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: TRUE");
+                                    logResult();
                                     res = true;
                                 }
                             } else if (isInsertion) {
@@ -501,4 +527,22 @@ public class Analiser {
         return res;
     }
 
+    private void logResult() {
+        if(mind.getSolutions().size() > 0) {
+            mind.getLog().add(LogMode.SOLVES, "Solves:");
+            int i = 0;
+            for(String log : (List<String>) mind.getSolutions().getRoot()) {
+                mind.getLog().add(LogMode.SOLVES, String.format("\tSolve %03d: %s", ++i, log));
+            }
+        }
+        if(mind.getValues().size() > 0) {
+            mind.getLog().add(LogMode.VALUES, "Values:");
+            int i = 0;
+            for(String log : (List<String>) mind.getValues().getRoot()) {
+                mind.getLog().add(LogMode.VALUES, String.format("\tSolve %03d: %s", ++i, log));
+            }
+        }
+
+
+    }
 }

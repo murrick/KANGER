@@ -52,9 +52,11 @@ public class Mind {
 
     private Set<Long> usedDomains = new HashSet();
     private Set<Long> initiatedDomains = new HashSet();
-    private Set<Long> usedTree = new HashSet();
-    private Set<Long> closedTree = new HashSet();
+    private Set<Long> usedTrees = new HashSet();
+    private Set<Long> closedTrees = new HashSet();
     private Map<Domain, Map<Right, Set<Domain>>> causes = new HashMap<>();
+
+    private Set<Long> activeRights = new HashSet<>();
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
@@ -194,15 +196,16 @@ public class Mind {
         rights.release();
         trees.release();
 
-        tValues.clear();
     }
 
     public void clearQueryStatus() {
         usedDomains.clear();
-        usedTree.clear();
-        closedTree.clear();
+        usedTrees.clear();
+        closedTrees.clear();
         initiatedDomains.clear();
         causes.clear();
+
+        tValues.clear();
     }
 
     public void clear() throws ParseErrorException {
@@ -456,11 +459,11 @@ public class Mind {
     }
 
     public Set<Long> getUsedTrees() {
-        return usedTree;
+        return usedTrees;
     }
 
     public Set<Long> getClosedTrees() {
-        return closedTree;
+        return closedTrees;
     }
 
     public Set<Long> getInitiatedDomains() {
@@ -469,6 +472,10 @@ public class Mind {
 
     public Map<Domain, Map<Right, Set<Domain>>> getCauses() {
         return causes;
+    }
+
+    public Set<Long> getActiveRights() {
+        return activeRights;
     }
 }
 

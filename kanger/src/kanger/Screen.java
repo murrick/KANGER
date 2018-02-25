@@ -25,9 +25,9 @@ import java.util.Scanner;
  */
 public class Screen {
 
-    public static boolean LINE_EDITOR_ENABLE = 
-    System.getProperties().getProperty("kanger.enable.line.editor") != null
-    && System.getProperties().getProperty("kanger.enable.line.editor").equals("true");
+    public static boolean LINE_EDITOR_ENABLE = true;
+//            System.getProperties().getProperty("kanger.enable.line.editor") != null
+//                    && System.getProperties().getProperty("kanger.enable.line.editor").equals("true");
 
     public static void session(Mind mind) {
         boolean stop = false;
@@ -79,7 +79,7 @@ public class Screen {
                             showHelp();
                             break;
                         case 'R': {
-                                Mind m = mind;
+                            Mind m = mind;
 //                            int pos = 0;
 //                            while (line.substring(pos).contains("..")) {
 //                                int ps = line.indexOf("..");
@@ -89,11 +89,11 @@ public class Screen {
 //                                }
 //                            }
 //                            line.replace("/", "");
-                                showRights(m, line.charAt(0) != 'r');
-                            }
-                            break;
+                            showRights(m, line.charAt(0) != 'r');
+                        }
+                        break;
                         case 'B': {
-                                Mind m = mind;
+                            Mind m = mind;
 //                            int pos = 0;
 //                            while (line.substring(pos).contains("..")) {
 //                                int ps = line.indexOf("..");
@@ -103,9 +103,9 @@ public class Screen {
 //                                }
 //                            }
 //                            line.replace("/", "");
-                                showBase(m, line.charAt(0) != 'b', line.trim().contains(" ") ? line.split(" ")[1] : null);
-                            }
-                            break;
+                            showBase(m, line.charAt(0) != 'b', line.trim().contains(" ") ? line.split(" ")[1] : null);
+                        }
+                        break;
                         case 'F':
                             showFunctions(mind, line.charAt(0) != 'f');
                             break;
@@ -140,19 +140,19 @@ public class Screen {
                                     showLog(mind, LogMode.SOLVES);
                                     showLog(mind, LogMode.VALUES);
                                 }
-                                System.out.println(mind.getLog().getCurrent().getRecord());
+                                System.out.println(mind.getLog().getCurrent(LogMode.ANALIZER).getRecord());
 //                            lastQuery = savedQuery;
                             }
                             break;
                         case 'C': {
-                                System.out.printf("Are you sure to clear workspace? [y/N]? ");
-                                String s = new Scanner(System.in).nextLine().toUpperCase();
-                                if (!s.isEmpty() && s.charAt(0) == 'Y') {
-                                    mind.clear();
+                            System.out.printf("Are you sure to clear workspace? [y/N]? ");
+                            String s = new Scanner(System.in).nextLine().toUpperCase();
+                            if (!s.isEmpty() && s.charAt(0) == 'Y') {
+                                mind.clear();
 //                                mind.rollback();
-                                }
                             }
-                            break;
+                        }
+                        break;
 //                        case 'E': {
 //                            System.out.printf("Are you sure to clear working memory? [y/N]? ");
 //                            String s = new Scanner(System.in).nextLine().toUpperCase();
@@ -201,7 +201,8 @@ public class Screen {
                             } else if (mind.getAnalyser().isInsertion()) {
                                 showLog(mind, LogMode.SAVED);
                             }
-                            System.out.println((mind.getLog().getCurrent()).getRecord());
+                            LogEntry lastLine = mind.getLog().getCurrent(LogMode.ANALIZER);
+                            System.out.println(lastLine.getRecord());
                             if (res == null && !mind.getAnalyser().isInsertion()) {
                                 showHypo(mind);
                             }
@@ -278,10 +279,11 @@ public class Screen {
 //            System.out.println();
 //        }
 //    }
+
     public static void showCopyrigt(Mind mind) {
         System.out.printf("KANGER III, Version %s\n"
-                          + "Copiryght (C) 1986-%d, Gunn A. Qusnetsov, Dmitry G. Qusnetsov, All rights reserved!\n"
-                          + "Written by Dmitry G. Qusnetsov. Compiled: %s\n", Version.VERSION_S, Version.YEAR, Version.DATE_S);
+                + "Copiryght (C) 1986-%d, Gunn A. Qusnetsov, Dmitry G. Qusnetsov, All rights reserved!\n"
+                + "Written by Dmitry G. Qusnetsov. Compiled: %s\n", Version.VERSION_S, Version.YEAR, Version.DATE_S);
 //        System.out.printf("Context ID: %s\n", mind.getContextIdString());
     }
 
@@ -355,32 +357,32 @@ public class Screen {
 
     public static void showHelp() {
         System.out.printf(
-            "Available KEYWORDS:\n\n"
-            + "   HELP    - Get this message\n"
-            + "\n"
-            + "   ?       - Check for Rights Collisions\n"
-            + "   BASE    - View DataBase contents\n"
-            + "   RIGHTS  - View compiled-structured Rights list\n"
-            + "   FUNCS   - View defined Functions list\n"
-            + "   KILL    - Remove right\n"
-            + "   LIST    - View Hypotheses list after last work\n"
-            + "   INSERT  - Insert Hypotheses as right\n"
-            + "   AGAIN   - Repeat last question\n"
-            + "   XPLAIN  - Show explanation log\n"
-            + "   SOLVES  - Show solves list\n"
-            + "   VALUES  - Show values list\n"
+                "Available KEYWORDS:\n\n"
+                        + "   HELP    - Get this message\n"
+                        + "\n"
+                        + "   ?       - Check for Rights Collisions\n"
+                        + "   BASE    - View DataBase contents\n"
+                        + "   RIGHTS  - View compiled-structured Rights list\n"
+                        + "   FUNCS   - View defined Functions list\n"
+                        + "   KILL    - Remove right\n"
+                        + "   LIST    - View Hypotheses list after last work\n"
+                        + "   INSERT  - Insert Hypotheses as right\n"
+                        + "   AGAIN   - Repeat last question\n"
+                        + "   XPLAIN  - Show explanation log\n"
+                        + "   SOLVES  - Show solves list\n"
+                        + "   VALUES  - Show values list\n"
 //                        + "   TEXT    - Show source text\n"
-            + "   CLEAR   - Clear workspace\n"
+                        + "   CLEAR   - Clear workspace\n"
 //                        + "   ERASE   - Clear all working memory\n"
-            + "\n"
+                        + "\n"
 //                        + "   PUT     - Save Source file\n"
-            + "   GET     - Load Source file from disk\n"
-            + "   ZIP     - Save compiled code\n"
-            + "   UNZIP   - Load compiled code from file\n"
-            + "\n"
-            + "   QUIT    - Quit KANGER\n"
-            + "\n"
-            + "You can use just FIRST letter of keywords.\n"
+                        + "   GET     - Load Source file from disk\n"
+                        + "   ZIP     - Save compiled code\n"
+                        + "   UNZIP   - Load compiled code from file\n"
+                        + "\n"
+                        + "   QUIT    - Quit KANGER\n"
+                        + "\n"
+                        + "You can use just FIRST letter of keywords.\n"
         );
     }
 
@@ -885,11 +887,11 @@ public class Screen {
                     //mind.getAnalyser().analiser(true);
                     Boolean res = mind.query("?");
                     if (res != null && res) {
-                        System.out.println(mind.getLog().getCurrent().getRecord());
+                        System.out.println(mind.getLog().getCurrent(LogMode.ALL).getRecord());
                         System.out.printf("File %s loaded\n", line);
                         return true;
                     } else {
-                        System.out.println(mind.getLog().getCurrent().getRecord());
+                        System.out.println(mind.getLog().getCurrent(LogMode.ALL).getRecord());
                         System.out.printf("Use XPLAIN command for analisys\n");
                         return false;
                     }
@@ -936,7 +938,7 @@ public class Screen {
 //    }
     public static boolean saveCompiled(Mind mind) throws RuntimeErrorException, ParseErrorException {
         if (!mind.query("?")) {
-            System.out.println(mind.getLog().getCurrent().getRecord());
+            System.out.println(mind.getLog().getCurrent(LogMode.ALL).getRecord());
             System.out.printf("Use XPLAIN command for analisys\n");
             return false;
         }

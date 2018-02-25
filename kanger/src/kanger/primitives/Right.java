@@ -23,8 +23,11 @@ public class Right {
     private String orig = "";                   // Оригинальная строка
     private boolean current = false;            // Вновь введенное правило
 
+    private Mind mind = null;
+
 
     public Right() {
+        this.mind = mind;
     }
 
     public Right(DataInputStream dis, Mind mind) throws IOException {
@@ -34,6 +37,7 @@ public class Right {
         while (count-- > 0) {
 			tree.add(new Tree(dis, mind));
         }
+        this.mind = mind;
     }
 
     public List<Tree> getTree() {
@@ -91,7 +95,19 @@ public class Right {
         tree.add(x);
         return x;
     }
-	
+
+    public boolean isActive() {
+        return mind.getActiveRights().contains(id);
+    }
+
+    public void setActive(boolean active) {
+        if(active) {
+            mind.getActiveRights().add(id);
+        } else {
+            mind.getActiveRights().remove(id);
+        }
+    }
+
 //    @Override
 //    public boolean equals(Object o) {
 //        if (o == null || !(o instanceof Right)) {

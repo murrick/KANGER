@@ -76,11 +76,20 @@ public class LogStore {
         return root;
     }
 
-    public LogEntry getCurrent() {
+    public LogEntry getCurrent(LogMode mode) {
         if (root == null || root.size() == 0) {
             return null;
         } else {
-            return root.get(root.size() - 1);
+            if(mode == LogMode.ALL) {
+                return root.get(root.size() - 1);
+            } else {
+                for (int i = root.size() - 1; i >= 0; --i) {
+                    if (root.get(i).getType() == mode) {
+                        return root.get(i);
+                    }
+                }
+            }
+            return null;
         }
     }
 
