@@ -17,6 +17,7 @@ public class Tree {
 
     private List<Domain> sequence = new ArrayList<>();            // Домены
     private boolean closed = false;
+    private boolean used = false;
 
     public Tree() {
     }
@@ -39,6 +40,14 @@ public class Tree {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     public Tree clone() {

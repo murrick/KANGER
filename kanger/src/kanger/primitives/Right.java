@@ -21,6 +21,7 @@ public class Right {
     private long id = -1;                       // ID Правила
     private Right next = null;                  // Следующее правило
     private String orig = "";                   // Оригинальная строка
+    private boolean current = false;            // Вновь введенное правило
 
 
     public Right() {
@@ -61,6 +62,14 @@ public class Right {
 
     public void setOrig(String orig) {
         this.orig = orig;
+    }
+
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
