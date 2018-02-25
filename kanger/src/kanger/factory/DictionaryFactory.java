@@ -16,8 +16,7 @@ public class DictionaryFactory {
     private Term root = null;
     private Term saved = null;
     private long lastID = 0, saveLastID;
-    private int cCvar = 0, saveCcvar;
-    /* Счетчик C-переменных */
+    private int cCvar = 0, saveCcvar;           // Счетчик C-переменных
 
     private Mind mind = null;
 
@@ -42,7 +41,7 @@ public class DictionaryFactory {
     public Term find(Object o) {
         Term t = new Term(o);
         for (Term dic = root; dic != null; dic = dic.getNext()) {
-            if(dic.compareTo(t) == 0) {
+            if (dic.compareTo(t) == 0) {
                 return dic;
             }
         }
@@ -50,17 +49,17 @@ public class DictionaryFactory {
     }
 
     public Term get() {
-            String temp = String.format("%c%d", Enums.CVC, ++cCvar);
-            return add(temp);
+        String temp = String.format("%c%d", Enums.CVC, ++cCvar);
+        return add(temp);
     }
 
     public Term get(long id) {
-            for (Term dic = root; dic != null; dic = dic.getNext()) {
-                if (id == dic.getId()) {
-                    return dic;
-                }
+        for (Term dic = root; dic != null; dic = dic.getNext()) {
+            if (id == dic.getId()) {
+                return dic;
             }
-            return null;
+        }
+        return null;
     }
 
     public Term getRoot() {
@@ -87,9 +86,17 @@ public class DictionaryFactory {
     }
 
     public void release() {
-        root = saved;
-        cCvar = saveCcvar;
-        lastID = saveLastID;
+        if(root != null && saved != null && root.getId() != saved.getId()) {
+            for (Term t = root; t != null; t = t.getNext()) {
+                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                    t.setNext(null);
+                    break;
+                }
+            }
+            root = saved;
+            cCvar = saveCcvar;
+            lastID = saveLastID;
+        }
     }
 
     public int size() {

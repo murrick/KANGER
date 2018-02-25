@@ -71,7 +71,7 @@ public class PredicateFactory {
 
     public void mark() {
         for (Predicate p = root; p != null; p = p.getNext()) {
-            p.setDummy(p.getSolve());
+            p.setSavedSolve(p.getSolve());
             p.setHypo(null);
             for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
                 s.setCuted(false);
@@ -84,17 +84,32 @@ public class PredicateFactory {
     }
 
     public void release() {
-        for (Predicate p = root; p != null; p = p.getNext()) {
-            p.setSolve(p.getDummy());
-            p.setHypo(null);
-            for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
-                s.setCuted(false);
-                s.setLoged(0);
-//                s.getSubst().clear();
+        if(root != null && saved != null && root.getId() != saved.getId()) {
+            for (Predicate p = root; p != null; p = p.getNext()) {
+                if (p.getNext() != null && p.getNext().getId() == saved.getId()) {
+                    p.setNext(null);
+                    break;
+                }
             }
+            for (Predicate p = root; p != null; p = p.getNext()) {
+                if(p.getSolve().getId() != p.getSavedSolve().getId()) {
+                    for (Solve s = p.getSolve(); p != null; p = p.getNext()) {
+                        if (p.getNext() != null && p.getNext().getId() == p.getSavedSolve().getId()) {
+                            p.setNext(null);
+                            break;
+                        }
+                    }
+                    p.setHypo(null);
+                    p.setSolve(p.getSavedSolve());
+//                    for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
+//                        s.setCuted(false);
+//                        s.setLoged(0);
+//                    }
+                }
+            }
+            root = saved;
+            lastID = saveLastID;
         }
-        root = saved;
-        lastID = saveLastID;
     }
 
     public int size() {

@@ -158,16 +158,16 @@ public class TVariable {
         mind.getTValues().get(this).setSolve(s);
     }
 
-    //    public Predicate getP() {
+    //    public Predicate getPredicate() {
 //        return p;
 //    }
 //
-//    public void setP(Predicate p) {
+//    public void setPredicate(Predicate p) {
 //        this.p = p;
 //    }
 //
     public String toString() {
-        if (getOwner() == 0 || getValue() == null) {
+        if (/*getOwner() == 0 || */getValue() == null) {
             return String.format("%c%d", Enums.TVC, id);
         } else {
             return String.format("%c%d:%s", Enums.TVC, id, getValue().toString());

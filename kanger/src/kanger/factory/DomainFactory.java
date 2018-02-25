@@ -32,9 +32,9 @@ public class DomainFactory {
         if (p != null) {
             return p;
         } else {
-            p = new Domain();
+            p = new Domain(mind);
             p.setNext(root);
-            p.setP(pred);
+            p.setPredicate(pred);
             p.setAntc(antc);
             p.setRight(r);
             p.setId(lastID++);
@@ -50,7 +50,7 @@ public class DomainFactory {
 
     public Domain find(Predicate pred, boolean antc, List<Argument> arg) {
         for (Domain p = root; p != null; p = p.getNext()) {
-            if (p.isAntc() == antc && p.getP() == pred && p.getP().getRange() == pred.getRange() && !p.getL().isEmpty()) {
+            if (p.isAntc() == antc && p.getPredicate() == pred && p.getPredicate().getRange() == pred.getRange() && !p.getArguments().isEmpty()) {
                 int i = 0;
                 for (; i < pred.getRange(); ++i) {
                     if (p.get(i).getValue() != arg.get(i).getValue() || p.get(i).getT() != arg.get(i).getT() || p.get(i).getF() != arg.get(i).getF()) {/*??? .f*/
@@ -93,7 +93,7 @@ public class DomainFactory {
 
     public void init() {
         for (Domain d = root; d != null; d = d.getNext()) {
-            d.setCuted(0);
+            d.setUsed(false);
 //            d.setLoged(false);
         }
     }
@@ -104,8 +104,16 @@ public class DomainFactory {
     }
 
     public void release() {
-        root = saved;
-        lastID = saveLastID;
+        if(root != null && saved != null && root.getId() != saved.getId()) {
+            for (Domain t = root; t != null; t = t.getNext()) {
+                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                    t.setNext(null);
+                    break;
+                }
+            }
+            root = saved;
+            lastID = saveLastID;
+        }
     }
 
     public int size() {

@@ -21,7 +21,7 @@ public class Predicate {
     private int range = 0;                  // К-во параметров
     private long id = -1;                   // Идентификатор
     private Solve solve = null;             // Список решений
-    private Solve dummy = null;             // Временная база
+    private Solve savedSolve = null;             // Временная база
     private Solve hypo = null;              // Гипотезы
 //    private Solve saveHypo = null;          // Сохранение гипотез
 //    private Solve backupHypo = null;
@@ -80,12 +80,12 @@ public class Predicate {
         this.solve = slove;
     }
 
-    public Solve getDummy() {
-        return dummy;
+    public Solve getSavedSolve() {
+        return savedSolve;
     }
 
-    public void setDummy(Solve dummy) {
-        this.dummy = dummy;
+    public void setSavedSolve(Solve savedSolve) {
+        this.savedSolve = savedSolve;
     }
 
     public Solve getHypo() {

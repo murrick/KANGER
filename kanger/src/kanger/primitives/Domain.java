@@ -13,57 +13,50 @@ import java.util.List;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
- *
+ * <p>
  * Описатель варианта решения предиката
  */
 public class Domain {
 
-    private Predicate p = null;                             // Ссылка на описатель предиката
-    private List<Argument> l = new ArrayList<>();           // Массив подстановочных переменных
+    private Predicate predicate = null;                             // Ссылка на описатель предиката
+    private List<Argument> arguments = new ArrayList<>();           // Массив подстановочных переменных
     private boolean antc = true;                            // ! или ?
-    private int cuted = 0;                                  // Флаг активности
+    //    private boolean used = true;                                  // Флаг активности
     private Right right;                                    // Ссылка на правило
     private long id = -1;                                   // id домена
     private Domain next = null;                             // Следующий элемент
 
-    public Domain() {
+    private Mind mind = null;
+
+    public Domain(Mind mind) {
+        this.mind = mind;
     }
 
     public Domain(DataInputStream dis, Mind mind) throws IOException {
         id = dis.readLong();
         mind.getDomainLinks().put(this, dis.readLong());
-        cuted = dis.readInt();
         int flags = dis.readInt();
         antc = (flags & 0x0001) != 0;
-//        loged = (flags & 0x0002) != 0;
-//        cst = (flags & 0x0004) != 0;
+//        used = (flags & 0x0002) != 0;
         long id = dis.readLong();
-        p = (Predicate) mind.getPredicates().get(id);
+        predicate = mind.getPredicates().get(id);
         int count = dis.readInt();
-        l.clear();
+        arguments.clear();
         while (count-- > 0) {
             Argument a = new Argument(dis, mind);
-            l.add(a);
+            arguments.add(a);
         }
     }
 
 
-    public Predicate getP() {
-        return p;
+    public Predicate getPredicate() {
+        return predicate;
     }
 
-    public void setP(Predicate p) {
-        this.p = p;
+    public void setPredicate(Predicate predicate) {
+        this.predicate = predicate;
     }
 
-//    public boolean isLoged() {
-//        return loged;
-//    }
-//
-//    public void setLoged(boolean loged) {
-//        this.loged = loged;
-//    }
-//
     public Right getRight() {
         return right;
     }
@@ -80,14 +73,6 @@ public class Domain {
         this.id = id;
     }
 
-//    public boolean isCst() {
-//        return cst;
-//    }
-//
-//    public void setCst(boolean cst) {
-//        this.cst = cst;
-//    }
-//
     public Domain getNext() {
         return next;
     }
@@ -97,23 +82,39 @@ public class Domain {
     }
 
     public Argument get(int i) {
-        return l.get(i);
+        return arguments.get(i);
     }
 
     public void add(Argument t) {
-        l.add(t);
+        arguments.add(t);
     }
 
-    public int getCuted() {
-        return cuted;
+    public boolean isUsed() {
+        return mind.getUsedDomains().contains(id);
     }
 
-    public void setCuted(int cuted) {
-        this.cuted = cuted;
+    public void setUsed(boolean used) {
+        if (used) {
+            mind.getUsedDomains().add(id);
+        } else {
+            mind.getUsedDomains().remove(id);
+        }
     }
 
-    public List<Argument> getL() {
-        return l;
+    public boolean isInitiated() {
+        return mind.getInitiatedDomains().contains(id);
+    }
+
+    public void setInitiated(boolean on) {
+        if (on) {
+            mind.getInitiatedDomains().add(id);
+        } else {
+            mind.getInitiatedDomains().remove(id);
+        }
+    }
+
+    public List<Argument> getArguments() {
+        return arguments;
     }
 
     public boolean isAntc() {
@@ -124,16 +125,16 @@ public class Domain {
         this.antc = antc;
     }
 
-//    String s = String.format("%c%s(", d.isAntc() ? Enums.ANT : Enums.SUC, d.getP().getName());
+    //    String s = String.format("%c%s(", d.isAntc() ? Enums.ANT : Enums.SUC, d.getPredicate().getName());
 //    int i = 0;
-//    for (TList t : d.getL()) {
+//    for (TList t : d.getArguments()) {
 //        String name = "_";
 //        if (t.isCSet()) name = t.getC().toString();
 //        else if (t.isFSet() && t.getF().getR() != null)
 //            name = t.getF().toString(); // + "=" + t.getF().getR().toString();
 //        else if (t.isTSet() && t.getT().getOwner() != 0) name = t.getT().getValue().getTerm().getName();
 //        s += name;
-//        if (i + 1 != d.getP().getRange()) {
+//        if (i + 1 != d.getPredicate().getRange()) {
 //            s += String.format("%c", Enums.COMMA);
 //        }
 //        ++i;
@@ -146,21 +147,21 @@ public class Domain {
             s += t.getT().toString();
         } else if (t.isFSet()) {
             s += t.getF().toString();
-        } else  {
-                s += t.getValue().toString();
+        } else {
+            s += t.getValue().toString();
         }
         return s;
     }
 
     public String toString() {
         String s = String.format("%c", antc ? Enums.ANT : Enums.SUC);
-        Operation op = Parser.getOp(p.getName());
+        Operation op = Parser.getOp(predicate.getName());
         if (op == null) {
-            s += p.getName() + "(";
+            s += predicate.getName() + "(";
             int i = 0;
-            for (Argument t : l) {
+            for (Argument t : arguments) {
                 s += formatParam(t);
-                if (i + 1 != p.getRange()) {
+                if (i + 1 != predicate.getRange()) {
                     s += (char) Enums.COMMA;
                 }
                 ++i;
@@ -168,14 +169,14 @@ public class Domain {
             s += ")";
         } else if (op.getRange() == 1) {
             if (op.isPost()) {
-                s += formatParam(l.get(0)) + op.getName();
+                s += formatParam(arguments.get(0)) + op.getName();
             } else {
-                s += op.getName() + formatParam(l.get(0));
+                s += op.getName() + formatParam(arguments.get(0));
             }
         } else {
             try {
                 for (int i = 0; i < op.getRange(); ++i) {
-                    s += formatParam(l.get(i));
+                    s += formatParam(arguments.get(i));
                     if (i + 1 < op.getRange()) {
                         s += " " + op.getName() + " ";
                     }
@@ -190,14 +191,13 @@ public class Domain {
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);
         dos.writeLong(right.getId());
-        dos.writeInt(cuted);
         int flags = (antc ? 0x0001 : 0);
-//                | (loged ? 0x0002 : 0)
+//                | (used ? 0x0002 : 0);
 //                | (cst ? 0x0004 : 0);
         dos.writeInt(flags);
-        dos.writeLong(p.getId());
-        dos.writeInt(l.size());
-        for (Argument a : l) {
+        dos.writeLong(predicate.getId());
+        dos.writeInt(arguments.size());
+        for (Argument a : arguments) {
             a.writeCompiledData(dos);
         }
     }
@@ -208,14 +208,14 @@ public class Domain {
             return false;
         } else {
             Domain d = (Domain) o;
-            if (!p.equals(d.p)) {
+            if (!predicate.equals(d.predicate)) {
                 return false;
             }
-            if (l.size() != d.l.size()) {
+            if (arguments.size() != d.arguments.size()) {
                 return false;
             }
-            for (int i = 0; i < l.size(); ++i) {
-                if (!l.get(i).equals(d.l.get(i))) {
+            for (int i = 0; i < arguments.size(); ++i) {
+                if (!arguments.get(i).equals(d.arguments.get(i))) {
                     return false;
                 }
             }

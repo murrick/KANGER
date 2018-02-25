@@ -26,7 +26,7 @@ public class Hypotese {
 
     public Hypotese(Solve solve) {
         this.predicate = solve.getPredicate();
-//        this.solve.addAll(solve.getL());
+//        this.solve.addAll(solve.getArguments());
         for (Argument a : solve.getL()) {
             this.solve.add(a.getValue());
         }

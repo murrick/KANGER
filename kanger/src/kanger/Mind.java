@@ -17,7 +17,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -31,6 +33,7 @@ public class Mind {
     private final TVariableFactory tVars = new TVariableFactory(this);                    // t-переменные
     private final DomainFactory domains = new DomainFactory(this);                            // Список доменов
     private final RightFactory rights = new RightFactory(this);                               // Список правил
+    private final TreeFactory trees = new TreeFactory(this);                               // Список секвенций
 
     private final HypotesesStore hypoteses = new HypotesesStore();                    // Список гипотез
     private final LogStore log = new LogStore();                                      // Протокол вывода
@@ -50,10 +53,16 @@ public class Mind {
 
     private ScriptEngine scryptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
+    private Set<Long> usedDomains = new HashSet();
+    private Set<Long> initiatedDomains = new HashSet();
+    private Set<Long> usedTree = new HashSet();
+    private Set<Long> closedTree = new HashSet();
+
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<Solve, Long> solveLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
+
 
     private transient volatile int currentLevel = 0;
     private transient volatile Solve currentSolve = null;
@@ -79,6 +88,10 @@ public class Mind {
 
     public RightFactory getRights() {
         return rights;
+    }
+
+    public TreeFactory getTrees() {
+        return trees;
     }
 
     public TVariableFactory getTVars() {
@@ -173,6 +186,7 @@ public class Mind {
         domains.mark();
         tVars.mark();
         rights.mark();
+        trees.mark();
     }
 
     public void release() {
@@ -181,8 +195,16 @@ public class Mind {
         domains.release();
         tVars.release();
         rights.release();
+        trees.release();
 
         tValues.clear();
+    }
+
+    public void clearQueryStatus() {
+        usedDomains.clear();
+        usedTree.clear();
+        closedTree.clear();
+        initiatedDomains.clear();
     }
 
     public void clear() throws ParseErrorException {
@@ -449,5 +471,21 @@ public class Mind {
         return tVariableLinks;
     }
 
+
+    public Set<Long> getUsedDomains() {
+        return usedDomains;
+    }
+
+    public Set<Long> getUsedTrees() {
+        return usedTree;
+    }
+
+    public Set<Long> getClosedTrees() {
+        return closedTree;
+    }
+
+    public Set<Long> getInitiatedDomains() {
+        return initiatedDomains;
+    }
 }
 

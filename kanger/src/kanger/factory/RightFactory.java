@@ -15,7 +15,7 @@ public class RightFactory {
     private Right root = null;
     private Right saved = null;
     private Right current = null;
-    private int cRight = 0, lastRight = 0;
+    private int lastID = 0, saveLastID;
 
     private Mind mind = null;
 
@@ -25,7 +25,7 @@ public class RightFactory {
 
     public Right add() {
         Right p = new Right();
-        p.setId(++cRight);
+        p.setId(++lastID);
         p.setNext(root);
         root = p;
         current = p;
@@ -39,10 +39,6 @@ public class RightFactory {
             }
         }
         return null;
-    }
-
-    public int get() {
-        return lastRight;
     }
 
     public Right getRoot() {
@@ -73,8 +69,8 @@ public class RightFactory {
         root = null;
         saved = null;
         current = null;
-        cRight = 0;
-        lastRight = 0;
+        lastID = 0;
+        saveLastID = 0;
     }
 
 //    public void init() {
@@ -89,13 +85,21 @@ public class RightFactory {
 //    }
 
     public void mark() {
-        lastRight = cRight;
+        saveLastID = lastID;
         saved = root;
     }
 
     public void release() {
-        root = saved;
-        cRight = lastRight;
+        if(root != null && saved != null && root.getId() != saved.getId()) {
+            for (Right t = root; t != null; t = t.getNext()) {
+                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                    t.setNext(null);
+                    break;
+                }
+            }
+            root = saved;
+            lastID = saveLastID;
+        }
     }
 
     public int size() {
@@ -107,7 +111,7 @@ public class RightFactory {
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
-        dos.writeInt(cRight);
+        dos.writeInt(lastID);
         dos.writeInt(size());
         for (Right r = root; r != null; r = r.getNext()) {
             r.writeCompiledData(dos);
@@ -115,7 +119,7 @@ public class RightFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
-        cRight = dis.readInt();
+        lastID = dis.readInt();
         int count = dis.readInt();
         root = null;
         Right a = null, b;

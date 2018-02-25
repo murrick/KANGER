@@ -82,7 +82,7 @@ public class Function {
 //        arg = list;
 //    }
 
-    //    public List<Argument> getL() {
+    //    public List<Argument> getArguments() {
 //        return arg;
 //    }
 //

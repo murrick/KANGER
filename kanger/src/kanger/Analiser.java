@@ -25,9 +25,9 @@ public class Analiser {
 
 
     private boolean compareDomains(Domain d1, Domain d2, int level) {
-        if (level >= d1.getP().getRange()) {
-            d1.setCuted(1);
-            d2.setCuted(1);
+        if (level >= d1.getPredicate().getRange()) {
+            d1.setUsed(true);
+            d2.setUsed(true);
             mind.getLog().add(LogMode.ANALIZER, "Equals:");
             mind.getLog().add(LogMode.ANALIZER, "\t" + d1.toString());
             mind.getLog().add(LogMode.ANALIZER, "\t" + d2.toString());
@@ -35,11 +35,22 @@ public class Analiser {
         } else {
             for (int i = 0; i <= level; ++i) {
                 if (d1.get(i).isTSet() && d1.get(i).isEmpty() && !d2.get(i).isEmpty()) {
-                    if (!d1.get(i).setValue(d2.get(i).getValue()))
+                    if (!d1.get(i).setValue(d2.get(i).getValue())) {
                         return false;
+                    } else {
+                        d1.setInitiated(true);
+                    }
                 } else if (d2.get(i).isTSet() && d2.get(i).isEmpty() && !d1.get(i).isEmpty()) {
-                    if (!d2.get(i).setValue(d1.get(i).getValue()))
+                    if (!d2.get(i).setValue(d1.get(i).getValue())) {
                         return false;
+                    } else {
+                        d2.setInitiated(true);
+                    }
+                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
+                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
+                    Term c = mind.getTerms().get();
+                    d1.get(i).setValue(c);
+                    d2.get(i).setValue(c);
                 } else if (d1.get(i).isEmpty() || d2.get(i).isEmpty() || !d1.get(i).getValue().equals(d2.get(i).getValue())) {
                     return false;
                 }
@@ -51,105 +62,75 @@ public class Analiser {
     private boolean compareRights(Right r1, Right r2) {
         //mind.release();
         // Последовательно сравниваем все ветки двух правил
-        boolean closed = true;
+        boolean closed = false;
+
+//        mind.getInitiatedDomains().clear();
+//        int initiatedCount = 0;
+//        do {
+//            initiatedCount = mind.getInitiatedDomains().size();
         for (Tree t1 : r1.getTree()) {
             for (Tree t2 : r2.getTree()) {
                 // Сравнение двух ветвей
                 for (Domain d1 : t1.getSequence()) {
                     for (Domain d2 : t2.getSequence()) {
-                        if (d1.getCuted() == 0 && d2.getCuted() == 0
+                        if (!d1.isUsed() && !d2.isUsed()
                                 && d1.isAntc() != d2.isAntc()
-                                && d1.getP().equals(d2.getP())) {
-                            if (compareDomains(d1, d2, 0)) {
-//                                d1.setCuted(1);
-//                                d2.setCuted(1);
-                                t1.setUsed(true);
-                                t2.setUsed(true);
-                            }
+                                && d1.getPredicate().equals(d2.getPredicate())) {
+                            compareDomains(d1, d2, 0);
+//                                if (compareDomains(d1, d2, 0)) {
+//                                    t1.setUsed(true);
+//                                    t2.setUsed(true);
+//
+//                                    Screen.showTree(r1);
+//                                    Screen.showTree(r2);
+//                                }
                         }
                     }
                 }
 
-                if (t1.isUsed()) {
-                    closed = true;
-                    for (Domain d : t1.getSequence()) {
-                        if (d.getCuted() == 0) {
-                            closed = false;
-                            break;
-                        }
-                    }
-                    t1.setClosed(closed);
+            }
+        }
+//        } while(initiatedCount != mind.getInitiatedDomains().size());
+
+        boolean treeClosed = false;
+        for (Tree t : r1.getTree()) {
+            boolean c = true;
+            for (Domain d : t.getSequence()) {
+                if (d.isUsed()) {
+                    t.setUsed(true);
+                } else {
+                    c = false;
                 }
-                if (t2.isUsed()) {
-                    closed = true;
-                    for (Domain d : t2.getSequence()) {
-                        if (d.getCuted() == 0) {
-                            closed = false;
-                            break;
-                        }
-                    }
-                    t2.setClosed(closed);
-                }
+            }
+            t.setClosed(c);
+            if (c) {
+                treeClosed = true;
             }
         }
 
-        closed = false;
-        if(!r1.isCurrent()) {
-            for (Tree t : r1.getTree()) {
-                if (t.isClosed()) {
-                    closed = true;
-                } else if(t.isUsed()) {
-                    for(Domain d: t.getSequence()) {
-                        if(d.getCuted() == 0) {
-                            mind.getLog().add(LogMode.ANALIZER, "Hypoteses:");
-                            mind.getLog().add(LogMode.ANALIZER, "\t" + d.toString());
-                        }
-                    }
+        for (Tree t : r2.getTree()) {
+            boolean c = true;
+            for (Domain d : t.getSequence()) {
+                if (d.isUsed()) {
+                    t.setUsed(true);
+                } else {
+                    c = false;
                 }
+            }
+            t.setClosed(c);
+            if (c && treeClosed) {
+                closed = true;
             }
         }
 
-        if(closed) {
-            return true;
-        }
-
-        closed = false;
-        if(!r2.isCurrent()) {
-            for (Tree t : r2.getTree()) {
-                if (t.isClosed()) {
-                    closed = true;
-                } else if(t.isUsed()) {
-                    for(Domain d: t.getSequence()) {
-                        if(d.getCuted() == 0) {
-                            mind.getLog().add(LogMode.ANALIZER, "Hypoteses:");
-                            mind.getLog().add(LogMode.ANALIZER, "\t" + d.toString());
-                        }
-                    }
-                }
-            }
-        }
-
-        if(closed) {
-            return true;
-        }
-
-        return false;
+        return closed;
     }
 
     public boolean analiser(boolean logging) {
         boolean result = false;
-        mind.mark();
 
-        for(Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
-            for(Tree t : r.getTree()) {
-                t.setClosed(false);
-                t.setUsed(false);
-                for(Domain d : t.getSequence()) {
-                    d.setCuted(0);
-                }
-            }
-        }
-
+//        mind.release();
+        mind.clearQueryStatus();
 
         for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
             for (Right r2 = r1.getNext(); r2 != null; r2 = r2.getNext()) {
@@ -157,6 +138,21 @@ public class Analiser {
                     result = true;
                 }
             }
+        }
+        if (!result) {
+            for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
+                for (Tree t : r1.getTree()) {
+                    if (!t.isClosed() && t.isUsed()) {
+                        for (Domain d : t.getSequence()) {
+                            if (!d.isUsed()) {
+                                mind.getLog().add(LogMode.ANALIZER, "Hypoteses:");
+                                mind.getLog().add(LogMode.ANALIZER, "\t" + d.toString());
+                            }
+                        }
+                    }
+                }
+            }
+
         }
         return result;
     }
@@ -193,7 +189,7 @@ public class Analiser {
             }
         }
 //        else if (target.getWidth() == 1 && target.getHeight() == 1) {
-//            Solve s = target.getT().getD().getP().deleteSolve(target.getT().getD().getL());
+//            Solve s = target.getT().getD().getPredicate().deleteSolve(target.getT().getD().getArguments());
 //            if (withRelatedRights && s != null) {
 //                if (s.getRight() != null) {
 //                    rr.add(s.getRight());
@@ -250,6 +246,8 @@ public class Analiser {
         mind.getSolutions().reset();
         mind.getValues().reset();
         mind.getHypotesisStore().reset();
+
+        mind.release();
         mind.mark();
 
         //mind.clear();
@@ -262,7 +260,7 @@ public class Analiser {
             mind.getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
             res = null;
         } else {
-            mind.mark();
+//            mind.mark();
             int key = line.charAt(0);
             switch (key) {
 
@@ -279,7 +277,7 @@ public class Analiser {
                     mind.getLog().reset();
                     mind.getLog().add(LogMode.ANALIZER, "============= ACCEPTING ===================");
 
-                    mind.release();
+//                    mind.release();
                     analiser(true);
 
 //                    Right r = (Right) mind.compileLine(invert(line));
@@ -300,6 +298,8 @@ public class Analiser {
 //                        mind.release();
 //                        analiser();
                     Right r = (Right) mind.compileLine(line);
+                    r.setCurrent(true);
+
                     if (r != null) {
                         mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                         mind.getLog().add(LogMode.ANALIZER, r);
@@ -331,13 +331,16 @@ public class Analiser {
                                 }
                                 mind.getLog().add(LogMode.ANALIZER, "SUCCESS: New solves: " + mind.getHypotesisStore().size());
                             }
+
+                            r.setCurrent(false);
                             mind.setChanged(true);
                             mind.mark();
                         }
                     }
 //                    }
 
-                    mind.release();
+//                    mind.release();
+//                    mind.clearQueryStatus();
                 }
                 break;
 
@@ -368,17 +371,19 @@ public class Analiser {
                         res = true;
                     } else if (!isInsertion) {
 
-                        mind.release();
-                        analiser(true);
-                        mind.mark();
+//                        mind.release();
+//                        mind.mark();
 //                        isHypotheses = true;
 
                         if (!DEBUG_DISABLE_FALSE_CHECK) {
 
                             mind.getLog().reset();
                             mind.getLog().add(LogMode.ANALIZER, "============= FALSE CHECKING ==============");
+
+                            analiser(true);
                             Right r = (Right) mind.compileLine(invert(line));
                             r.setCurrent(true);
+
                             if (r != null) {
                                 mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                                 mind.getLog().add(LogMode.ANALIZER, r);
@@ -409,14 +414,17 @@ public class Analiser {
                         mind.getLog().add(LogMode.ANALIZER, "============= TRUE CHECKING ===============");
 
                         //mind.release();
-                        mind.release();
+//                        mind.release();
 //                        analiser();
                         mind.getSolutions().reset();
                         mind.getValues().reset();
+                        mind.release();
                         //analiser();
 
+                        analiser(true);
                         Right r = (Right) mind.compileLine(line);
                         r.setCurrent(true);
+
                         if (r != null) {
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                             mind.getLog().add(LogMode.ANALIZER, r);
@@ -457,7 +465,7 @@ public class Analiser {
                                 if (!isInsertion) {
                                     storeHypo();
                                 }
-                                mind.release();
+//                                mind.release();
                                 // Удаляем гипотезы,которые приведут к сходимости в случае анализа правил.
                                 // Гипотезв приводящие к сходимости на уровне базы данных отсеиваются в фазе добавления
                                 if (!testMode) {
@@ -481,7 +489,7 @@ public class Analiser {
 
                     }
 
-                    mind.release();
+//                    mind.release();
                     break;
                 }
             }

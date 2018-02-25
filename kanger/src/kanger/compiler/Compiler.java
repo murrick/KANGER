@@ -32,7 +32,7 @@ public class Compiler {
 //        NodeFactory n = new NodeFactory();
 //        construct(n, root, antc, Node.STILL);
 //        t = recurseTree(n.getRoot());
-        Tree t = new Tree();
+        Tree t = mind.getTrees().add();
         r.getTree().add(t);
         construct(r, t, root, antc, new HashMap<String, Argument>(), new ArrayList<Tree>());
         mind.resetDummy();
@@ -50,7 +50,7 @@ public class Compiler {
 //            for (Tree v = t; v != null; v = v.getDown()) {
 //                List<Argument> arg = new ArrayList<>();
 //                if (mind.getAnalyser().fillSolve(arg, v.getD(), v.getD().isAntc()) != 0) {
-//                    mind.getAnalyser().addBase(arg, v.getD(), false /*v.getD().getP(), v.getD().isAntc()*/);
+//                    mind.getAnalyser().addBase(arg, v.getD(), false /*v.getD().getPredicate(), v.getD().isAntc()*/);
 //                }
 //            }
 ////            }

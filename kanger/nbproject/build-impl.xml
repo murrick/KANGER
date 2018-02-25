@@ -170,7 +170,7 @@ is divided into following sections:
             <istrue value="${do.depend}"/>
         </condition>
         <path id="endorsed.classpath.path" path="${endorsed.classpath}"/>
-        <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/p:'${toString:endorsed.classpath.path}'">
+        <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/predicate:'${toString:endorsed.classpath.path}'">
             <and>
                 <isset property="endorsed.classpath"/>
                 <not>

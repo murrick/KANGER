@@ -1,7 +1,8 @@
 package kanger.factory;
 
 import kanger.Mind;
-import kanger.primitives.TVariable;
+import kanger.primitives.Right;
+import kanger.primitives.Tree;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,45 +11,40 @@ import java.io.IOException;
 /**
  * Created by murray on 25.05.15.
  */
-public class TVariableFactory {
+public class TreeFactory {
 
-    private TVariable root = null;
-    private TVariable saved = null;
-    private int lastID = 0, saveLastID;            /* Счетчик T-переменных */
+    private Tree root = null;
+    private Tree saved = null;
+    private long lastID = 0, saveLastID;
 
     private Mind mind = null;
 
-    public TVariableFactory(Mind mind) {
+    public TreeFactory(Mind mind) {
         this.mind = mind;
     }
 
-    public TVariable add() {
-        TVariable p = new TVariable(mind);
+    public Tree add() {
+        Tree p = new Tree(mind);
         p.setId(++lastID);
-        p.setOwner(0);
-        p.setS(null);
-        p.setArea(mind.getTerms().getRoot());
-//        p.setValue(null);
-        p.setRight(mind.getRights().getRoot());
         p.setNext(root);
         root = p;
         return p;
     }
 
-    public TVariable get(long id) {
-        for (TVariable t = root; t != null; t = t.getNext()) {
-            if (t.getId() == id) {
-                return t;
+    public Tree get(long id) {
+        for (Tree r = root; r != null; r = r.getNext()) {
+            if (r.getId() == id) {
+                return r;
             }
         }
         return null;
     }
 
-    public TVariable getRoot() {
+    public Tree getRoot() {
         return root;
     }
 
-    public void setRoot(TVariable o) {
+    public void setRoot(Tree o) {
         root = o;
     }
 
@@ -56,13 +52,7 @@ public class TVariableFactory {
         root = null;
         saved = null;
         lastID = 0;
-    }
-
-    public void init() {
-        for (TVariable v = root; v != null; v = v.getNext()) {
-            v.setOwner(0);
-            v.setS(null);
-        }
+        saveLastID = 0;
     }
 
     public void mark() {
@@ -72,7 +62,7 @@ public class TVariableFactory {
 
     public void release() {
         if(root != null && saved != null && root.getId() != saved.getId()) {
-            for (TVariable t = root; t != null; t = t.getNext()) {
+            for (Tree t = root; t != null; t = t.getNext()) {
                 if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
                     t.setNext(null);
                     break;
@@ -85,28 +75,27 @@ public class TVariableFactory {
 
     public int size() {
         int cnt = 0;
-        for (TVariable q = root; q != null; q = q.getNext()) {
+        for (Tree q = root; q != null; q = q.getNext()) {
             ++cnt;
         }
         return cnt;
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
-        dos.writeInt(lastID);
-        int sz = size();
-        dos.writeInt(sz);
-        for (TVariable t = root; t != null; t = t.getNext()) {
-            t.writeCompiledData(dos);
+        dos.writeLong(lastID);
+        dos.writeInt(size());
+        for (Tree r = root; r != null; r = r.getNext()) {
+            r.writeCompiledData(dos);
         }
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
-        lastID = dis.readInt();
+        lastID = dis.readLong();
         int count = dis.readInt();
-        TVariable a = null, b;
         root = null;
+        Tree a = null, b;
         while (count-- > 0) {
-            b = new TVariable(dis, mind);
+            b = new Tree(dis, mind);
             if (a == null) {
                 root = b;
             } else {
