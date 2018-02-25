@@ -24,16 +24,6 @@ public class Hypotese {
     private Set<Right> rights = new HashSet<>();
     private boolean deleted = false;
 
-    public Hypotese(Solve solve) {
-        this.predicate = solve.getPredicate();
-//        this.solve.addAll(solve.getArguments());
-        for (Argument a : solve.getL()) {
-            this.solve.add(a.getValue());
-        }
-        this.antc = solve.isAntc();
-
-    }
-
     public Hypotese(Predicate predicate, List<Argument> arg) {
         this.predicate = predicate;
 //        this.antc = antc;

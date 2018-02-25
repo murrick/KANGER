@@ -16,10 +16,7 @@ import kanger.stores.*;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -57,17 +54,17 @@ public class Mind {
     private Set<Long> initiatedDomains = new HashSet();
     private Set<Long> usedTree = new HashSet();
     private Set<Long> closedTree = new HashSet();
+    private Map<Domain, Map<Right, Set<Domain>>> causes = new HashMap<>();
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
-    private transient Map<Solve, Long> solveLinks = null;
+    //    private transient Map<Solve, Long> solveLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
 
     private transient volatile int currentLevel = 0;
-    private transient volatile Solve currentSolve = null;
+    //    private transient volatile Solve currentSolve = null;
     private transient volatile int substCount = 0;
-
 
 
     public DictionaryFactory getTerms() {
@@ -126,13 +123,13 @@ public class Mind {
         this.currentLevel = currentLevel;
     }
 
-    public Solve getCurrentSolve() {
-        return currentSolve;
-    }
-
-    public void setCurrentSolve(Solve currentSolve) {
-        this.currentSolve = currentSolve;
-    }
+//    public Solve getCurrentSolve() {
+//        return currentSolve;
+//    }
+//
+//    public void setCurrentSolve(Solve currentSolve) {
+//        this.currentSolve = currentSolve;
+//    }
 
     public void resetDummy() {
         solves.reset();
@@ -205,6 +202,7 @@ public class Mind {
         usedTree.clear();
         closedTree.clear();
         initiatedDomains.clear();
+        causes.clear();
     }
 
     public void clear() throws ParseErrorException {
@@ -286,7 +284,7 @@ public class Mind {
 
     /**
      * Удаление правила из дерева вывода
-     *
+     * <p>
      * Удалять можно только правила не содержащие t-переменные
      *
      * @param r
@@ -305,24 +303,6 @@ public class Mind {
     }
 
     private void removeSolve() {
-    }
-
-    private void removeSolvesRecords(Right r) {
-        for (Predicate p = predicates.getRoot(); p != null; p = p.getNext()) {
-            Solve c = null;
-            for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
-                s.getCauses().remove(r);
-                if (s.getCauses().size() == 0 /*s.getRight() == r && s.cVarsExists()*/) {
-                    if (c == null) {
-                        p.setSolve(s.getNext());
-                    } else {
-                        c.setNext(s.getNext());
-                    }
-                } else {
-                    c = s;
-                }
-            }
-        }
     }
 
     private void removeTVarsRecords(Right r) {
@@ -357,7 +337,6 @@ public class Mind {
     }
 
     public void removeInsertionRight(Right r) {
-        removeSolvesRecords(r);
         removeTVarsRecords(r);
         removeCVarsRecords(r);
         removeRightRecord(r);
@@ -406,7 +385,7 @@ public class Mind {
 
         dictionaryLinks = new HashMap<>();
         domainLinks = new HashMap<>();
-        solveLinks = new HashMap<>();
+//        solveLinks = new HashMap<>();
         tVariableLinks = new HashMap<>();
 
         int signature = dis.readInt();
@@ -422,23 +401,23 @@ public class Mind {
         this.predicates.readCompiledData(dis);
         this.domains.readCompiledData(dis);
         this.rights.readCompiledData(dis);
-        for(Map.Entry<Term,Long> d: dictionaryLinks.entrySet()) {
+        for (Map.Entry<Term, Long> d : dictionaryLinks.entrySet()) {
             d.getKey().setRight(rights.get(d.getValue()));
         }
-        for(Map.Entry<Domain,Long> d: domainLinks.entrySet()) {
+        for (Map.Entry<Domain, Long> d : domainLinks.entrySet()) {
             d.getKey().setRight(rights.get(d.getValue()));
         }
         //TODO: Загрузка causes
 //        for(Map.Entry<Solve,Long> d: solveLinks.entrySet()) {
 //            d.getKey().setRight(rights.get(d.getValue()));
 //        }
-        for(Map.Entry<TVariable,Long> d: tVariableLinks.entrySet()) {
+        for (Map.Entry<TVariable, Long> d : tVariableLinks.entrySet()) {
             d.getKey().setRight(rights.get(d.getValue()));
         }
 
         dictionaryLinks = null;
         domainLinks = null;
-        solveLinks = null;
+//        solveLinks = null;
         tVariableLinks = null;
 
     }
@@ -463,9 +442,9 @@ public class Mind {
         return domainLinks;
     }
 
-    public Map<Solve, Long> getSolveLinks() {
-        return solveLinks;
-    }
+//    public Map<Solve, Long> getSolveLinks() {
+//        return solveLinks;
+//    }
 
     public Map<TVariable, Long> gettVariableLinks() {
         return tVariableLinks;
@@ -486,6 +465,10 @@ public class Mind {
 
     public Set<Long> getInitiatedDomains() {
         return initiatedDomains;
+    }
+
+    public Map<Domain, Map<Right, Set<Domain>>> getCauses() {
+        return causes;
     }
 }
 

@@ -25,9 +25,9 @@ import java.util.Scanner;
 public class Screen {
 
     public static boolean LINE_EDITOR_ENABLE = false;
-	
-     //       System.getProperties().getProperty("kanger.disable.line.editor") == null
-     //               || System.getProperties().getProperty("kanger.disable.line.editor").equals("false");
+
+    //       System.getProperties().getProperty("kanger.disable.line.editor") == null
+    //               || System.getProperties().getProperty("kanger.disable.line.editor").equals("false");
 
     public static void session(Mind mind) {
         boolean stop = false;
@@ -181,9 +181,9 @@ public class Screen {
 //                                reader.getHistory().getHistoryList().remove(0);
 //                                reader.getHistory().addToHistory(line);
                             } else {
-                               // StringSelection selec = new StringSelection(line);
-                               // Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                               // clipboard.setContents(selec, selec);
+                                // StringSelection selec = new StringSelection(line);
+                                // Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                                // clipboard.setContents(selec, selec);
                             }
 
                             Boolean res = mind.getAnalyser().query(line, false);
@@ -437,36 +437,31 @@ public class Screen {
 //        return str;
 //    }
     //
-    public static void showCauses(Mind mind, Solve s, int level) {
+    public static void showCauses(Mind mind, Domain s, int level) {
         String indent = "";
         for (int i = 0; i < level; ++i) {
             indent += "\t";
         }
-        for(Right r : s.getCauses().keySet()) {
+        for (Right r : s.getCauses().keySet()) {
             if (r != null) {
                 System.out.printf("\t\t%sRight: %s\n", indent, r.getOrig());
             }
-                for (Solve so : s.getCauses().get(r)) {
-                    System.out.printf("\t\t%sCause: %s\n", indent, so.toString());
-                    showCauses(mind, so, level + 1);
-
-                }
+            for (Domain so : s.getCauses().get(r)) {
+                System.out.printf("\t\t%sCause: %s\n", indent, so.toString());
+                showCauses(mind, so, level + 1);
+            }
         }
     }
 
-    public static void showPred(Mind mind, Predicate p, Solve slv, boolean showCauses) {
-        if (slv == null) {
-            System.out.printf("Predicate %s(%d) :\n", p.getName(), p.getRange());
-        }
-        if (p.getSolve() == null) {
+    public static void showPred(Mind mind, Predicate p, boolean showCauses) {
+        System.out.printf("Predicate %s(%d) :\n", p.getName(), p.getRange());
+        if (p.getSolves().isEmpty()) {
             System.out.printf("\tHas not solves\n");
         } else {
-            for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
-                if (slv == null || s == slv) {
-                    System.out.printf("\t%s\n", s.toString());
-                    if (showCauses) {
-                        showCauses(mind, s, 0);
-                    }
+            for (Domain s : p.getSolves()) {
+                System.out.printf("\t%s\n", s.toString());
+                if (showCauses) {
+                    showCauses(mind, s, 0);
                 }
             }
         }
@@ -514,8 +509,8 @@ public class Screen {
 //
     public static void showBase(Mind mind, boolean showCauses, String param) {
         for (Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
-            if (p.getSolve() != null && !mind.getCalculator().exists(p) && (param == null || param.equals(p.getName()))) {
-                showPred(mind, p, null, showCauses);
+            if (!p.getSolves().isEmpty() && !mind.getCalculator().exists(p) && (param == null || param.equals(p.getName()))) {
+                showPred(mind, p, showCauses);
                 System.out.printf("\n");
             }
         }
@@ -749,23 +744,24 @@ public class Screen {
 //            mind.getText().replace(start, end, "");
 //            mind.setChanged(true);
 
-            for (Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
-                Solve m = p.getSolve();
-                for (Solve o = p.getSolve(); o != null; o = o.getNext()) {
-                    if (o.getCauses().containsKey(r)) {
-                        o.getCauses().remove(r);
-                        if(o.getCauses().size() == 0) {
-                            if (m == o) {
-                                p.setSolve(o.getNext());
-                            } else {
-                                m.setNext(o.getNext());
-                            }
-                        }
-                    }
-                    m = o;
-                }
-            }
-            //mind.clear();
+            //TODO: Тут просто закомментировал. С удалением правил надо разобраться
+//            for (Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
+//                Solve m = p.getSolve();
+//                for (Solve o = p.getSolve(); o != null; o = o.getNext()) {
+//                    if (o.getCauses().containsKey(r)) {
+//                        o.getCauses().remove(r);
+//                        if (o.getCauses().size() == 0) {
+//                            if (m == o) {
+//                                p.setSolve(o.getNext());
+//                            } else {
+//                                m.setNext(o.getNext());
+//                            }
+//                        }
+//                    }
+//                    m = o;
+//                }
+//            }
+//            //mind.clear();
         }
     }
 

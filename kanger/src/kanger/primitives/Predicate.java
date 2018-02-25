@@ -5,6 +5,7 @@ import kanger.Mind;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,32 +21,19 @@ public class Predicate {
     private String name = "";               // Имя предиката
     private int range = 0;                  // К-во параметров
     private long id = -1;                   // Идентификатор
-    private Solve solve = null;             // Список решений
-    private Solve savedSolve = null;             // Временная база
-    private Solve hypo = null;              // Гипотезы
-//    private Solve saveHypo = null;          // Сохранение гипотез
-//    private Solve backupHypo = null;
-    private Predicate next = null;                  // Следующий предикат
+    private Predicate next = null;          // Следующий предикат
 
-    public Predicate() {
+    private Mind mind = null;
+
+    public Predicate(Mind mind) {
+        this.mind = mind;
     }
 
     public Predicate(DataInputStream dis, Mind mind) throws IOException {
         id = dis.readLong();
         name = dis.readUTF();
         range = dis.readInt();
-        int count = dis.readInt();
-        Solve a = null, b = null;
-        while (count-- > 0) {
-            b = new Solve(dis, mind);
-            b.setPredicate(this);
-            if (a == null) {
-                solve = b;
-            } else {
-                a.setNext(b);
-            }
-            a = b;
-        }
+        this.mind = mind;
     }
 
     public String getName() {
@@ -72,55 +60,6 @@ public class Predicate {
         this.id = id;
     }
 
-    public Solve getSolve() {
-        return solve;
-    }
-
-    public void setSolve(Solve slove) {
-        this.solve = slove;
-    }
-
-    public Solve getSavedSolve() {
-        return savedSolve;
-    }
-
-    public void setSavedSolve(Solve savedSolve) {
-        this.savedSolve = savedSolve;
-    }
-
-    public Solve getHypo() {
-        return hypo;
-    }
-
-    public void setHypo(Solve hypo) {
-        this.hypo = hypo;
-    }
-
-    public Solve getSolve(long id) {
-        for(Solve s = solve; s!=null; s=s.getNext()) {
-            if(s.getId() == id) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-//    public Solve getSaveHypo() {
-//        return saveHypo;
-//    }
-//
-//    public void setSaveHypo(Solve saveHypo) {
-//        this.saveHypo = saveHypo;
-//    }
-//
-//    public Solve getBackupHypo() {
-//        return backupHypo;
-//    }
-//
-//    public void setBackupHypo(Solve backupHypo) {
-//        this.backupHypo = backupHypo;
-//    }
-//
     public Predicate getNext() {
         return next;
     }
@@ -133,52 +72,16 @@ public class Predicate {
         dos.writeLong(id);
         dos.writeUTF(name);
         dos.writeInt(range);
-        int count = 0;
-        for (Solve s = solve; s != null; s = s.getNext()) {
-            ++count;
-        }
-        dos.writeInt(count);
-        for (Solve s = solve; s != null; s = s.getNext()) {
-            s.writeCompiledData(dos);
-        }
     }
 
-    public Solve deleteSolve(List target) {
-        Solve c = null;
-        Solve ret = null;
-        for (Solve s = solve; s != null; s = s.getNext()) {
-            if (/*s.isAntc() && */s.equals(target)) {
-                ret = s;
-                if (c == null) {
-                    solve = s.getNext();
-                } else {
-                    c.setNext(s.getNext());
-                }
-            } else {
-                c = s;
+    public List<Domain> getSolves() {
+        List<Domain> list = new ArrayList<>();
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(this.equals(d.getPredicate())) {
+                list.add(d);
             }
         }
-        return ret;
-    }
-
-    public Solve addSolve() {
-        long id = solve == null ? 1 : solve.getId() + 1;
-        Solve s = new Solve();
-        s.setPredicate(this);
-        s.setId(id);
-        s.setNext(solve);
-        solve = s;
-        return s;
-    }
-
-    public Solve addHypo() {
-        long id = hypo == null ? 1 : hypo.getId() + 1;
-        Solve s = new Solve();
-        s.setPredicate(this);
-        s.setId(id);
-        s.setNext(hypo);
-        hypo = s;
-        return s;
+        return list;
     }
 
     public String toString() {

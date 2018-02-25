@@ -26,7 +26,7 @@ public class TVariableFactory {
         TVariable p = new TVariable(mind);
         p.setId(++lastID);
         p.setOwner(0);
-        p.setS(null);
+        p.setSolve(null);
         p.setArea(mind.getTerms().getRoot());
 //        p.setValue(null);
         p.setRight(mind.getRights().getRoot());
@@ -61,7 +61,7 @@ public class TVariableFactory {
     public void init() {
         for (TVariable v = root; v != null; v = v.getNext()) {
             v.setOwner(0);
-            v.setS(null);
+            v.setSolve(null);
         }
     }
 

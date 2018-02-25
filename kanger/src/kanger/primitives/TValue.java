@@ -6,7 +6,7 @@ package kanger.primitives;
 public class TValue {
     private Term value = null;
     private int level = 0;
-    private Solve solve = null;
+    private Domain solve = null;
 
     public Term getValue() {
         return value;
@@ -24,11 +24,11 @@ public class TValue {
         this.level = level;
     }
 
-    public Solve getSolve() {
+    public Domain getSolve() {
         return solve;
     }
 
-    public void setSolve(Solve solve) {
+    public void setSolve(Domain solve) {
         this.solve = solve;
     }
 }

@@ -2,7 +2,6 @@ package kanger.factory;
 
 import kanger.Mind;
 import kanger.primitives.Predicate;
-import kanger.primitives.Solve;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -30,7 +29,7 @@ public class PredicateFactory {
         if (p != null) {
             return p;
         } else {
-            p = new Predicate();
+            p = new Predicate(mind);
             p.setId(lastID++);
             p.setNext(root);
             p.setRange(range);
@@ -70,15 +69,6 @@ public class PredicateFactory {
     }
 
     public void mark() {
-        for (Predicate p = root; p != null; p = p.getNext()) {
-            p.setSavedSolve(p.getSolve());
-            p.setHypo(null);
-            for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
-                s.setCuted(false);
-                s.setLoged(0);
-//                s.getSubst().clear();
-            }
-        }
         saved = root;
         saveLastID = lastID;
     }
@@ -89,22 +79,6 @@ public class PredicateFactory {
                 if (p.getNext() != null && p.getNext().getId() == saved.getId()) {
                     p.setNext(null);
                     break;
-                }
-            }
-            for (Predicate p = root; p != null; p = p.getNext()) {
-                if(p.getSolve().getId() != p.getSavedSolve().getId()) {
-                    for (Solve s = p.getSolve(); p != null; p = p.getNext()) {
-                        if (p.getNext() != null && p.getNext().getId() == p.getSavedSolve().getId()) {
-                            p.setNext(null);
-                            break;
-                        }
-                    }
-                    p.setHypo(null);
-                    p.setSolve(p.getSavedSolve());
-//                    for (Solve s = p.getSolve(); s != null; s = s.getNext()) {
-//                        s.setCuted(false);
-//                        s.setLoged(0);
-//                    }
                 }
             }
             root = saved;

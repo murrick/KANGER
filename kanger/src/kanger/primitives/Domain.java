@@ -8,8 +8,7 @@ import kanger.enums.Enums;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -111,6 +110,13 @@ public class Domain {
         } else {
             mind.getInitiatedDomains().remove(id);
         }
+    }
+
+    public Map<Right, Set<Domain>> getCauses() {
+        if(!mind.getCauses().containsKey(this)) {
+            mind.getCauses().put(this, new HashMap<>());
+        }
+        return mind.getCauses().get(this);
     }
 
     public List<Argument> getArguments() {

@@ -6,8 +6,10 @@ import kanger.enums.LogMode;
 import kanger.exception.ParseErrorException;
 import kanger.exception.RuntimeErrorException;
 import kanger.primitives.*;
+import kanger.stores.HypotesesStore;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -38,12 +40,14 @@ public class Analiser {
                     if (!d1.get(i).setValue(d2.get(i).getValue())) {
                         return false;
                     } else {
+                        d1.get(i).getT().setSolve(d2);
                         d1.setInitiated(true);
                     }
                 } else if (d2.get(i).isTSet() && d2.get(i).isEmpty() && !d1.get(i).isEmpty()) {
                     if (!d2.get(i).setValue(d1.get(i).getValue())) {
                         return false;
                     } else {
+                        d2.get(i).getT().setSolve(d1);
                         d2.setInitiated(true);
                     }
                 } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
@@ -76,7 +80,12 @@ public class Analiser {
                         if (!d1.isUsed() && !d2.isUsed()
                                 && d1.isAntc() != d2.isAntc()
                                 && d1.getPredicate().equals(d2.getPredicate())) {
+
+//                            boolean initiatedD1 = d1.isInitiated();
+//                            boolean initiatedD2 = d2.isInitiated();
+
                             compareDomains(d1, d2, 0);
+
 //                                if (compareDomains(d1, d2, 0)) {
 //                                    t1.setUsed(true);
 //                                    t2.setUsed(true);
@@ -139,31 +148,20 @@ public class Analiser {
                 }
             }
         }
-        if (!result) {
-            for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
-                for (Tree t : r1.getTree()) {
-                    if (!t.isClosed() && t.isUsed()) {
-                        for (Domain d : t.getSequence()) {
-                            if (!d.isUsed()) {
-                                mind.getLog().add(LogMode.ANALIZER, "Hypoteses:");
-                                mind.getLog().add(LogMode.ANALIZER, "\t" + d.toString());
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
         return result;
     }
 
 //    ///////////////////////////////
 
     void storeHypo() {
-        for (Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
-            if (!mind.getCalculator().exists(p)) {
-                for (Solve s = p.getHypo(); s != null; s = s.getNext()) {
-                    mind.getHypotesisStore().add(s);
+        for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
+            for (Tree t : r1.getTree()) {
+                if (!t.isClosed() && t.isUsed()) {
+                    for (Domain d : t.getSequence()) {
+                        if (!d.isUsed()) {
+                            mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
+                        }
+                    }
                 }
             }
         }
@@ -178,7 +176,7 @@ public class Analiser {
 
         if (mind.getHypotesisStore().size() > 0) {
             for (Hypotese h : (List<Hypotese>) mind.getHypotesisStore().getRoot()) {
-                h.getPredicate().deleteSolve(h.getSolve());
+//                h.getPredicate().deleteSolve(h.getSolve());
                 if (withRelatedRights) {
 
                     for (Right r : h.getRights()) {

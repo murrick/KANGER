@@ -13,42 +13,23 @@ public class HypotesesStore {
     private List<Hypotese> root = null;
     private boolean enableStore = true;
 
-    public Hypotese add(Solve solve) {
+    public Hypotese add(Predicate pred, List<Argument> arg) {
         if (!enableStore) {
             return null;
         }
         if (root == null) {
             root = new ArrayList<>();
         }
-        Hypotese h = find(solve);
+        Hypotese h = find(pred, arg);
         if (h != null) {
             return h;
         } else {
-            h = new Hypotese(solve);
-            h.getRights().addAll(solve.getCauses().keySet());
+            h = new Hypotese(pred, arg);
             root.add(h);
             return h;
         }
-    }
 
-//    public Hypotese add(Predicate pred, List<Argument> arg, Right r) {
-//        if (!enableStore) {
-//            return null;
-//        }
-//        if (root == null) {
-//            root = new ArrayList<>();
-//        }
-//        Hypotese h = find(pred, arg);
-//        if (h != null) {
-//            return h;
-//        } else {
-//            h = new Hypotese(pred, arg);
-//            h.setRight(r);
-//            root.add(h);
-//            return h;
-//        }
-//
-//    }
+    }
 
     public void enable(boolean enable) {
         enableStore = enable;
@@ -62,24 +43,6 @@ public class HypotesesStore {
         return root.get(index);
     }
 
-    public Hypotese find(Solve solve) {
-        for (Hypotese h : root) {
-            if (h.getPredicate().equals(solve.getPredicate())) {
-                int i = 0;
-                if (solve.getL().size() == h.getSolve().size()) {
-                    for (; i < h.getSolve().size(); ++i) {
-                        if (h.getSolve().get(i) != null && !h.getSolve().get(i).equals(solve.get(i))) {
-                            break;
-                        }
-                    }
-                }
-                if (i == h.getSolve().size()) {
-                    return h;
-                }
-            }
-        }
-        return null;
-    }
 
     public Hypotese find(Predicate pred, List<Argument> arg) {
         for (Hypotese h : root) {

@@ -100,8 +100,8 @@ public class TVariable {
         if (value != null) {
             if (!isInside(value)) {
                 mind.getTValues().get(this).setValue(value);
-                setOwner(mind.getCurrentLevel());
-                setS(mind.getCurrentSolve());
+//                setOwner(mind.getCurrentLevel());
+//                setSolve(mind.getCurrentSolve());
                 mind.incSubstCount();
             } else {
                 throw new TValueOutOfOrver(value.toString());
@@ -143,7 +143,7 @@ public class TVariable {
         this.next = next;
     }
 
-    public Solve getS() {
+    public Domain getSolve() {
         if (mind.getTValues().containsKey(this)) {
             return mind.getTValues().get(this).getSolve();
         } else {
@@ -151,7 +151,7 @@ public class TVariable {
         }
     }
 
-    public void setS(Solve s) {
+    public void setSolve(Domain s) {
         if (!mind.getTValues().containsKey(this)) {
             mind.getTValues().put(this, new TValue());
         }
