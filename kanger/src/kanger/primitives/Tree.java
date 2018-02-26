@@ -91,8 +91,10 @@ public class Tree {
     }
 
      
+    @Override
     public Tree clone() {
         Tree t = mind.getTrees().add();
+        t.setRight(right);
         t.sequence.addAll(sequence);
         return t;
     }
@@ -104,5 +106,6 @@ public class Tree {
             dos.writeLong(d.getId());
         }
     }
+    
 
 }

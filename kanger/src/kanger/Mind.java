@@ -41,7 +41,7 @@ public class Mind {
     private final Map<TVariable, TValue> tValues = new HashMap<>();
 
     private final Calculator calculator = new Calculator(this);
-    private final Analiser analyser = new Analiser(this);
+    private final Analiser analiser = new Analiser(this);
     private final Compiler compiler = new Compiler(this);
 
     private volatile boolean changed = false;
@@ -63,9 +63,7 @@ public class Mind {
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
-
     private transient volatile int currentLevel = 0;
-
 
     public DictionaryFactory getTerms() {
         return terms;
@@ -136,7 +134,6 @@ public class Mind {
         rights.reset();
     }
 
-
     public boolean isChanged() {
         return changed;
     }
@@ -150,7 +147,7 @@ public class Mind {
     }
 
     public Analiser getAnalyser() {
-        return analyser;
+        return analiser;
     }
 
     public Object getCompiler() {
@@ -174,7 +171,7 @@ public class Mind {
         rights.release();
         trees.release();
 
-        tValues.clear();
+//        tValues.clear();
     }
 
     public void clearQueryStatus() {
@@ -210,6 +207,7 @@ public class Mind {
             String line = (String) t[0];
             compileLine(line);
         }
+        //analiser.link(true);
     }
 
     public Object compileLine(String line) throws ParseErrorException, RuntimeErrorException {
@@ -266,8 +264,6 @@ public class Mind {
     /**
      * Удаление правила из дерева вывода
      * <p>
-     * Удалять можно только правила не содержащие t-переменные
-     *
      * @param r
      */
     private void removeRightRecord(Right r) {
@@ -283,8 +279,40 @@ public class Mind {
         }
     }
 
+    private void removeTreeRecords(Right r) {
+        Tree o = null;
+        for (Tree t = trees.getRoot(); t != null; t = t.getNext()) {
 
-    private void removeTVarsRecords(Right r) {
+            if (t.getRight() == r) {
+                if (o == null) {
+                    trees.setRoot(t.getNext());
+                } else {
+                    o.setNext(t.getNext());
+                }
+            } else {
+                o = t;
+            }
+        }
+    }
+
+    private void removeDomainRecords(Right r) {
+        Domain o = null;
+        for (Domain t = domains.getRoot(); t != null; t = t.getNext()) {
+
+            if (t.getRight() == r) {
+                if (o == null) {
+                    domains.setRoot(t.getNext());
+                } else {
+                    o.setNext(t.getNext());
+                }
+            } else {
+                o = t;
+            }
+        }
+    }
+
+    
+    private void removeTVarRecords(Right r) {
         TVariable o = null;
         for (TVariable t = tVars.getRoot(); t != null; t = t.getNext()) {
 
@@ -300,7 +328,7 @@ public class Mind {
         }
     }
 
-    private void removeCVarsRecords(Right r) {
+    private void removeCVarRecords(Right r) {
         Term o = null;
         for (Term t = terms.getRoot(); t != null; t = t.getNext()) {
             if (t.getRight() == r && t.isCVar()) {
@@ -316,8 +344,13 @@ public class Mind {
     }
 
     public void removeInsertionRight(Right r) {
-        removeTVarsRecords(r);
-        removeCVarsRecords(r);
+        clearQueryStatus();
+        tValues.clear();
+
+        removeTVarRecords(r);
+        removeCVarRecords(r);
+        removeDomainRecords(r);
+        removeTreeRecords(r);
         removeRightRecord(r);
     }
 
@@ -338,7 +371,7 @@ public class Mind {
     }
 
     public void writeCompiledData(OutputStream os) throws IOException, RuntimeErrorException {
-        analyser.analiser(true);
+        analiser.analiser(true);
 
         DataOutputStream dos = new DataOutputStream(os);
         dos.writeInt(19640207);
@@ -406,7 +439,7 @@ public class Mind {
     }
 
     public Boolean query(String line) throws ParseErrorException, RuntimeErrorException {
-        return analyser.query(line, false);
+        return analiser.query(line, false);
     }
 
     public String getVersion() {
@@ -424,11 +457,9 @@ public class Mind {
 //    public Map<Solve, Long> getSolveLinks() {
 //        return solveLinks;
 //    }
-
     public Map<TVariable, Long> gettVariableLinks() {
         return tVariableLinks;
     }
-
 
     public Set<Long> getUsedDomains() {
         return usedDomains;
@@ -449,7 +480,7 @@ public class Mind {
     public Set<Long> getQueuedDomains() {
         return queuedDomains;
     }
-    
+
     public Set<Long> getActiveRights() {
         return activeRights;
     }
@@ -460,12 +491,12 @@ public class Mind {
 
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();
-        if(substituted.isEmpty()) {
-        for(Right r = rights.getRoot(); r != null; r=r.getNext() ) {
+        if (substituted.isEmpty()) {
+            for (Right r = rights.getRoot(); r != null; r = r.getNext()) {
                 set.add(r);
             }
         } else {
-            for(long id : substituted) {
+            for (long id : substituted) {
                 for (Domain d : tVars.get(id).getSolves()) {
                     set.addAll(d.getPredicate().getRights());
                 }
@@ -473,5 +504,12 @@ public class Mind {
         }
         return set;
     }
-}
 
+    public Set<Tree> getActualTrees() {
+        Set<Tree> set = new HashSet<>();
+        for (Right r : getActualRights()) {
+            set.addAll(r.getTree());
+        }
+        return set;
+    }
+}

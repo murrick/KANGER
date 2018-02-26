@@ -192,7 +192,8 @@ public class Screen {
                                 // Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                                 // clipboard.setContents(selec, selec);
                             }
-
+                            for(String ln : line.split(";")) {
+                            
                             Boolean res = mind.getAnalyser().query(line, false);
                             if (res != null) {
                                 showLog(mind, LogMode.SOLVES);
@@ -204,6 +205,7 @@ public class Screen {
                             System.out.println(lastLine.getRecord());
                             if (res == null && !mind.getAnalyser().isInsertion()) {
                                 showHypo(mind);
+                            }
                             }
 //                            }
                             break;
@@ -756,101 +758,7 @@ public class Screen {
                 r = r.getNext();
             }
 
-            if (q != null) {
-                q.setNext(r.getNext());
-                r.setNext(null);
-            } else {
-                mind.getRights().setRoot(r.getNext());
-                r.setNext(null);
-            }
-
-//            String text = mind.getText().toString();
-//            String orig = r.getOrig();
-//
-//            int start = text.indexOf(orig);
-//            int end = start + orig.length();
-//            while (end < text.length() && (text.charAt(end) == '\r' || text.charAt(end) == '\n' || text.charAt(end) == ' ' || text.charAt(end) == '\t')) {
-//                ++end;
-//            }
-//            mind.getText().replace(start, end, "");
-
-
-            Tree x = null;
-            for (Tree z = mind.getTrees().getRoot(); z != null;) {
-                if (z.getRight().getId() == r.getId()) {
-                    if (x != null) {
-                        x.setNext(z.getNext());
-                        z.setNext(null);
-                        z = z.getNext();
-                    } else {
-                        mind.getTrees().setRoot(z.getNext());
-                        z.setNext(null);
-                        z = mind.getTrees().getRoot();
-                        x = null;
-                    }
-                } else {
-                    x = z;
-                    z = z.getNext();
-                }
-            }
-
-            TVariable t = null;
-            for (TVariable v = mind.getTVars().getRoot(); v != null;) {
-                if (v.getRight().getId() == r.getId()) {
-                    if (t != null) {
-                        t.setNext(v.getNext());
-                        v.setNext(null);
-                        v = t.getNext();
-                    } else {
-                        mind.getTVars().setRoot(v.getNext());
-                        v.setNext(null);
-                        v = mind.getTVars().getRoot();
-                        t = null;
-                    }
-                } else {
-                    t = v;
-                    v = v.getNext();
-                }
-            }
-
-            Term c = null;
-            for (Term z = mind.getTerms().getRoot(); z != null;) {
-                if (z.getRight().getId() == r.getId()) {
-                    if (c != null) {
-                        c.setNext(z.getNext());
-                        z.setNext(null);
-                        z = z.getNext();
-                    } else {
-                        mind.getTerms().setRoot(z.getNext());
-                        z.setNext(null);
-                        z = mind.getTerms().getRoot();
-                        c = null;
-                    }
-                } else {
-                    c = z;
-                    z = z.getNext();
-                }
-            }
-
-            Domain e = null;
-            for (Domain d = mind.getDomains().getRoot(); d != null;) {
-                if (d.getRight().getId() == r.getId()) {
-                    if (e != null) {
-                        e.setNext(d.getNext());
-                        d.setNext(null);
-                        d = e.getNext();
-                    } else {
-                        mind.getDomains().setRoot(d.getNext());
-                        d.setNext(null);
-                        d = mind.getDomains().getRoot();
-                        e = null;
-                    }
-                } else {
-                    e = d;
-                    d = d.getNext();
-                }
-            }
-
+            mind.removeInsertionRight(r);
             mind.setChanged(true);
         }
     }

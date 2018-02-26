@@ -29,7 +29,7 @@ public class RightFactory {
     }
 
     public Right add() {
-        Right p = new Right();
+        Right p = new Right(mind);
         p.setId(++lastID);
         p.setNext(root);
         root = p;

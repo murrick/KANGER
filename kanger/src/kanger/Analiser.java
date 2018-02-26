@@ -8,6 +8,8 @@ import kanger.exception.RuntimeErrorException;
 import kanger.primitives.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public class Analiser {
         this.mind = mind;
     }
 
-    private void substitutions(Domain d1, Domain d2, int level, boolean logging, boolean occurrs) {
+    private void linkDomains(Domain d1, Domain d2, int level, boolean logging, boolean occurrs) {
         if (level >= d1.getPredicate().getRange()) {
             if (logging && occurrs) {
                 logComparsion(d1);
@@ -48,7 +50,7 @@ public class Analiser {
                         TSubst s = t.setValue(d2.get(i).getValue());
                         s.setSrcSolve(d2);
                         s.setDstSolve(d1);
-                        occurrs =true;
+                        occurrs = true;
                     } catch (TValueOutOfOrver ex) {
                     }
                 }
@@ -84,7 +86,7 @@ public class Analiser {
 //                    }
                 }
             }
-            substitutions(d1, d2, level + 1, logging, occurrs);
+            linkDomains(d1, d2, level + 1, logging, occurrs);
         }
     }
 
@@ -94,10 +96,6 @@ public class Analiser {
                 if (a.isTSet() && a.getT().getDstSolve().getPredicate().getId() == d.getPredicate().getId()) {
                     for (Domain r : a.getT().getSolves()) {
                         mind.getLog().add(LogMode.ANALIZER, "Result: " + r.toString());
-                        r.setAcceptor(false);
-                        if (bake) {
-                            mind.getRights().add(r);
-                        }
                     }
                     mind.getLog().add(LogMode.ANALIZER, "From right  : " + a.getT().getRight().toString());
                     mind.getLog().add(LogMode.ANALIZER, "\tAcceptor: " + d.toString());
@@ -110,66 +108,187 @@ public class Analiser {
         }
     }
 
-    private boolean compareRights(Right r1, Right r2, boolean logging) {
-        boolean closed = false;
-
-        for (Tree t1 : r1.getTree()) {
-            for (Tree t2 : r2.getTree()) {
-                // Сравнение двух ветвей
-                if (t1.getId() != t2.getId()) {
-                    for (Domain d1 : t1.getSequence()) {
-                        for (Domain d2 : t2.getSequence()) {
-                            if (d1.isAntc() != d2.isAntc() && d1.getPredicate().equals(d2.getPredicate())) {
-                                substitutions(d1, d2, 0, logging, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return closed;
-    }
-
-    public boolean recurse(TVariable t, boolean logging) {
-        boolean result = false;
+    public void recurseLink(TVariable t, Set<Tree> set, boolean logging) {
         if (t == null) {
 
-            Set<Right> set = mind.getActualRights();
-            for (Right r1 : set) {
-                for (Right r2 : set) {
-                    if (compareRights(r1, r2, logging)) {
-                        result = true;
+            for (Tree t1 : set) {
+                for (Tree t2 : set) {
+                    if (t1.getId() != t2.getId()) {
+                        for (Domain d1 : t1.getSequence()) {
+                            for (Domain d2 : t2.getSequence()) {
+                                if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
+                                    linkDomains(d1, d2, 0, logging, false);
+                                }
+                            }
+                        }
                     }
                 }
             }
         } else {
             t.rewind();
             do {
-                if (recurse(t.getNext(), logging)) {
-                    result = true;
-                }
+                recurseLink(t.getNext(), set, logging);
             } while (t.next());
         }
+    }
+
+    public void link(boolean logging) {
+        link(null, logging);
+    }
+
+    public void link(Right r, boolean logging) {
+        int pass = 0;
+        if (r == null) {
+            mind.clearQueryStatus();
+            mind.getTValues().clear();
+        }
+
+        Set<Tree> set;
+//        if (r == null) {
+//            set = mind.getActualTrees();
+//        } else {
+//            set = r.getActualTrees();
+//        }
+
+        set = mind.getActualTrees();
+
+        do {
+            mind.getSubstituted().clear();
+            if (logging) {
+                mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
+            }
+            recurseLink(mind.getTVars().getRoot(), set, logging);
+        } while (mind.getSubstituted().size() > 0);
+
+    }
+
+    private List<TVariable> getTVariables(List<Domain> sequence) {
+        List<TVariable> list = new ArrayList<>();
+        for (Domain d : sequence) {
+            for (Argument a : d.getArguments()) {
+                if (a.isTSet() && !list.contains(a)) {
+                    list.add(a.getT());
+                }
+            }
+        }
+        return list;
+    }
+
+    private boolean recurseTree(List<Domain> sequence, List<TVariable> vars, int index, boolean logging) {
+        boolean result = false;
+        if (index >= vars.size()) {
+            for (Domain a : sequence) {
+                for (Domain b : sequence) {
+                    if (a.getPredicate().getId() == b.getPredicate().getId() && a.isAntc() != b.isAntc()) {
+                        boolean equals = true;
+                        if ((a.getRight().isQuery() && b.isAcceptor()) || (b.getRight().isQuery() && a.isAcceptor())) {
+                            equals = false;
+                        } else {
+                            for (int i = 0; i < a.getPredicate().getRange(); ++i) {
+                                if (!a.getArguments().get(i).isEmpty()
+                                        && !b.getArguments().get(i).isEmpty()
+                                        && a.getArguments().get(i).getValue().equals(b.getArguments().get(i).getValue())) {
+                                } else {
+                                    equals = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (equals) {
+                            result = true;
+
+                            if (a.getRight().isQuery()) {
+                                mind.getSolutions().add(b.toString());
+                            } else if ((b.getRight().isQuery())) {
+                                mind.getSolutions().add(a.toString());
+                            } else {
+                                mind.getSolutions().add(a.toString());
+                                mind.getSolutions().add(b.toString());
+                            }
+
+                            if (logging) {
+                                mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
+                                for (Domain x : sequence) {
+                                    mind.getLog().add(LogMode.ANALIZER, "\t" + x.toString());
+                                }
+                                mind.getLog().add(LogMode.ANALIZER, "Сoincidence : ");
+                                mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
+                                mind.getLog().add(LogMode.ANALIZER, "\t" + b.toString());
+                            }
+
+                            List<TVariable> list;
+                            if (a.getRight().isQuery()) {
+                                list = getTVariables(Arrays.asList(a));
+                            } else if (b.getRight().isQuery()) {
+                                list = getTVariables(Arrays.asList(b));
+                            } else {
+                                list = getTVariables(Arrays.asList(a, b));
+                            }
+
+                            if (!list.isEmpty()) {
+                                if (logging) {
+                                    mind.getLog().add(LogMode.ANALIZER, "Values : ");
+                                }
+                                for (TVariable t : list) {
+                                    mind.getValues().add(t.getName() + "=" + t.getValue());
+                                    if (logging) {
+                                        mind.getLog().add(LogMode.ANALIZER, "\t" + t.getName() + "=" + t.getValue());
+                                    }
+                                }
+                            }
+
+                            if (logging) {
+                                mind.getLog().add(LogMode.ANALIZER, "===========================================");
+                            }
+
+                        }
+                    }
+                }
+            }
+        } else {
+            vars.get(index).rewind();
+            do {
+                if (recurseTree(sequence, vars, index + 1, logging)) {
+                    result = true;
+                }
+            } while (vars.get(index).next());
+        }
         return result;
+    }
+
+    public boolean analiseTree(List<Domain> sequence, boolean logging) {
+        List<TVariable> vars = getTVariables(sequence);
+        return recurseTree(sequence, vars, 0, logging);
     }
 
     public boolean analiser(boolean logging) {
         boolean result = false;
         int counter = 0;
-        mind.getActiveRights().clear();
-        mind.clearQueryStatus();
 
-        do {
-            mind.getSubstituted().clear();
-            if(logging) {
-                mind.getLog().add(LogMode.ANALIZER, "----------------------------------- PASS " + (++counter));
+        if (logging) {
+            mind.getLog().add(LogMode.ANALIZER, "============= ANALISER ====================");
+        }
+
+        Set<Tree> query = new HashSet<>();
+        for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
+            if (r.isQuery()) {
+                query.addAll(r.getTree());
             }
+        }
 
-            if (recurse(mind.getTVars().getRoot(), logging)) {
+        for (Tree t = mind.getTrees().getRoot(); t != null; t = t.getNext()) {
+            if (analiseTree(t.getSequence(), logging)) {
                 result = true;
             }
-        } while (mind.getSubstituted().size() > 0);
+            for (Tree x : query) {
+                List<Domain> actual = new ArrayList<>();
+                actual.addAll(t.getSequence());
+                actual.addAll(x.getSequence());
+                if (analiseTree(actual, logging)) {
+                    result = true;
+                }
+            }
+        }
 
         return result;
     }
@@ -274,6 +393,7 @@ public class Analiser {
         isInsertion = false;
 
         mind.getLog().add(LogMode.ANALIZER, "============= CHECKING ===================");
+        link(true);
         if (analiser(true)) {
             mind.getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
             res = null;
@@ -296,9 +416,7 @@ public class Analiser {
                     mind.getLog().add(LogMode.ANALIZER, "============= ACCEPTING ===================");
 
 //                    mind.release();
-
 //                    analiser(false);
-
 //                    Right r = (Right) mind.compileLine(invert(line));
 //                    if (r != null) {
 //                        mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
@@ -317,13 +435,13 @@ public class Analiser {
 //                        mind.release();
 //                        analiser();
                     Right r = (Right) mind.compileLine(line);
-                    r.setCurrent(true);
 
                     if (r != null) {
                         mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                         mind.getLog().add(LogMode.ANALIZER, r);
                         mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
+                        link(r, true);
                         if (analiser(true)) {
                             mind.getLog().add(LogMode.ANALIZER, "ERROR: Conflict in new Right");
                             res = null;
@@ -351,7 +469,6 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "SUCCESS: New solves: " + mind.getHypotesisStore().size());
                             }
 
-                            r.setCurrent(false);
                             mind.setChanged(true);
                             mind.mark();
                         }
@@ -393,17 +510,18 @@ public class Analiser {
 //                        mind.release();
 //                        mind.mark();
 //                        isHypotheses = true;
+                        mind.getLog().reset();
                         if (!DEBUG_DISABLE_FALSE_CHECK) {
 
-                            mind.getLog().reset();
                             mind.getLog().add(LogMode.ANALIZER, "============= FALSE CHECKING ==============");
 
 //
 //                            analiser(false);
                             Right r = (Right) mind.compileLine(invert(line));
-                            r.setCurrent(true);
 
                             if (r != null) {
+                                r.setQuery(true);
+
                                 mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                                 mind.getLog().add(LogMode.ANALIZER, r);
                                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
@@ -413,10 +531,8 @@ public class Analiser {
 //                                mind.getRights().release();
 //                                mind.getTrees().release();
 //                                mind.getDomains().release();
-                                bake = true;
-                                Boolean rz = analiser(true);
-                                bake = false;
-                                if (rz) {
+                                link(r, true);
+                                if (analiser(true)) {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
                                     logResult();
                                     res = false;
@@ -435,6 +551,13 @@ public class Analiser {
                                     //mind.clear();
                                 }
                             }
+
+                            if (res == null) {
+                                mind.release();
+                                link(false);
+                            }
+
+                        } else {
                         }
                     }
 
@@ -444,15 +567,11 @@ public class Analiser {
                         //mind.release();
 //                        mind.release();
 //                        analiser();
-
-                        mind.release();
                         //analiser();
-
-                        analiser(false);
                         Right r = (Right) mind.compileLine(line);
-                        r.setCurrent(true);
 
                         if (r != null) {
+                            r.setQuery(true);
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                             mind.getLog().add(LogMode.ANALIZER, r);
                             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
@@ -466,10 +585,8 @@ public class Analiser {
 //                            if (!isInsertion) {
 //                                isHypotheses = true;
 //                            }
-                            bake = true;
-                            Boolean rz = analiser(true);
-                            bake = false;
-                            if (rz) {
+                            link(r, true);
+                            if (analiser(true)) {
                                 if (isInsertion) {
                                     mind.removeInsertionRight(r);
                                     List<Right> killedRights = killInsertion(r, key == Enums.WIPE);
@@ -556,4 +673,5 @@ public class Analiser {
         }
 
     }
+
 }

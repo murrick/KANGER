@@ -6,7 +6,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -19,12 +21,11 @@ public class Right {
     private long id = -1;                       // ID Правила
     private Right next = null;                  // Следующее правило
     private String orig = "";                   // Оригинальная строка
-    private boolean current = false;            // Вновь введенное правило
+    private boolean query = false;            // Вновь введенное правило
 
     private Mind mind = null;
 
-
-    public Right() {
+    public Right(Mind mind) {
         this.mind = mind;
     }
 
@@ -33,7 +34,7 @@ public class Right {
         orig = dis.readUTF();
         int count = dis.readInt();
         while (count-- > 0) {
-			tree.add(new Tree(dis, mind));
+            tree.add(new Tree(dis, mind));
         }
         this.mind = mind;
     }
@@ -66,12 +67,12 @@ public class Right {
         this.orig = orig;
     }
 
-    public boolean isCurrent() {
-        return current;
+    public boolean isQuery() {
+        return query;
     }
 
-    public void setCurrent(boolean current) {
-        this.current = current;
+    public void setQuery(boolean current) {
+        this.query = current;
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
@@ -79,7 +80,7 @@ public class Right {
         dos.writeUTF(orig);
         dos.writeInt(tree.size());
         for (Tree r : tree) {
-			r.writeCompiledData(dos);
+            r.writeCompiledData(dos);
 
         }
     }
@@ -99,11 +100,35 @@ public class Right {
     }
 
     public void setActive(boolean active) {
-        if(active) {
+        if (active) {
             mind.getActiveRights().add(id);
         } else {
             mind.getActiveRights().remove(id);
         }
+    }
+
+    public Set<Right> getActualRights() {
+        Set<Right> set = new HashSet<>();
+        Set<Predicate> preds = new HashSet<>();
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(d.getRight().getId() == id) {
+                preds.add(d.getPredicate());
+            }
+        }
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(d.getRight().getId() != id && preds.contains(d.getPredicate())) {
+                set.add(d.getRight());
+            }
+        }
+        return set;
+    }
+    
+    public Set<Tree> getActualTrees() {
+        Set<Tree> set = new HashSet<>();
+        for (Right r : getActualRights()) {
+            set.addAll(r.getTree());
+        }
+        return set;
     }
     
     @Override
