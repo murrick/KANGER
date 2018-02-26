@@ -18,6 +18,7 @@ public class Tree {
     private List<Domain> sequence = new ArrayList<>();          // Домены
     private long id = -1;                                       // Идентификатор
     private Tree next = null;
+    private Right right = null;
 
     private Mind mind = null;
 
@@ -73,6 +74,14 @@ public class Tree {
         this.id = id;
     }
 
+    public Right getRight() {
+        return right;
+    }
+
+    public void setRight(Right right) {
+        this.right = right;
+    }
+
     public Tree getNext() {
         return next;
     }
@@ -81,6 +90,7 @@ public class Tree {
         this.next = next;
     }
 
+     
     public Tree clone() {
         Tree t = mind.getTrees().add();
         t.sequence.addAll(sequence);

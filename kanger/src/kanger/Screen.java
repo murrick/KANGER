@@ -18,10 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 /**
- * Created by murray on 28.05.15.
- * $Author: murray $
+ * Created by murray on 28.05.15. $Author: murray $
  */
 public class Screen {
 
@@ -47,8 +45,6 @@ public class Screen {
 //                Runtime.getRuntime().exec("input keyevent " + ss.charAt(i));
 //            } catch (IOException e) {} 
 //        }
-
-
         showCopyrigt(mind);
 
         while (!stop) {
@@ -67,7 +63,9 @@ public class Screen {
                     System.out.printf("\n: ");
                     line = new Scanner(System.in).nextLine();
                 }
-                if (line == null) line = "";
+                if (line == null) {
+                    line = "";
+                }
                 if (line.length() > 0) {
                     switch (line.toUpperCase().charAt(0)) {
                         case 'Q':
@@ -230,7 +228,9 @@ public class Screen {
                 String msg = x.split("@")[1];
                 System.out.println("ERROR: " + msg);
                 System.out.println(line);
-                while (pos-- > 0) System.out.print(" ");
+                while (pos-- > 0) {
+                    System.out.print(" ");
+                }
                 System.out.println("^");
                 line = "";
 //                incomplete = "";
@@ -243,7 +243,6 @@ public class Screen {
         System.out.println("KANGER III Session closed");
 
     }
-
 
     public static void showLog(Mind mind, LogMode type) {
         if (mind.getLog().size() > 0) {
@@ -279,7 +278,6 @@ public class Screen {
 //            System.out.println();
 //        }
 //    }
-
     public static void showCopyrigt(Mind mind) {
         System.out.printf("KANGER III, Version %s\n"
                 + "Copiryght (C) 1986-%d, Gunn A. Qusnetsov, Dmitry G. Qusnetsov, All rights reserved!\n"
@@ -354,35 +352,34 @@ public class Screen {
 //            return true;
 //        }
 //    }
-
     public static void showHelp() {
         System.out.printf(
                 "Available KEYWORDS:\n\n"
-                        + "   HELP    - Get this message\n"
-                        + "\n"
-                        + "   ?       - Check for Rights Collisions\n"
-                        + "   BASE    - View DataBase contents\n"
-                        + "   RIGHTS  - View compiled-structured Rights list\n"
-                        + "   FUNCS   - View defined Functions list\n"
-                        + "   KILL    - Remove right\n"
-                        + "   LIST    - View Hypotheses list after last work\n"
-                        + "   INSERT  - Insert Hypotheses as right\n"
-                        + "   AGAIN   - Repeat last question\n"
-                        + "   XPLAIN  - Show explanation log\n"
-                        + "   SOLVES  - Show solves list\n"
-                        + "   VALUES  - Show values list\n"
-//                        + "   TEXT    - Show source text\n"
-                        + "   CLEAR   - Clear workspace\n"
-//                        + "   ERASE   - Clear all working memory\n"
-                        + "\n"
-//                        + "   PUT     - Save Source file\n"
-                        + "   GET     - Load Source file from disk\n"
-                        + "   ZIP     - Save compiled code\n"
-                        + "   UNZIP   - Load compiled code from file\n"
-                        + "\n"
-                        + "   QUIT    - Quit KANGER\n"
-                        + "\n"
-                        + "You can use just FIRST letter of keywords.\n"
+                + "   HELP    - Get this message\n"
+                + "\n"
+                + "   ?       - Check for Rights Collisions\n"
+                + "   BASE    - View DataBase contents\n"
+                + "   RIGHTS  - View compiled-structured Rights list\n"
+                + "   FUNCS   - View defined Functions list\n"
+                + "   KILL    - Remove right\n"
+                + "   LIST    - View Hypotheses list after last work\n"
+                + "   INSERT  - Insert Hypotheses as right\n"
+                + "   AGAIN   - Repeat last question\n"
+                + "   XPLAIN  - Show explanation log\n"
+                + "   SOLVES  - Show solves list\n"
+                + "   VALUES  - Show values list\n"
+                //                        + "   TEXT    - Show source text\n"
+                + "   CLEAR   - Clear workspace\n"
+                //                        + "   ERASE   - Clear all working memory\n"
+                + "\n"
+                //                        + "   PUT     - Save Source file\n"
+                + "   GET     - Load Source file from disk\n"
+                + "   ZIP     - Save compiled code\n"
+                + "   UNZIP   - Load compiled code from file\n"
+                + "\n"
+                + "   QUIT    - Quit KANGER\n"
+                + "\n"
+                + "You can use just FIRST letter of keywords.\n"
         );
     }
 
@@ -454,25 +451,42 @@ public class Screen {
         }
         for (Right r : s.getCauses().keySet()) {
             if (r != null) {
-                System.out.printf("\t\t%sRight: %s\n", indent, r.getOrig());
+                System.out.printf("\t    %sRight: %s\n", indent, r.getOrig());
             }
             for (Domain so : s.getCauses().get(r)) {
-                System.out.printf("\t\t%sCause: %s\n", indent, so.toString());
+                System.out.printf("\t    %sCause: %s\n", indent, so.toString());
                 showCauses(mind, so, level + 1);
             }
         }
     }
 
+    private static void showPredRecurse(Mind mind, int level, Domain d, boolean showCauses) {
+        if (level >= d.getPredicate().getRange()) {
+            System.out.printf("\t%s\n", d.toString());
+            if (showCauses) {
+                showCauses(mind, d, 0);
+            }
+        } else if (d.getArguments().get(level).isTSet()) {
+            TVariable t = d.getArguments().get(level).getT();
+            t.rewind();
+            do {
+                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
+                    showPredRecurse(mind, level + 1, d, showCauses);
+                }
+            } while (t.next());
+        } else {
+            showPredRecurse(mind, level + 1, d, showCauses);
+        }
+    }
+
     public static void showPred(Mind mind, Predicate p, boolean showCauses) {
         System.out.printf("Predicate %s(%d) :\n", p.getName(), p.getRange());
-        if (p.getSolves().isEmpty()) {
+        List<Domain> list = p.getSolves();
+        if (list.isEmpty()) {
             System.out.printf("\tHas not solves\n");
         } else {
-            for (Domain s : p.getSolves()) {
-                System.out.printf("\t%s\n", s.toString());
-                if (showCauses) {
-                    showCauses(mind, s, 0);
-                }
+            for (Domain s : list) {
+                showPredRecurse(mind, 0, s, showCauses);
             }
         }
     }
@@ -728,6 +742,10 @@ public class Screen {
         System.out.printf("Are you sure to remove right " + (i + 1) + " [y/N]? ");
         String s = new Scanner(System.in).nextLine();
         if (s.charAt(0) == 'Y' || s.charAt(0) == 'y') {
+
+            mind.clearQueryStatus();
+            mind.getTValues().clear();
+            
             Right q = null;
             Right r = mind.getRights().getRoot();
             for (int k = 0; k < i; ++k) {
@@ -752,26 +770,66 @@ public class Screen {
 //                ++end;
 //            }
 //            mind.getText().replace(start, end, "");
-//            mind.setChanged(true);
 
-            //TODO: Тут просто закомментировал. С удалением правил надо разобраться
-//            for (Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
-//                Solve m = p.getSolve();
-//                for (Solve o = p.getSolve(); o != null; o = o.getNext()) {
-//                    if (o.getCauses().containsKey(r)) {
-//                        o.getCauses().remove(r);
-//                        if (o.getCauses().size() == 0) {
-//                            if (m == o) {
-//                                p.setSolve(o.getNext());
-//                            } else {
-//                                m.setNext(o.getNext());
-//                            }
-//                        }
-//                    }
-//                    m = o;
-//                }
-//            }
-//            //mind.clear();
+
+            Tree x = null;
+            for (Tree z = mind.getTrees().getRoot(); z != null;) {
+                if (z.getRight().getId() == r.getId()) {
+                    if (x != null) {
+                        x.setNext(z.getNext());
+                        z.setNext(null);
+                        z = z.getNext();
+                    } else {
+                        mind.getTrees().setRoot(z.getNext());
+                        z.setNext(null);
+                        z = mind.getTrees().getRoot();
+                        x = null;
+                    }
+                } else {
+                    x = z;
+                    z = z.getNext();
+                }
+            }
+
+            TVariable t = null;
+            for (TVariable v = mind.getTVars().getRoot(); v != null;) {
+                if (v.getRight().getId() == r.getId()) {
+                    if (t != null) {
+                        t.setNext(v.getNext());
+                        v.setNext(null);
+                        v = t.getNext();
+                    } else {
+                        mind.getTVars().setRoot(v.getNext());
+                        v.setNext(null);
+                        v = mind.getTVars().getRoot();
+                        t = null;
+                    }
+                } else {
+                    t = v;
+                    v = v.getNext();
+                }
+            }
+
+            Domain e = null;
+            for (Domain d = mind.getDomains().getRoot(); d != null;) {
+                if (d.getRight().getId() == r.getId()) {
+                    if (e != null) {
+                        e.setNext(d.getNext());
+                        d.setNext(null);
+                        d = e.getNext();
+                    } else {
+                        mind.getDomains().setRoot(d.getNext());
+                        d.setNext(null);
+                        d = mind.getDomains().getRoot();
+                        e = null;
+                    }
+                } else {
+                    e = d;
+                    d = d.getNext();
+                }
+            }
+
+            mind.setChanged(true);
         }
     }
 
@@ -812,7 +870,6 @@ public class Screen {
 //            return false;
 //        }
 //    }
-
     public static boolean loadSource(Mind mind) throws ParseErrorException, RuntimeErrorException {
         Scanner scanner = new Scanner(System.in);
 //        if (checkChg(mind)) {

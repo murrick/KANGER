@@ -1,7 +1,6 @@
 package kanger.factory;
 
 import kanger.Mind;
-import kanger.primitives.Right;
 import kanger.primitives.Tree;
 
 import java.io.DataInputStream;
@@ -26,6 +25,7 @@ public class TreeFactory {
     public Tree add() {
         Tree p = new Tree(mind);
         p.setId(++lastID);
+        p.setRight(mind.getRights().getRoot());
         p.setNext(root);
         root = p;
         return p;

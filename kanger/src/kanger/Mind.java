@@ -52,9 +52,9 @@ public class Mind {
 
     private Set<Long> usedDomains = new HashSet();
     private Set<Long> initiatedDomains = new HashSet();
+    private Set<Long> queuedDomains = new HashSet();
     private Set<Long> usedTrees = new HashSet();
     private Set<Long> closedTrees = new HashSet();
-    private Map<Domain, Map<Right, Set<Domain>>> causes = new HashMap<>();
 
     private Set<Long> activeRights = new HashSet<>();
 
@@ -203,7 +203,7 @@ public class Mind {
         usedTrees.clear();
         closedTrees.clear();
         initiatedDomains.clear();
-        causes.clear();
+        queuedDomains.clear();
 
         tValues.clear();
     }
@@ -470,10 +470,10 @@ public class Mind {
         return initiatedDomains;
     }
 
-    public Map<Domain, Map<Right, Set<Domain>>> getCauses() {
-        return causes;
+    public Set<Long> getQueuedDomains() {
+        return queuedDomains;
     }
-
+    
     public Set<Long> getActiveRights() {
         return activeRights;
     }

@@ -6,65 +6,103 @@ import kanger.enums.LogMode;
 import kanger.exception.ParseErrorException;
 import kanger.exception.RuntimeErrorException;
 import kanger.primitives.*;
-import kanger.stores.HypotesesStore;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import kanger.exception.TValueOutOfOrver;
 
+// !@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z);
 /**
  * Created by murray on 26.05.15.
  */
 public class Analiser {
 
     private static final boolean DEBUG_DISABLE_FALSE_CHECK = false;
-    private Mind mind;
+
+    private final Mind mind;
     private boolean isInsertion = false;
 
     public Analiser(Mind mind) {
         this.mind = mind;
     }
 
-
     private boolean compareDomains(Domain d1, Domain d2, int level) {
         if (level >= d1.getPredicate().getRange()) {
             d1.setUsed(true);
             d2.setUsed(true);
-//            if(d1.isInitiated() || d2.isInitiated()) {
-                mind.getSolutions().add(d1.toString());
-//                mind.getLog().add(LogMode.ANALIZER, "Equals:");
-//                mind.getLog().add(LogMode.ANALIZER, "\t" + d1.toString());
-//                mind.getLog().add(LogMode.ANALIZER, "\t" + d2.toString());
-                for(Argument a : d1.getArguments()) {
-                    if(a.isTSet())
+
+            //TODO: ???
+            mind.getSolutions().add(d1.toString());
+
+            for (Argument a : d1.getArguments()) {
+                if (a.isTSet()) {
                     mind.getValues().add(a.getT().getName() + "=" + a.getValue());
                 }
-//            }
+            }
             return true;
         } else {
+            //ПОДСТАНОВКИ
             for (int i = 0; i <= level; ++i) {
-                if (d1.get(i).isTSet() && d1.get(i).isEmpty() && !d2.get(i).isEmpty()) {
-                    if (!d1.get(i).setValue(d2.get(i).getValue())) {
+                if (d1.get(i).isTSet() && !d2.get(i).isEmpty() && !d1.get(i).getT().contains(d2.get(i).getValue())) {
+                    try {
+                        TVariable t = d1.get(i).getT();
+                        if (t.isEmpty()) {
+                            d1.setInitiated(true);
+                            TSubst s = t.setValue(d2.get(i).getValue());
+                            s.setSrcSolve(d2);
+                            s.setDstSolve(d1);
+                        } else {
+                            d1.setQueued(true);
+                            TSubst s = t.addValue(d2.get(i).getValue());
+                            s.setSrcSolve(d2);
+                            s.setDstSolve(d1);
+                            return false;
+                        }
+                    } catch (TValueOutOfOrver ex) {
                         return false;
-                    } else {
-//                        d2.getRight().setActive(true);
-                        d1.get(i).getT().setSolve(d2);
-                        d1.setInitiated(true);
                     }
-                } else if (d2.get(i).isTSet() && d2.get(i).isEmpty() && !d1.get(i).isEmpty()) {
-                    if (!d2.get(i).setValue(d1.get(i).getValue())) {
+                }
+                if (d2.get(i).isTSet() && !d1.get(i).isEmpty() && !d2.get(i).getT().contains(d1.get(i).getValue())) {
+                    try {
+                        TVariable t = d2.get(i).getT();
+                        if (t.isEmpty()) {
+                            d2.setInitiated(true);
+                            TSubst s = t.setValue(d1.get(i).getValue());
+                            s.setSrcSolve(d1);
+                            s.setDstSolve(d2);
+                        } else {
+                            d2.setQueued(true);
+                            TSubst s = t.addValue(d1.get(i).getValue());
+                            s.setSrcSolve(d1);
+                            s.setDstSolve(d2);
+                            return false;
+                        }
+                    } catch (TValueOutOfOrver ex) {
                         return false;
-                    } else {
-//                        d1.getRight().setActive(true);
-                        d2.get(i).getT().setSolve(d1);
-                        d2.setInitiated(true);
                     }
-                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
-                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
-                    Term c = mind.getTerms().get();
-                    d1.get(i).setValue(c);
-                    d2.get(i).setValue(c);
-                } else if (d1.get(i).isEmpty() || d2.get(i).isEmpty() || !d1.get(i).getValue().equals(d2.get(i).getValue())) {
+//                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
+//                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
+//                    Term c = mind.getTerms().get();
+//                    try {
+//                        TSubst s = d1.get(i).getT().setValue(c);
+//                        s.setSrcSolve(d2);
+//                        s.setDstSolve(d1);
+//                        d1.setInitiated(true);
+//                    } catch (TValueOutOfOrver ex) {
+//                        return false;
+//                    }
+//                    try {
+//                        TSubst s = d2.get(i).getT().setValue(c);
+//                        s.setSrcSolve(d1);
+//                        s.setDstSolve(d2);
+//                        d2.setInitiated(true);
+//                    } catch (TValueOutOfOrver ex) {
+//                        return false;
+//                    }
+                }
+                if (d1.get(i).isEmpty() || d2.get(i).isEmpty() || !d1.get(i).getValue().equals(d2.get(i).getValue())) {
                     return false;
                 }
             }
@@ -72,45 +110,87 @@ public class Analiser {
         }
     }
 
-    private boolean compareRights(Right r1, Right r2) {
-        //mind.release();
-        // Последовательно сравниваем все ветки двух правил
+    private boolean logComparsion(Domain d) {
+        if (d.isInitiated()) {
+            mind.getLog().add(LogMode.ANALIZER, "Solve set: " + d.toString());
+            for (Argument a : d.getArguments()) {
+                if (a.isTSet() && a.getT().getDstSolve().getPredicate().getId() == d.getPredicate().getId()) {
+                    mind.getLog().add(LogMode.ANALIZER, "\tRight: " + a.getT().getRight().toString());
+                    mind.getLog().add(LogMode.ANALIZER, "\tCause: " + a.getT().getSrcSolve());
+                }
+            }
+            return true;
+        } else if (d.isQueued()) {
+            mind.getLog().add(LogMode.ANALIZER, "Solve add: " + d.toString());
+            for (Argument a : d.getArguments()) {
+                if (a.isTSet() && a.getT().getDstSolve().getPredicate().getId() == d.getPredicate().getId()) {
+                    mind.getLog().add(LogMode.ANALIZER, "\tRight: " + a.getT().getRight().toString());
+                    mind.getLog().add(LogMode.ANALIZER, "\tCause: " + a.getT().getSrcSolve());
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean compareRights(Right r1, Right r2, boolean logging) {
         boolean closed = false;
 
-//        mind.getInitiatedDomains().clear();
-//        int initiatedCount = 0;
-//        do {
-//            initiatedCount = mind.getInitiatedDomains().size();
+//        mind.getUsedDomains().clear();
+//        mind.getUsedTrees().clear();
+//        mind.getClosedTrees().clear();
         for (Tree t1 : r1.getTree()) {
             for (Tree t2 : r2.getTree()) {
                 // Сравнение двух ветвей
-                for (Domain d1 : t1.getSequence()) {
-                    for (Domain d2 : t2.getSequence()) {
-                        if (!d1.isUsed() && !d2.isUsed()
-                                && d1.isAntc() != d2.isAntc()
-                                && d1.getPredicate().equals(d2.getPredicate())) {
+                if (t1.getId() != t2.getId()) {
+                    for (Domain d1 : t1.getSequence()) {
+                        for (Domain d2 : t2.getSequence()) {
+                            if (d1.isAntc() != d2.isAntc() && d1.getPredicate().equals(d2.getPredicate())) {
+                                compareDomains(d1, d2, 0);
 
-//                            boolean initiatedD1 = d1.isInitiated();
-//                            boolean initiatedD2 = d2.isInitiated();
+                                if (logging) {
+                                    if (!logComparsion(d1) && !logComparsion(d2)) {
+                                        if (d1.isUsed() && d2.isUsed()) {
+                                            mind.getLog().add(LogMode.ANALIZER, "Comparsion success: ");
+                                            mind.getLog().add(LogMode.ANALIZER, "\t" + d1.toString());
+                                            mind.getLog().add(LogMode.ANALIZER, "\t" + d2.toString());
+                                        }
+                                    }
 
-                            compareDomains(d1, d2, 0);
+                                    List<List<String>> net = Screen.formatTree(r1);
+                                    for (int i = 0; i < net.get(0).size(); ++i) {
+                                        String s = "";
+                                        for (int k = 0; k < net.size(); ++k) {
+                                            s += net.get(k).get(i);
+                                            if (k + 1 < net.size()) {
+                                                s += " ";
+                                            }
+                                        }
+                                        mind.getLog().add(LogMode.ANALIZER, s);
+                                    }
 
-//                                if (compareDomains(d1, d2, 0)) {
-//                                    t1.setUsed(true);
-//                                    t2.setUsed(true);
-//
-//                                    Screen.showTree(r1);
-//                                    Screen.showTree(r2);
-//                                }
+                                    net = Screen.formatTree(r2);
+                                    for (int i = 0; i < net.get(0).size(); ++i) {
+                                        String s = "";
+                                        for (int k = 0; k < net.size(); ++k) {
+                                            s += net.get(k).get(i);
+                                            if (k + 1 < net.size()) {
+                                                s += " ";
+                                            }
+                                        }
+                                        mind.getLog().add(LogMode.ANALIZER, s);
+                                    }
+
+                                }
+                            }
                         }
                     }
                 }
-
             }
         }
-//        } while(initiatedCount != mind.getInitiatedDomains().size());
 
-        boolean treeClosed = false;
+        Set<Tree> treeClosed = new HashSet<>();
         for (Tree t : r1.getTree()) {
             boolean c = true;
             for (Domain d : t.getSequence()) {
@@ -122,7 +202,7 @@ public class Analiser {
             }
             t.setClosed(c);
             if (c) {
-                treeClosed = true;
+                treeClosed.add(t);
             }
         }
 
@@ -136,7 +216,7 @@ public class Analiser {
                 }
             }
             t.setClosed(c);
-            if (c && treeClosed) {
+            if (c && treeClosed.size() > 0 && !treeClosed.contains(t)) {
                 closed = true;
             }
         }
@@ -144,38 +224,55 @@ public class Analiser {
         return closed;
     }
 
-    public boolean analiser(boolean logging) {
+    public boolean recurse(TVariable t, boolean logging) {
         boolean result = false;
+        if (t == null) {
 
-//        mind.release();
+                    mind.getUsedDomains().clear();
+            
+            for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
+                for (Right r2 = mind.getRights().getRoot(); r2 != null; r2 = r2.getNext()) {
+                    
+                    mind.getUsedTrees().clear();
+                    mind.getClosedTrees().clear();
 
-        mind.getActiveRights().clear();
-
-        List<Right> list = new ArrayList<>();
-        for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
-            list.add(0, r);
-        }
-
-        for(int i=0; i<list.size(); ++i) {
-            mind.clearQueryStatus();
-
-            for (Right r1 : list) {
-                for (Right r2 = r1.getNext(); r2 != null; r2 = r2.getNext()) {
-                    if (compareRights(r1, r2)) {
-                        result = true;
+                    if (r1.getId() != r2.getId()) {
+                        if (compareRights(r1, r2, logging)) {
+                            result = true;
+                        }
                     }
                 }
             }
-
-            Right r = list.get(0);
-            list.remove(0);
-            list.add(r);
+        } else {
+            t.rewind();
+            do {
+                if (recurse(t.getNext(), logging)) {
+                    result = true;
+                }
+            } while (t.next());
         }
         return result;
     }
 
-//    ///////////////////////////////
+    public boolean analiser(boolean logging) {
+        boolean result = false;
+        mind.getActiveRights().clear();
+        mind.clearQueryStatus();
 
+//        if(!logging) {
+////            mind.getTValues().clear();
+//        }
+        do {
+            mind.dropSubstCount();
+            if (recurse(mind.getTVars().getRoot(), logging)) {
+                result = true;
+            }
+        } while (mind.getSubstCount() > 0);
+
+        return result;
+    }
+
+//    ///////////////////////////////
     void storeHypo() {
         for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
             for (Tree t : r1.getTree()) {
@@ -191,7 +288,6 @@ public class Analiser {
     }
 
 //    ///////////////////////////////
-
     private List<Right> killInsertion(Right target, boolean withRelatedRights) {
         int flag = 0;
         mind.release();
@@ -233,7 +329,6 @@ public class Analiser {
     }
 
 /////////////////////////////////////
-
     private String invert(String line) {
         if (line.charAt(0) == Enums.ANT) {
             return String.format("%c%s", Enums.SUC, line.substring(1));
@@ -299,7 +394,7 @@ public class Analiser {
                     mind.getLog().add(LogMode.ANALIZER, "============= ACCEPTING ===================");
 
 //                    mind.release();
-                    analiser(true);
+                    analiser(false);
 
 //                    Right r = (Right) mind.compileLine(invert(line));
 //                    if (r != null) {
@@ -395,13 +490,12 @@ public class Analiser {
 //                        mind.release();
 //                        mind.mark();
 //                        isHypotheses = true;
-
                         if (!DEBUG_DISABLE_FALSE_CHECK) {
 
                             mind.getLog().reset();
                             mind.getLog().add(LogMode.ANALIZER, "============= FALSE CHECKING ==============");
 
-                            analiser(true);
+                            analiser(false);
                             Right r = (Right) mind.compileLine(invert(line));
                             r.setCurrent(true);
 
@@ -410,7 +504,7 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, r);
                                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
-                                if (analiser(false)) {
+                                if (analiser(true)) {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
                                     logResult();
                                     res = false;
@@ -441,7 +535,7 @@ public class Analiser {
                         mind.release();
                         //analiser();
 
-                        analiser(true);
+                        analiser(false);
                         Right r = (Right) mind.compileLine(line);
                         r.setCurrent(true);
 
@@ -452,7 +546,6 @@ public class Analiser {
 
                             mind.getSolutions().reset();
                             mind.getValues().reset();
-
 
 //                            if (!isInsertion) {
 //                                isHypotheses = true;
@@ -528,21 +621,20 @@ public class Analiser {
     }
 
     private void logResult() {
-        if(mind.getSolutions().size() > 0) {
+        if (mind.getSolutions().size() > 0) {
             mind.getLog().add(LogMode.SOLVES, "Solves:");
             int i = 0;
-            for(String log : (List<String>) mind.getSolutions().getRoot()) {
+            for (String log : (List<String>) mind.getSolutions().getRoot()) {
                 mind.getLog().add(LogMode.SOLVES, String.format("\tSolve %03d: %s", ++i, log));
             }
         }
-        if(mind.getValues().size() > 0) {
+        if (mind.getValues().size() > 0) {
             mind.getLog().add(LogMode.VALUES, "Values:");
             int i = 0;
-            for(String log : (List<String>) mind.getValues().getRoot()) {
+            for (String log : (List<String>) mind.getValues().getRoot()) {
                 mind.getLog().add(LogMode.VALUES, String.format("\tSolve %03d: %s", ++i, log));
             }
         }
-
 
     }
 }

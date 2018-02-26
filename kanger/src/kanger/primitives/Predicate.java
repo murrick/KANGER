@@ -84,6 +84,7 @@ public class Predicate {
         return list;
     }
 
+    @Override
     public String toString() {
         return name + "(" + range + ")";
     }

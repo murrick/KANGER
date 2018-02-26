@@ -47,7 +47,6 @@ public class Domain {
         }
     }
 
-
     public Predicate getPredicate() {
         return predicate;
     }
@@ -104,6 +103,10 @@ public class Domain {
         return mind.getInitiatedDomains().contains(id);
     }
 
+    public boolean isQueued() {
+        return mind.getQueuedDomains().contains(id);
+    }
+    
     public void setInitiated(boolean on) {
         if (on) {
             mind.getInitiatedDomains().add(id);
@@ -112,11 +115,25 @@ public class Domain {
         }
     }
 
-    public Map<Right, Set<Domain>> getCauses() {
-        if(!mind.getCauses().containsKey(this)) {
-            mind.getCauses().put(this, new HashMap<>());
+    public void setQueued(boolean on) {
+        if (on) {
+            mind.getQueuedDomains().add(id);
+        } else {
+            mind.getQueuedDomains().remove(id);
         }
-        return mind.getCauses().get(this);
+    }
+    
+    public Map<Right, Set<Domain>> getCauses() {
+        Map<Right, Set<Domain>> map = new HashMap<>();
+        for (Argument a : arguments) {
+            if (a.isTSet() && !a.isEmpty()) {
+                if (!map.containsKey(a.getT().getRight())) {
+                    map.put(a.getT().getRight(), new HashSet<>());
+                }
+                map.get(a.getT().getRight()).add(a.getT().getSrcSolve());
+            }
+        }
+        return map;
     }
 
     public List<Argument> getArguments() {

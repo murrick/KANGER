@@ -20,9 +20,9 @@ public class Parser {
         /* 1 */new Operation("++", "_inc", 1, 1, 1, false, false), new Operation("--", "_dec", 1, 1, 1, false, false), new Operation("-", "_neg", 1, 1, 1, false, false), new Operation("+", "_val", 1, 1, 1, false, false), new Operation("~~", "_bitnot", 1, 1, 1, false, false),
         /* 2 */ new Operation("*", "_mul", 2, 2, 0, false, false), new Operation("/", "_div", 2, 2, 0, false, false), new Operation("%", "_rem", 2, 2, 0, false, false),
         /* 3 */ new Operation("+", "_add", 3, 2, 0, false, false), new Operation("-", "_sub", 3, 2, 0, false, false),
-            new Operation("<<", "_bitleft", 3, 2, 0, false, false), new Operation(">>", "_bitright", 3, 2, 0, false, false), new Operation("&", "_bitand", 3, 2, 0, false, false),
-            new Operation("^", "_bitxor", 3, 2, 0, false, false), new Operation("|", "_bitor", 3, 2, 0, false, false),
-            new Operation(",", "", 6, 2, 0, false, false),
+        new Operation("<<", "_bitleft", 3, 2, 0, false, false), new Operation(">>", "_bitright", 3, 2, 0, false, false), new Operation("&", "_bitand", 3, 2, 0, false, false),
+        new Operation("^", "_bitxor", 3, 2, 0, false, false), new Operation("|", "_bitor", 3, 2, 0, false, false),
+        new Operation(",", "", 6, 2, 0, false, false),
         /* 2 */
         /* 3 */ new Operation("<", "_lr", 11, 2, 0, false, false), new Operation("<=", "_le", 11, 2, 0, false, false), new Operation(">", "_gr", 11, 2, 0, false, false), new Operation(">=", "_ge", 11, 2, 0, false, false),
         /* 4 */ new Operation("==", "_eq", 12, 2, 0, false, false), new Operation("=", "_eq", 12, 2, 0, false, false), new Operation("!=", "_ne", 12, 2, 0, false, false), new Operation("<>", "_ne", 12, 2, 0, false, false),
@@ -30,7 +30,7 @@ public class Parser {
         /* 6 */ new Operation("||", "|", 14, 2, 0, false, true),
         /* 7 */ new Operation("->", "}", 15, 2, 0, false, true),
         /* 8 */ new Operation("@", "", 16, 1, 1, true, false), new Operation("$", "", 16, 1, 1, true, false), new Operation("~", "", 16, 1, 1, false, false),
-            new Operation("", "", 0, 0, 0, false, false),};
+        new Operation("", "", 0, 0, 0, false, false),};
 
     public static boolean isDelimiter(int ch) {
         return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
@@ -269,13 +269,12 @@ public class Parser {
              }
              }
              */
-
             if (p.getName() == null) {
                 p.setName(line);
             }
 
             if (p.getName().charAt(0) == Enums.COMMA && mode == 0) {
-                p.setPrior(13);
+                p.setPrior(17);
             }
 
 
@@ -352,7 +351,11 @@ public class Parser {
                     p.setLeft(root);
                     root = p;
                 } else {
-                    p.setLeft(q);
+                    if (wasq == null) {
+                        p.setLeft(q);
+                    } else {
+                        p.setRight(q);
+                    }
                     if (r.getNext() == DIR_LEFT) {
                         r.setLeft(p);
                     } else {

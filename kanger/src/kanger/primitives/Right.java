@@ -6,9 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -106,6 +104,11 @@ public class Right {
         } else {
             mind.getActiveRights().remove(id);
         }
+    }
+    
+    @Override
+    public String toString() {
+        return orig;
     }
 
 //    @Override

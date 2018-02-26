@@ -6,6 +6,10 @@ import kanger.primitives.TVariable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import kanger.primitives.Right;
 
 /**
  * Created by murray on 25.05.15.
@@ -26,13 +30,21 @@ public class TVariableFactory {
     public TVariable add() {
         TVariable p = new TVariable(mind);
         p.setId(++lastID);
-        p.setSolve(null);
         p.setArea(mind.getTerms().getRoot());
-//        p.setValue(null);
         p.setRight(mind.getRights().getRoot());
         p.setNext(root);
         root = p;
         return p;
+    }
+
+    public Set<TVariable> get(Right r) {
+        Set<TVariable> set = new HashSet<>();
+        for (TVariable t = root; t != null; t = t.getNext()) {
+            if (t.getRight().getId() == r.getId()) {
+                set.add(t);
+            }
+        }
+        return set;
     }
 
     public TVariable get(long id) {
@@ -59,9 +71,7 @@ public class TVariableFactory {
     }
 
     public void init() {
-        for (TVariable v = root; v != null; v = v.getNext()) {
-            v.setSolve(null);
-        }
+        mind.getTValues().clear();
     }
 
     public void mark() {

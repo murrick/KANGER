@@ -7,14 +7,8 @@ import java.util.*;
  */
 public class TValue {
 
-    private List<Term> value = new ArrayList<>();
+    private List<TSubst> values = new ArrayList<>();
     private int current = 0;
-    private Set<Integer> success = new HashSet<>();
-    private Domain solve = null;
-
-    public Set<Integer> getSuccess() {
-        return success;
-    }
 
     public void setCurrent(int current) {
         this.current = current;
@@ -25,30 +19,99 @@ public class TValue {
     }
 
     public Term getValue() {
-        return value.isEmpty() ? null : value.get(current);
+        return values.isEmpty() ? null : values.get(current).getValue();
     }
 
-    public void addValue(Term v) {
-        int i = exists(v);
+    public TSubst get(int i) {
+        if (values.isEmpty() || i >= values.size() || i < 0) {
+            return null;
+        }
+        return values.get(i);
+    }
+
+    public TSubst addValue(Term v) {
+        int i = contains(v);
         if (i == -1) {
-            value.add(v);
+            TSubst s = new TSubst();
+            s.setValue(v);
+            values.add(s);
+            return s;
+        } else {
+            return values.get(i);
         }
     }
 
-    public int exists(Term v) {
-        for (int i = 0; i < value.size(); ++i) {
-            if (value.get(i).equals(v)) {
+    public TSubst setValue(Term v) {
+        int i = contains(v);
+        if (i == -1) {
+            TSubst s = new TSubst();
+            s.setValue(v);
+            values.add(s);
+            current = values.size() - 1;
+        } else {
+            current = i;
+        }
+        return values.get(current);
+    }
+
+    public void setSrcSolve(Domain solve) {
+        if (!values.isEmpty()) {
+            values.get(current).setSrcSolve(solve);
+        }
+    }
+
+    public Domain getSrcSolve() {
+        if (!values.isEmpty()) {
+            return values.get(current).getSrcSolve();
+        } else {
+            return null;
+        }
+    }
+
+    public void setDstSolve(Domain solve) {
+        if (!values.isEmpty()) {
+            values.get(current).setDstSolve(solve);
+        }
+    }
+
+    public Domain getDstSolve() {
+        if (!values.isEmpty()) {
+            return values.get(current).getDstSolve();
+        } else {
+            return null;
+        }
+    }
+    
+    public void setSuccess(boolean success) {
+        if (!values.isEmpty()) {
+            values.get(current).setSuccess(success);
+        }
+    }
+
+    public boolean isSuccess() {
+        if (!values.isEmpty()) {
+            return values.get(current).isSuccess();
+        } else {
+            return false;
+        }
+    }
+
+    public int contains(Term v) {
+        for (int i = 0; i < values.size(); ++i) {
+            if (values.get(i).getValue().equals(v)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public Domain getSolve() {
-        return solve;
+    public int size() {
+        return values.size();
     }
 
-    public void setSolve(Domain solve) {
-        this.solve = solve;
+    @Override
+    public String toString() {
+        return getValue().toString();
     }
+
 }
