@@ -23,9 +23,9 @@ import java.util.Scanner;
  */
 public class Screen {
 
-    public static boolean LINE_EDITOR_ENABLE = true;
-//            System.getProperties().getProperty("kanger.enable.line.editor") != null
-//                    && System.getProperties().getProperty("kanger.enable.line.editor").equals("true");
+    public static boolean LINE_EDITOR_ENABLE = 
+            System.getProperties().getProperty("kanger.enable.line.editor") != null
+                    && System.getProperties().getProperty("kanger.enable.line.editor").equals("true");
 
     public static void session(Mind mind) {
         boolean stop = false;

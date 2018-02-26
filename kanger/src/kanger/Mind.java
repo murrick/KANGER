@@ -60,12 +60,10 @@ public class Mind {
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
-    //    private transient Map<Solve, Long> solveLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
 
     private transient volatile int currentLevel = 0;
-    //    private transient volatile Solve currentSolve = null;
     private transient volatile int substCount = 0;
 
 
@@ -124,14 +122,6 @@ public class Mind {
     public void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
     }
-
-//    public Solve getCurrentSolve() {
-//        return currentSolve;
-//    }
-//
-//    public void setCurrentSolve(Solve currentSolve) {
-//        this.currentSolve = currentSolve;
-//    }
 
     public void resetDummy() {
         solves.reset();
@@ -305,8 +295,6 @@ public class Mind {
         }
     }
 
-    private void removeSolve() {
-    }
 
     private void removeTVarsRecords(Right r) {
         TVariable o = null;
