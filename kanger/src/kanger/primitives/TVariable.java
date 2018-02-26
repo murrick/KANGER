@@ -1,12 +1,10 @@
 package kanger.primitives;
 
-import kanger.Mind;
-import kanger.enums.Enums;
-import kanger.exception.TValueOutOfOrver;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
+import kanger.*;
+import kanger.enums.*;
+import kanger.exception.*;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -99,7 +97,7 @@ public class TVariable {
         }
         if (value != null) {
             if (!isInside(value)) {
-                mind.getTValues().get(this).setValue(value);
+                mind.getTValues().get(this).addValue(value);
 //                setOwner(mind.getCurrentLevel());
 //                setSolve(mind.getCurrentSolve());
                 mind.incSubstCount();
@@ -111,21 +109,21 @@ public class TVariable {
         }
     }
 
-    public int getOwner() {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).getLevel();
-        } else {
-            return 0;
-        }
-    }
-
-    public void setOwner(int owner) {
-        if (!mind.getTValues().containsKey(this)) {
-            mind.getTValues().put(this, new TValue());
-        }
-        mind.getTValues().get(this).setLevel(owner);
-
-    }
+//    public int getOwner() {
+//        if (mind.getTValues().containsKey(this)) {
+//            return mind.getTValues().get(this).getLevel();
+//        } else {
+//            return 0;
+//        }
+//    }
+//
+//    public void setOwner(int owner) {
+//        if (!mind.getTValues().containsKey(this)) {
+//            mind.getTValues().put(this, new TValue());
+//        }
+//        mind.getTValues().get(this).setLevel(owner);
+//
+//    }
 
     public Right getRight() {
         return right;

@@ -14,7 +14,8 @@ public class TVariableFactory {
 
     private TVariable root = null;
     private TVariable saved = null;
-    private int lastID = 0, saveLastID;            /* Счетчик T-переменных */
+    private int lastID = 0, saveLastID;
+    /* Счетчик T-переменных */
 
     private Mind mind = null;
 
@@ -25,7 +26,6 @@ public class TVariableFactory {
     public TVariable add() {
         TVariable p = new TVariable(mind);
         p.setId(++lastID);
-        p.setOwner(0);
         p.setSolve(null);
         p.setArea(mind.getTerms().getRoot());
 //        p.setValue(null);
@@ -60,7 +60,6 @@ public class TVariableFactory {
 
     public void init() {
         for (TVariable v = root; v != null; v = v.getNext()) {
-            v.setOwner(0);
             v.setSolve(null);
         }
     }
@@ -71,9 +70,9 @@ public class TVariableFactory {
     }
 
     public void release() {
-        if(root != null && saved != null && root.getId() != saved.getId()) {
+        if (root != null && saved != null && root.getId() != saved.getId()) {
             for (TVariable t = root; t != null; t = t.getNext()) {
-                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
                     t.setNext(null);
                     break;
                 }
