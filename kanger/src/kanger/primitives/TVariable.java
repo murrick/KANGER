@@ -95,7 +95,9 @@ public class TVariable {
             mind.getTValues().put(this, new TValue());
         }
         if (!isInside(value)) {
-            mind.incSubstCount();
+            if(mind.getTValues().get(this).contains(value) == -1) {
+                mind.getSubstituted().add(id);
+            }
             return mind.getTValues().get(this).setValue(value);
         } else {
             throw new TValueOutOfOrver(value.toString());
@@ -107,7 +109,9 @@ public class TVariable {
             mind.getTValues().put(this, new TValue());
         }
         if (!isInside(value)) {
-            mind.incSubstCount();
+            if(mind.getTValues().get(this).contains(value) == -1) {
+                mind.getSubstituted().add(id);
+            }
             return mind.getTValues().get(this).addValue(value);
         } else {
             throw new TValueOutOfOrver(value.toString());
@@ -279,5 +283,16 @@ public class TVariable {
             }
         }
         return list;
+    }
+
+    public Set<Domain> getSolves() {
+        Set<Domain> set = new HashSet<>();
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(d.contains(this)) {
+                set.add(d);
+            }
+        }
+        return set;
+
     }
 }

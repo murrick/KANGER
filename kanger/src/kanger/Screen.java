@@ -17,6 +17,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by murray on 28.05.15. $Author: murray $
@@ -481,12 +482,14 @@ public class Screen {
 
     public static void showPred(Mind mind, Predicate p, boolean showCauses) {
         System.out.printf("Predicate %s(%d) :\n", p.getName(), p.getRange());
-        List<Domain> list = p.getSolves();
-        if (list.isEmpty()) {
+        Set<Domain> set = p.getSolves();
+        if (set.isEmpty()) {
             System.out.printf("\tHas not solves\n");
         } else {
-            for (Domain s : list) {
-                showPredRecurse(mind, 0, s, showCauses);
+            for (Domain s : set) {
+                if(!s.isAcceptor()) {
+                    showPredRecurse(mind, 0, s, showCauses);
+                }
             }
         }
     }
@@ -807,6 +810,25 @@ public class Screen {
                 } else {
                     t = v;
                     v = v.getNext();
+                }
+            }
+
+            Term c = null;
+            for (Term z = mind.getTerms().getRoot(); z != null;) {
+                if (z.getRight().getId() == r.getId()) {
+                    if (c != null) {
+                        c.setNext(z.getNext());
+                        z.setNext(null);
+                        z = z.getNext();
+                    } else {
+                        mind.getTerms().setRoot(z.getNext());
+                        z.setNext(null);
+                        z = mind.getTerms().getRoot();
+                        c = null;
+                    }
+                } else {
+                    c = z;
+                    z = z.getNext();
                 }
             }
 

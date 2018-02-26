@@ -1,11 +1,16 @@
 package kanger.factory;
 
 import kanger.Mind;
+import kanger.primitives.Argument;
+import kanger.primitives.Domain;
 import kanger.primitives.Right;
+import kanger.primitives.Tree;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by murray on 25.05.15.
@@ -134,4 +139,14 @@ public class RightFactory {
         }
     }
 
+    public void add(Domain d) {
+        Right r = add();
+        Tree t = mind.getTrees().add();
+        r.getTree().add(t);
+        List<Argument> arg = new ArrayList<>();
+        for(Argument a : d.getArguments()) {
+            arg.add(new Argument(a.getValue()));
+        }
+        t.getSequence().add(mind.getDomains().add(d.getPredicate(), d.isAntc(), arg, r));
+    }
 }

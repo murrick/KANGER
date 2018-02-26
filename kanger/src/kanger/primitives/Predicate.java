@@ -6,7 +6,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -74,14 +76,24 @@ public class Predicate {
         dos.writeInt(range);
     }
 
-    public List<Domain> getSolves() {
-        List<Domain> list = new ArrayList<>();
+    public Set<Domain> getSolves() {
+        Set<Domain> set = new HashSet<>();
         for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
             if(this.equals(d.getPredicate())) {
-                list.add(d);
+                set.add(d);
             }
         }
-        return list;
+        return set;
+    }
+
+    public Set<Right> getRights() {
+        Set<Right> set = new HashSet<>();
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(d.getPredicate().getId() == id) {
+                set.add(d.getRight());
+            }
+        }
+        return set;
     }
 
     @Override

@@ -20,7 +20,6 @@ public class Domain {
     private Predicate predicate = null;                             // Ссылка на описатель предиката
     private List<Argument> arguments = new ArrayList<>();           // Массив подстановочных переменных
     private boolean antc = true;                            // ! или ?
-    //    private boolean used = true;                                  // Флаг активности
     private Right right;                                    // Ссылка на правило
     private long id = -1;                                   // id домена
     private Domain next = null;                             // Следующий элемент
@@ -99,19 +98,19 @@ public class Domain {
         }
     }
 
-    public boolean isInitiated() {
-        return mind.getInitiatedDomains().contains(id);
+    public boolean isAcceptor() {
+        return mind.getAcceptorDomains().contains(id);
     }
 
     public boolean isQueued() {
         return mind.getQueuedDomains().contains(id);
     }
     
-    public void setInitiated(boolean on) {
+    public void setAcceptor(boolean on) {
         if (on) {
-            mind.getInitiatedDomains().add(id);
+            mind.getAcceptorDomains().add(id);
         } else {
-            mind.getInitiatedDomains().remove(id);
+            mind.getAcceptorDomains().remove(id);
         }
     }
 
@@ -246,4 +245,12 @@ public class Domain {
         }
     }
 
+    public boolean contains(TVariable t) {
+        for(Argument a : arguments) {
+            if(a.isTSet() && a.getT().getId() == t.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

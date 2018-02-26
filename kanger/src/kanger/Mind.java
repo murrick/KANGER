@@ -50,11 +50,12 @@ public class Mind {
 
     private ScriptEngine scryptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-    private Set<Long> usedDomains = new HashSet();
-    private Set<Long> initiatedDomains = new HashSet();
-    private Set<Long> queuedDomains = new HashSet();
-    private Set<Long> usedTrees = new HashSet();
-    private Set<Long> closedTrees = new HashSet();
+    private Set<Long> usedDomains = new HashSet<>();
+    private Set<Long> acceptorDomains = new HashSet<>();
+    private Set<Long> queuedDomains = new HashSet<>();
+    private Set<Long> usedTrees = new HashSet<>();
+    private Set<Long> closedTrees = new HashSet<>();
+    private Set<Long> substituted = new HashSet<>();
 
     private Set<Long> activeRights = new HashSet<>();
 
@@ -64,7 +65,6 @@ public class Mind {
 
 
     private transient volatile int currentLevel = 0;
-    private transient volatile int substCount = 0;
 
 
     public DictionaryFactory getTerms() {
@@ -157,18 +157,6 @@ public class Mind {
         return compiler;
     }
 
-    public int getSubstCount() {
-        return this.substCount;
-    }
-
-    public void incSubstCount() {
-        ++this.substCount;
-    }
-
-    public void dropSubstCount() {
-        this.substCount = 0;
-    }
-
     public void mark() {
         terms.mark();
         predicates.mark();
@@ -186,16 +174,16 @@ public class Mind {
         rights.release();
         trees.release();
 
+        tValues.clear();
     }
 
     public void clearQueryStatus() {
         usedDomains.clear();
         usedTrees.clear();
         closedTrees.clear();
-        initiatedDomains.clear();
+        acceptorDomains.clear();
         queuedDomains.clear();
 
-        tValues.clear();
     }
 
     public void clear() throws ParseErrorException {
@@ -454,8 +442,8 @@ public class Mind {
         return closedTrees;
     }
 
-    public Set<Long> getInitiatedDomains() {
-        return initiatedDomains;
+    public Set<Long> getAcceptorDomains() {
+        return acceptorDomains;
     }
 
     public Set<Long> getQueuedDomains() {
@@ -464,6 +452,26 @@ public class Mind {
     
     public Set<Long> getActiveRights() {
         return activeRights;
+    }
+
+    public Set<Long> getSubstituted() {
+        return substituted;
+    }
+
+    public Set<Right> getActualRights() {
+        Set<Right> set = new HashSet<>();
+        if(substituted.isEmpty()) {
+        for(Right r = rights.getRoot(); r != null; r=r.getNext() ) {
+                set.add(r);
+            }
+        } else {
+            for(long id : substituted) {
+                for (Domain d : tVars.get(id).getSolves()) {
+                    set.addAll(d.getPredicate().getRights());
+                }
+            }
+        }
+        return set;
     }
 }
 
