@@ -426,9 +426,6 @@ public class Analiser {
                                 mind.release();
                                 mind.getLinker().link(false);
                                 mind.clearQueryStatus();
-                                
-                                System.out.println("----------- AFTER FALSE");
-                                Screen.showBase(mind, false, null);
                             }
 
                         } else {
@@ -462,20 +459,10 @@ public class Analiser {
 //                            if (!isInsertion) {
 //                                isHypotheses = true;
 //                            }
-
-                                System.out.println("----------- BEFORE LINK r");
-                                Screen.showBase(mind, false, null);
-
                             mind.getLinker().link(r, true);
-                            
-                                System.out.println("----------- AFTER LINK r");
-                                Screen.showBase(mind, false, null);
-                            
+
                             if (analiser(true)) {
-                                
-                                System.out.println("----------- AFTER ANALISER");
-                                Screen.showBase(mind, false, null);
-                                
+
                                 if (isInsertion) {
                                     mind.removeInsertionRight(r);
                                     List<Right> killedRights = killInsertion(r, key == Enums.WIPE);

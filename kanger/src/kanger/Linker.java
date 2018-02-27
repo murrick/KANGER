@@ -41,7 +41,9 @@ public class Linker {
                     try {
                         TVariable t = d1.get(i).getT();
 //                        if(!d1.getRight().isCurrent())
-                        d1.setAcceptor(true);
+                        if (!d2.getRight().isQuery()) {
+                            d1.setAcceptor(true);
+                        }
                         TSubst s = t.setValue(d2.get(i).getValue());
                         s.setSrcSolve(d2);
                         s.setDstSolve(d1);
@@ -53,7 +55,9 @@ public class Linker {
                     try {
                         TVariable t = d2.get(i).getT();
 //                        if(!d2.getRight().isCurrent())
-                        d2.setAcceptor(true);
+                        if (!d1.getRight().isQuery()) {
+                            d2.setAcceptor(true);
+                        }
                         TSubst s = t.setValue(d1.get(i).getValue());
                         s.setSrcSolve(d1);
                         s.setDstSolve(d2);
@@ -135,6 +139,7 @@ public class Linker {
     }
 
     public void link(boolean logging) {
+        mind.getAcceptorDomains().clear();
         link(null, logging);
     }
 
@@ -146,7 +151,6 @@ public class Linker {
 //        }
 
         mind.getSubstituted().clear();
-        mind.getAcceptorDomains().clear();
 //        set = mind.getActualTrees();
 
         do {
