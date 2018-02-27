@@ -125,8 +125,19 @@ public class Right {
     
     public Set<Tree> getActualTrees() {
         Set<Tree> set = new HashSet<>();
-        for (Right r : getActualRights()) {
-            set.addAll(r.getTree());
+        Set<Predicate> preds = new HashSet<>();
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(d.getRight().getId() == id) {
+                preds.add(d.getPredicate());
+            }
+        }
+        for(Tree t = mind.getTrees().getRoot(); t != null; t=t.getNext()) {
+            for(Domain d : t.getSequence()) {
+                if(preds.contains(d.getPredicate())) {
+                    set.add(t);
+                    break;
+                }
+            }
         }
         return set;
     }

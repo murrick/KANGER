@@ -24,7 +24,6 @@ public class Tree {
 
 //    private boolean closed = false;
 //    private boolean used = false;
-
     public Tree(Mind mind) {
         this.mind = mind;
     }
@@ -33,7 +32,7 @@ public class Tree {
         this.mind = mind;
         id = dis.readLong();
         int count = dis.readInt();
-        while(count-- > 0) {
+        while (count-- > 0) {
             sequence.add(mind.getDomains().get(dis.readLong()));
         }
     }
@@ -47,7 +46,7 @@ public class Tree {
     }
 
     public void setClosed(boolean closed) {
-        if(closed) {
+        if (closed) {
             mind.getClosedTrees().add(id);
         } else {
             mind.getClosedTrees().remove(id);
@@ -59,7 +58,7 @@ public class Tree {
     }
 
     public void setUsed(boolean used) {
-        if(used) {
+        if (used) {
             mind.getUsedTrees().add(id);
         } else {
             mind.getUsedTrees().remove(id);
@@ -90,13 +89,24 @@ public class Tree {
         this.next = next;
     }
 
-     
     @Override
     public Tree clone() {
         Tree t = mind.getTrees().add();
         t.setRight(right);
         t.sequence.addAll(sequence);
         return t;
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        for (Domain d : sequence) {
+            if (!s.isEmpty()) {
+                s += "\n";
+            }
+            s += d.toString();
+        }
+        return s;
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
@@ -106,6 +116,5 @@ public class Tree {
             dos.writeLong(d.getId());
         }
     }
-    
 
 }

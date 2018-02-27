@@ -43,6 +43,7 @@ public class Mind {
     private final Calculator calculator = new Calculator(this);
     private final Analiser analiser = new Analiser(this);
     private final Compiler compiler = new Compiler(this);
+    private final Linker linker = new Linker(this);
 
     private volatile boolean changed = false;
     private String sourceFileName = "mind.k";
@@ -154,6 +155,11 @@ public class Mind {
         return compiler;
     }
 
+    public Linker getLinker() {
+        return linker;
+    }
+
+    
     public void mark() {
         terms.mark();
         predicates.mark();
@@ -171,7 +177,7 @@ public class Mind {
         rights.release();
         trees.release();
 
-//        tValues.clear();
+        tValues.clear();
     }
 
     public void clearQueryStatus() {
