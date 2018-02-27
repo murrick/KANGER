@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class Analiser {
 
-    private static final boolean DEBUG_DISABLE_FALSE_CHECK = false;
+    private static final boolean DEBUG_DISABLE_FALSE_CHECK = true;
 
     private final Mind mind;
     private boolean isInsertion = false;
@@ -35,7 +35,10 @@ public class Analiser {
                 Domain a = sequence.get(k);
                 for (int j = k + 1; j < sequence.size(); ++j) {
                     Domain b = sequence.get(j);
-                    if (a.getPredicate().getId() == b.getPredicate().getId() && a.isAntc() != b.isAntc()) {
+                    if (a.getPredicate().getId() == b.getPredicate().getId()
+                            && a.isAntc() != b.isAntc()
+                            && (!a.isAcceptor() || a.getRight().isQuery())
+                            && (!b.isAcceptor() || b.getRight().isQuery())) {
                         boolean equals = true;
 //                        if ((a.getRight().isQuery() && b.isAcceptor()) || (b.getRight().isQuery() && a.isAcceptor())) {
 //                            equals = false;
@@ -46,11 +49,10 @@ public class Analiser {
                                 if (!xa.isEmpty() && !xb.isEmpty()
 //                                        && !((b.getRight().isQuery() || a.getRight().isQuery()) && xa.isTSet() && xa.getT().getSrcSolve().getId() == b.getId())
 //                                        && !((b.getRight().isQuery() || a.getRight().isQuery()) && xb.isTSet() && xb.getT().getSrcSolve().getId() == a.getId())
+//                                        && !a.isAcceptor() && !b.isAcceptor()
                                         && xa.getValue().equals(xb.getValue())) {
-//                                        && !a.isAcceptor() && !b.isAcceptor()) {
                                 } else {
                                     equals = false;
-                                    break;
                                 }
 //                            }
                         }
@@ -102,6 +104,9 @@ public class Analiser {
                             }
 
                         }
+                    } else {
+                    result = false;
+                    break;
                     }
                 }
             }
@@ -406,6 +411,9 @@ public class Analiser {
 //                                mind.getTrees().release();
 //                                mind.getDomains().release();
                                 mind.getLinker().link(r, true);
+
+
+                                Screen.showBase(mind, false, null);
                                 if (analiser(true)) {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
                                     logResult();
@@ -461,6 +469,7 @@ public class Analiser {
 //                                isHypotheses = true;
 //                            }
                             mind.getLinker().link(r, true);
+                            Screen.showBase(mind, false, null);
 
                             if (analiser(true)) {
                                 if (isInsertion) {

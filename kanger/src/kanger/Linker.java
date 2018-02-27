@@ -6,6 +6,7 @@
 package kanger;
 
 import java.util.Set;
+
 import kanger.enums.LogMode;
 import kanger.exception.TValueOutOfOrver;
 import kanger.primitives.Argument;
@@ -16,7 +17,6 @@ import kanger.primitives.TVariable;
 import kanger.primitives.Tree;
 
 /**
- *
  * @author murray
  */
 public class Linker {
@@ -41,7 +41,7 @@ public class Linker {
                     try {
                         TVariable t = d1.get(i).getT();
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-                        if (!d2.getRight().isQuery()) {
+                        if (!t.contains(d2.get(i).getValue()) && !d2.isAcceptor() && !d2.getRight().isQuery()) {
                             d1.setAcceptor(true);
                         }
                         TSubst s = t.setValue(d2.get(i).getValue());
@@ -56,7 +56,7 @@ public class Linker {
                     try {
                         TVariable t = d2.get(i).getT();
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-                        if (!d1.getRight().isQuery()) {
+                        if (!t.contains(d1.get(i).getValue()) && !d1.isAcceptor() && !d1.getRight().isQuery()) {
                             d2.setAcceptor(true);
                         }
                         TSubst s = t.setValue(d1.get(i).getValue());
@@ -156,20 +156,20 @@ public class Linker {
 //        }
 
         mind.getSubstituted().clear();
-//        set = mind.getActualTrees();
+        Set<Tree> set;
+        if (r == null) {
+            set = mind.getActualTrees();
+        } else {
+            set = r.getActualTrees();
+        }
 
         do {
-            Set<Tree> set;
-            if (r == null) {
-                set = mind.getActualTrees();
-            } else {
-                set = r.getActualTrees();
-            }
             mind.getSubstituted().clear();
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
             }
             recurseLink(mind.getTVars().getRoot(), set, logging);
+            set = mind.getActualTrees();
         } while (mind.getSubstituted().size() > 0);
 
     }
