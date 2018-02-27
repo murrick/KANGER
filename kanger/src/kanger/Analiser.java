@@ -47,8 +47,8 @@ public class Analiser {
                                 Argument xa = a.getArguments().get(i);
                                 Argument xb = b.getArguments().get(i);
                                 if (!xa.isEmpty() && !xb.isEmpty()
-//                                        && !((b.getRight().isQuery() || a.getRight().isQuery()) && xa.isTSet() && xa.getT().getSrcSolve().getId() == b.getId())
-//                                        && !((b.getRight().isQuery() || a.getRight().isQuery()) && xb.isTSet() && xb.getT().getSrcSolve().getId() == a.getId())
+//                                        && (!a.getRight().isQuery() || !xa.isTSet() || xa.getT().getSrcSolve().getId() != b.getId())
+//                                        && (!b.getRight().isQuery() || !xb.isTSet() || xb.getT().getSrcSolve().getId() != a.getId())
 //                                        && !a.isAcceptor() && !b.isAcceptor()
                                         && xa.getValue().equals(xb.getValue())) {
                                 } else {
@@ -413,7 +413,6 @@ public class Analiser {
                                 mind.getLinker().link(r, true);
 
 
-                                Screen.showBase(mind, false, null);
                                 if (analiser(true)) {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
                                     logResult();
@@ -469,8 +468,6 @@ public class Analiser {
 //                                isHypotheses = true;
 //                            }
                             mind.getLinker().link(r, true);
-                            Screen.showBase(mind, false, null);
-
                             if (analiser(true)) {
                                 if (isInsertion) {
                                     mind.removeInsertionRight(r);

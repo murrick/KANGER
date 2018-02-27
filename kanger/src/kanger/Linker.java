@@ -41,7 +41,7 @@ public class Linker {
                     try {
                         TVariable t = d1.get(i).getT();
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-                        if (!t.contains(d2.get(i).getValue()) && !d2.isAcceptor() && !d2.getRight().isQuery()) {
+                        if (!d2.isAcceptor() && !d2.getRight().isQuery()) {
                             d1.setAcceptor(true);
                         }
                         TSubst s = t.setValue(d2.get(i).getValue());
@@ -55,8 +55,8 @@ public class Linker {
                 if (d2.get(i).isTSet() && !d1.get(i).isEmpty() && !d2.get(i).getT().contains(d1.get(i).getValue())) {
                     try {
                         TVariable t = d2.get(i).getT();
-                        //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-                        if (!t.contains(d1.get(i).getValue()) && !d1.isAcceptor() && !d1.getRight().isQuery()) {
+                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
+                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
                             d2.setAcceptor(true);
                         }
                         TSubst s = t.setValue(d1.get(i).getValue());
