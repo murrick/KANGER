@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import kanger.exception.TValueOutOfOrver;
 
 // !@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z);
 /**
@@ -460,9 +459,8 @@ public class Analiser {
 //                                isHypotheses = true;
 //                            }
                             mind.getLinker().link(r, true);
-
+                            
                             if (analiser(true)) {
-
                                 if (isInsertion) {
                                     mind.removeInsertionRight(r);
                                     List<Right> killedRights = killInsertion(r, key == Enums.WIPE);
