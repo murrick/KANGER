@@ -37,18 +37,22 @@ public class Analiser {
                     Domain b = sequence.get(j);
                     if (a.getPredicate().getId() == b.getPredicate().getId() && a.isAntc() != b.isAntc()) {
                         boolean equals = true;
-                        if ((a.getRight().isQuery() && b.isAcceptor()) || (b.getRight().isQuery() && a.isAcceptor())) {
-                            equals = false;
-                        } else {
+//                        if ((a.getRight().isQuery() && b.isAcceptor()) || (b.getRight().isQuery() && a.isAcceptor())) {
+//                            equals = false;
+//                        } else {
                             for (int i = 0; i < a.getPredicate().getRange(); ++i) {
-                                if (!a.getArguments().get(i).isEmpty()
-                                        && !b.getArguments().get(i).isEmpty()
-                                        && a.getArguments().get(i).getValue().equals(b.getArguments().get(i).getValue())) {
+                                Argument xa = a.getArguments().get(i);
+                                Argument xb = b.getArguments().get(i);
+                                if (!xa.isEmpty() && !xb.isEmpty()
+//                                        && !((b.getRight().isQuery() || a.getRight().isQuery()) && xa.isTSet() && xa.getT().getSrcSolve().getId() == b.getId())
+//                                        && !((b.getRight().isQuery() || a.getRight().isQuery()) && xb.isTSet() && xb.getT().getSrcSolve().getId() == a.getId())
+                                        && xa.getValue().equals(xb.getValue())) {
+//                                        && !a.isAcceptor() && !b.isAcceptor()) {
                                 } else {
                                     equals = false;
                                     break;
                                 }
-                            }
+//                            }
                         }
                         if (equals) {
                             result = true;
@@ -397,7 +401,7 @@ public class Analiser {
                                 mind.getSolutions().reset();
                                 mind.getValues().reset();
 //                                mind.markAcceptors();
-                                
+
 //                                mind.getRights().release();
 //                                mind.getTrees().release();
 //                                mind.getDomains().release();

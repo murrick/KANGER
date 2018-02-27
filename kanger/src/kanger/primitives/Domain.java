@@ -212,7 +212,7 @@ public class Domain {
                 System.out.print(ex);
             }
         }
-        return s + ";" + (this.isAcceptor() ? " * " : "");
+        return s + ";" + (this.isAcceptor() ? " A " : "") + (right.isQuery() ? " Q " : "");
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {

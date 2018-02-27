@@ -104,6 +104,9 @@ public class Linker {
                     }
                     if (!found) {
                         mind.getLog().add(LogMode.ANALIZER, "Confirmed: " + a.getT().getSrcSolve());
+//                        if (d.getRight().isQuery()) {
+//                            a.getT().getDstSolve().setAcceptor(false);
+//                        }
                     }
                     mind.getLog().add(LogMode.ANALIZER, "From right  : " + a.getT().getRight().toString());
                     mind.getLog().add(LogMode.ANALIZER, "\tAcceptor: " + d.toString());
