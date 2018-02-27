@@ -105,7 +105,7 @@ public class Domain {
     public boolean isQueued() {
         return mind.getQueuedDomains().contains(id);
     }
-    
+
     public void setAcceptor(boolean on) {
         if (on) {
             mind.getAcceptorDomains().add(id);
@@ -121,18 +121,23 @@ public class Domain {
             mind.getQueuedDomains().remove(id);
         }
     }
-    
-    public Map<Right, Set<Domain>> getCauses() {
-        Map<Right, Set<Domain>> map = new HashMap<>();
+
+    public List<Domain> getCauses() {
+        List<Domain> list = new ArrayList<>();
         for (Argument a : arguments) {
             if (a.isTSet() && !a.isEmpty()) {
-                if (!map.containsKey(a.getT().getRight())) {
-                    map.put(a.getT().getRight(), new HashSet<>());
+                TVariable t = a.getT();
+                if (t.rewind()) {
+                    do {
+                        if (t.getDstSolve().getId() == id) {
+                            list.add(t.getSrcValue());
+                            break;
+                        }
+                    } while (t.next());
                 }
-                map.get(a.getT().getRight()).add(a.getT().getSrcSolve());
             }
         }
-        return map;
+        return list;
     }
 
     public List<Argument> getArguments() {
@@ -207,7 +212,7 @@ public class Domain {
                 System.out.print(ex);
             }
         }
-        return s + ";";
+        return s + ";" + (this.isAcceptor() ? " * " : "");
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
@@ -246,8 +251,8 @@ public class Domain {
     }
 
     public boolean contains(TVariable t) {
-        for(Argument a : arguments) {
-            if(a.isTSet() && a.getT().getId() == t.getId()) {
+        for (Argument a : arguments) {
+            if (a.isTSet() && a.getT().getId() == t.getId()) {
                 return true;
             }
         }

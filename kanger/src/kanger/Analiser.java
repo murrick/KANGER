@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 // !@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z);
 /**
  * Created by murray on 26.05.15.
@@ -397,6 +396,8 @@ public class Analiser {
 
                                 mind.getSolutions().reset();
                                 mind.getValues().reset();
+//                                mind.markAcceptors();
+                                
 //                                mind.getRights().release();
 //                                mind.getTrees().release();
 //                                mind.getDomains().release();
@@ -423,8 +424,9 @@ public class Analiser {
 
                             if (res == null) {
                                 mind.release();
-                                mind.getLinker().link(false);
                                 mind.clearQueryStatus();
+                                mind.getLinker().link(false);
+//                                mind.releaseAcceptors();
                             }
 
                         } else {
@@ -439,10 +441,6 @@ public class Analiser {
 //                        analiser();
                         //analiser();
                         Right r = (Right) mind.compileLine(line);
-
-                                System.out.println("----------- AFTER COMPILE LINE");
-                                Screen.showBase(mind, false, null);
-                        
                         if (r != null) {
                             r.setQuery(true);
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
@@ -459,7 +457,7 @@ public class Analiser {
 //                                isHypotheses = true;
 //                            }
                             mind.getLinker().link(r, true);
-                            
+
                             if (analiser(true)) {
                                 if (isInsertion) {
                                     mind.removeInsertionRight(r);

@@ -172,6 +172,14 @@ public class TVariable {
         }
     }
 
+    public Domain getSrcValue() {
+        if (mind.getTValues().containsKey(this)) {
+            return mind.getTValues().get(this).getSrcValue();
+        } else {
+            return null;
+        }
+    }
+
     public void setSrcSolve(Domain s) {
         if (!mind.getTValues().containsKey(this)) {
             mind.getTValues().put(this, new TValue());
@@ -182,6 +190,14 @@ public class TVariable {
     public Domain getDstSolve() {
         if (mind.getTValues().containsKey(this)) {
             return mind.getTValues().get(this).getDstSolve();
+        } else {
+            return null;
+        }
+    }
+
+    public Domain getDstValue() {
+        if (mind.getTValues().containsKey(this)) {
+            return mind.getTValues().get(this).getDstValue();
         } else {
             return null;
         }

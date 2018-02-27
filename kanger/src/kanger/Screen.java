@@ -24,9 +24,9 @@ import java.util.Set;
  */
 public class Screen {
 
-    public static boolean LINE_EDITOR_ENABLE = 
-            System.getProperties().getProperty("kanger.enable.line.editor") != null
-                    && System.getProperties().getProperty("kanger.enable.line.editor").equals("true");
+    public static boolean LINE_EDITOR_ENABLE
+            = System.getProperties().getProperty("kanger.enable.line.editor") != null
+            && System.getProperties().getProperty("kanger.enable.line.editor").equals("true");
 
     public static void session(Mind mind) {
         boolean stop = false;
@@ -192,20 +192,20 @@ public class Screen {
                                 // Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                                 // clipboard.setContents(selec, selec);
                             }
-                            for(String ln : line.split(";")) {
-                            
-                            Boolean res = mind.getAnalyser().query(line, false);
-                            if (res != null) {
-                                showLog(mind, LogMode.SOLVES);
-                                showLog(mind, LogMode.VALUES);
-                            } else if (mind.getAnalyser().isInsertion()) {
-                                showLog(mind, LogMode.SAVED);
-                            }
-                            LogEntry lastLine = mind.getLog().getCurrent(LogMode.ANALIZER);
-                            System.out.println(lastLine.getRecord());
-                            if (res == null && !mind.getAnalyser().isInsertion()) {
-                                showHypo(mind);
-                            }
+                            for (String ln : line.split(";")) {
+
+                                Boolean res = mind.getAnalyser().query(line, false);
+                                if (res != null) {
+                                    showLog(mind, LogMode.SOLVES);
+                                    showLog(mind, LogMode.VALUES);
+                                } else if (mind.getAnalyser().isInsertion()) {
+                                    showLog(mind, LogMode.SAVED);
+                                }
+                                LogEntry lastLine = mind.getLog().getCurrent(LogMode.ANALIZER);
+                                System.out.println(lastLine.getRecord());
+                                if (res == null && !mind.getAnalyser().isInsertion()) {
+                                    showHypo(mind);
+                                }
                             }
 //                            }
                             break;
@@ -448,17 +448,21 @@ public class Screen {
 //    }
     //
     public static void showCauses(Mind mind, Domain s, int level) {
+        //ПРЕДОХРАНИТЕЛЬ
+        if (level > 20) {
+            return;
+        }
+
+        List<Domain> list = s.getCauses();
         String indent = "";
         for (int i = 0; i < level; ++i) {
             indent += "\t";
         }
-        for (Right r : s.getCauses().keySet()) {
-            if (r != null) {
-                System.out.printf("\t    %sRight: %s\n", indent, r.getOrig());
-            }
-            for (Domain so : s.getCauses().get(r)) {
-                System.out.printf("\t    %sCause: %s\n", indent, so.toString());
-                showCauses(mind, so, level + 1);
+        if (!list.isEmpty()) {
+            System.out.printf("\t    %sRight: %s\n", indent, s.getRight().getOrig());
+            for (Domain d : list) {
+                System.out.printf("\t    %sCause: %s\n", indent, d.toString());
+                showCauses(mind, d, level + 1);
             }
         }
     }
@@ -489,7 +493,7 @@ public class Screen {
             System.out.printf("\tHas not solves\n");
         } else {
             for (Domain s : set) {
-                if(!s.isAcceptor()) {
+                if (!s.isAcceptor()) {
                     showPredRecurse(mind, 0, s, showCauses);
                 }
             }
@@ -750,7 +754,7 @@ public class Screen {
 
             mind.clearQueryStatus();
             mind.getTValues().clear();
-            
+
             Right q = null;
             Right r = mind.getRights().getRoot();
             for (int k = 0; k < i; ++k) {

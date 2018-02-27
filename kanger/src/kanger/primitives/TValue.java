@@ -68,6 +68,14 @@ public class TValue {
         }
     }
 
+    public Domain getSrcValue() {
+        if (!values.isEmpty()) {
+            return values.get(current).getSrcValue();
+        } else {
+            return null;
+        }
+    }
+
     public void setDstSolve(Domain solve) {
         if (!values.isEmpty()) {
             values.get(current).setDstSolve(solve);
@@ -77,6 +85,14 @@ public class TValue {
     public Domain getDstSolve() {
         if (!values.isEmpty()) {
             return values.get(current).getDstSolve();
+        } else {
+            return null;
+        }
+    }
+
+    public Domain getDstValue() {
+        if (!values.isEmpty()) {
+            return values.get(current).getDstValue();
         } else {
             return null;
         }

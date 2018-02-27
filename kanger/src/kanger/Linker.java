@@ -41,13 +41,14 @@ public class Linker {
                     try {
                         TVariable t = d1.get(i).getT();
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-//                        if (!d2.getRight().isQuery()) {
-                        d1.setAcceptor(true);
-//                        }
+                        if (!d2.getRight().isQuery()) {
+                            d1.setAcceptor(true);
+                        }
                         TSubst s = t.setValue(d2.get(i).getValue());
                         s.setSrcSolve(d2);
                         s.setDstSolve(d1);
                         occurrs = true;
+                        //}
                     } catch (TValueOutOfOrver ex) {
                     }
                 }
@@ -55,13 +56,14 @@ public class Linker {
                     try {
                         TVariable t = d2.get(i).getT();
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-//                        if (!d1.getRight().isQuery()) {
-                        d2.setAcceptor(true);
-//                        }
+                        if (!d1.getRight().isQuery()) {
+                            d2.setAcceptor(true);
+                        }
                         TSubst s = t.setValue(d1.get(i).getValue());
                         s.setSrcSolve(d1);
                         s.setDstSolve(d2);
                         occurrs = true;
+                        //}
                     } catch (TValueOutOfOrver ex) {
                     }
 //                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {

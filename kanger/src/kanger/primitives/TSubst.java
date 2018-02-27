@@ -5,15 +5,26 @@
  */
 package kanger.primitives;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import kanger.exception.TValueOutOfOrver;
+
 /**
  *
  * @author murray
  */
 public class TSubst {
     private Term value = null;
-    private Domain srcSolve = null;
-    private Domain dstSolve = null;
     private boolean success = false;
+    
+    private Domain srcSolve = null;
+    private Map<TVariable, Term> srcSolveValues = new HashMap<>();
+    private Domain dstSolve = null;
+    private Map<TVariable, Term> dstSolveValues = new HashMap<>();
 
     public Term getValue() {
         return value;
@@ -27,7 +38,26 @@ public class TSubst {
         return srcSolve;
     }
 
+    public Domain getSrcValue() {
+        for(Argument a : srcSolve.getArguments()) {
+            if(a.isTSet() && srcSolveValues.containsKey(a.getT())) {
+                try {
+                    a.getT().setValue(srcSolveValues.get(a.getT()));
+                } catch (TValueOutOfOrver ex) {
+                    //
+                }
+            }
+        }
+        return srcSolve;
+    }
+    
     public void setSrcSolve(Domain solve) {
+        srcSolveValues.clear();
+        for(Argument a : solve.getArguments()) {
+            if(a.isTSet() && !a.getT().isEmpty()) {
+                srcSolveValues.put(a.getT(), a.getT().getValue());
+            }
+        }
         this.srcSolve = solve;
     }
 
@@ -35,7 +65,26 @@ public class TSubst {
         return dstSolve;
     }
 
+    public Domain getDstValue() {
+        for(Argument a : dstSolve.getArguments()) {
+            if(a.isTSet() && dstSolveValues.containsKey(a.getT())) {
+                try {
+                    a.getT().setValue(dstSolveValues.get(a.getT()));
+                } catch (TValueOutOfOrver ex) {
+                    //
+                }
+            }
+        }
+        return dstSolve;
+    }
+    
     public void setDstSolve(Domain solve) {
+        dstSolveValues.clear();
+        for(Argument a : solve.getArguments()) {
+            if(a.isTSet() && !a.getT().isEmpty()) {
+                dstSolveValues.put(a.getT(), a.getT().getValue());
+            }
+        }
         this.dstSolve = solve;
     }
 

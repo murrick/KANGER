@@ -52,13 +52,16 @@ public class Mind {
     private ScriptEngine scryptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
     private Set<Long> usedDomains = new HashSet<>();
-    private Set<Long> acceptorDomains = new HashSet<>();
     private Set<Long> queuedDomains = new HashSet<>();
     private Set<Long> usedTrees = new HashSet<>();
     private Set<Long> closedTrees = new HashSet<>();
     private Set<Long> substituted = new HashSet<>();
 
     private Set<Long> activeRights = new HashSet<>();
+    
+    private Set<Long> acceptorDomains = new HashSet<>();
+    private Set<Long> markAcceptor = new HashSet<>();
+
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
@@ -482,7 +485,17 @@ public class Mind {
     public Set<Long> getAcceptorDomains() {
         return acceptorDomains;
     }
+    
+    public void markAcceptors() {
+        markAcceptor.clear();
+        markAcceptor.addAll(acceptorDomains);
+    }
 
+    public void releaseAcceptors() {
+        acceptorDomains.clear();
+        acceptorDomains.addAll(markAcceptor);
+    }
+    
     public Set<Long> getQueuedDomains() {
         return queuedDomains;
     }
