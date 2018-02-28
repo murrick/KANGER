@@ -50,7 +50,7 @@ public class Analiser {
 //                                        && (!a.getRight().isQuery() || !xa.isTSet() || xa.getT().getSrcSolve().getId() != b.getId())
 //                                        && (!b.getRight().isQuery() || !xb.isTSet() || xb.getT().getSrcSolve().getId() != a.getId())
 //                                        && !a.isAcceptor() && !b.isAcceptor()
-                                        && xa.getValue().equals(xb.getValue())) {
+                                        && xa.getValue().getId() == xb.getValue().getId()) {
                                 } else {
                                     equals = false;
                                 }

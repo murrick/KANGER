@@ -62,12 +62,25 @@ public class Mind {
     private Set<Long> acceptorDomains = new HashSet<>();
     private Set<Long> markAcceptor = new HashSet<>();
 
+	private Map<Long, Long> sources = new HashMap<>();
+	private Map<Long, Long> destinations = new HashMap<>();
+	
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
     private transient volatile int currentLevel = 0;
+
+
+	public Map<Long, Long> getDestinations() {
+		return destinations;
+	}
+
+
+	public Map<Long, Long> getSources() {
+		return sources;
+	}
 
     public DictionaryFactory getTerms() {
         return terms;
@@ -507,6 +520,8 @@ public class Mind {
     public Set<Long> getSubstituted() {
         return substituted;
     }
+	
+	
 
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();

@@ -258,4 +258,16 @@ public class Domain {
         }
         return false;
     }
+		
+	public boolean isDestinationFor(Domain d) {
+
+	}
+	
+
+	public void setDestinationFor(Domain d) {
+	
+	}
+		public boolean isDestination(){
+			
+		}
 }
