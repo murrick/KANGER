@@ -9,7 +9,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Dmitry G. Qusnetsov on 26.05.15.
@@ -174,7 +176,11 @@ public class Function {
                 s += t.getT().toString();
             }
         } else if (!t.isEmpty()) {
-            s += t.getValue().toString();
+            if(t.getValue().isCVar()) {
+                s += t.getValue().getName();
+            } else {
+                s += t.getValue().toString();
+            }
         } else {
             s += "_";
         }
@@ -232,7 +238,7 @@ public class Function {
             }
         }
         Argument r = range < arg.size() ? arg.get(range) : null;
-        return s + (r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
+        return s /*+ (r != null && r.getValue() != null ? (" = " + r.getValue()) : "")*/;
     }
 
     //    public void setResult(Term c) {
@@ -291,4 +297,21 @@ public class Function {
         }
         arg.get(range).delValue(d);
     }
+
+    private Set<TVariable> getTVariablesFromList(List<Argument> sequence) {
+        Set<TVariable> list = new HashSet<>();
+        for (Argument a : sequence) {
+            if (a.isTSet() && !list.contains(a.getT())) {
+                list.add(a.getT());
+            } else if(a.isFSet()){
+                list.addAll(getTVariablesFromList(a.getF().getArguments()));
+            }
+        }
+        return list;
+    }
+
+    public Set<TVariable> getTVariables() {
+        return getTVariablesFromList(arg);
+    }
+
 }

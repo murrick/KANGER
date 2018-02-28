@@ -5,6 +5,7 @@
  */
 package kanger;
 
+import java.util.List;
 import java.util.Set;
 
 import kanger.compiler.SysOp;
@@ -125,24 +126,24 @@ public class Linker {
 
     private boolean logComparsion(Domain d) {
         if (d.isDest()) {
-            for (Argument a : d.getArguments()) {
-                if (a.isTSet() && a.getT().getDstSolve().getPredicate().getId() == d.getPredicate().getId()) {
+            for (TVariable t : d.getTVariables()) {
+                if (t.getDstSolve().getPredicate().getId() == d.getPredicate().getId()) {
                     boolean found = false;
-                    for (Domain r : a.getT().getSolves()) {
+                    for (Domain r : t.getSolves()) {
                         if (d.getId() != r.getId()) {
                             mind.getLog().add(LogMode.ANALIZER, "Result: " + r.toString());
                             found = true;
                         }
                     }
                     if (!found) {
-                        mind.getLog().add(LogMode.ANALIZER, "Confirmed: " + a.getT().getSrcSolve());
+                        mind.getLog().add(LogMode.ANALIZER, "Confirmed: " + t.getSrcSolve());
 //                        if (d.getRight().isQuery()) {
 //                            a.getT().getDstSolve().setAcceptor(false);
 //                        }
                     }
-                    mind.getLog().add(LogMode.ANALIZER, "From right  : " + a.getT().getRight().toString());
+                    mind.getLog().add(LogMode.ANALIZER, "From right  : " + t.getRight().toString());
                     mind.getLog().add(LogMode.ANALIZER, "\tAcceptor: " + d.toString());
-                    mind.getLog().add(LogMode.ANALIZER, "\tDonor   : " + a.getT().getSrcSolve());
+                    mind.getLog().add(LogMode.ANALIZER, "\tDonor   : " + t.getSrcSolve());
                 }
             }
             return true;
@@ -157,24 +158,13 @@ public class Linker {
             for (Tree t1 : set) {
                 for (Tree t2 : set) {
                     for (Domain d1 : t1.getSequence()) {
-                        boolean occurrs = false;
-                        calcFunctions(d1);
-                        ;
                         for (Domain d2 : t2.getSequence()) {
-                            calcFunctions(d2);
-
                             if (t1.getId() != t2.getId()) {
 
                                 if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
-                                    occurrs = linkDomains(d1, d2, 0, logging, false);
+                                    linkDomains(d1, d2, 0, logging, false);
                                 }
                             }
-                            if (occurrs) {
-                                calcFunctions(d2);
-                            }
-                        }
-                        if (occurrs) {
-                            calcFunctions(d1);
                         }
                     }
                 }
@@ -216,6 +206,12 @@ public class Linker {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
             }
             recurseLink(mind.getTVars().getRoot(), set, logging);
+            for (Tree t : set) {
+                for (Domain d : t.getSequence()) {
+                    execSystem(d);
+                    calcFunctions(d);
+                }
+            }
             set = mind.getActualTrees();
         } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 

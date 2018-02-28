@@ -42,7 +42,7 @@ public class Predicates {
                             i = 1;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (arg.get(1).setValue((Domain) o, arg.get(1).getValue())) {
+                        if (arg.get(0).setValue((Domain) o, arg.get(1).getValue())) {
                             i = 1;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1)) {

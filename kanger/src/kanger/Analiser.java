@@ -39,6 +39,10 @@ public class Analiser {
                     try {
                         int res = mind.getCalculator().execute(a);
 
+                        if(res == 1) {
+//                            calcFunctions(a);
+                        }
+
                         if((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
 
                             result = true;
@@ -54,7 +58,7 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
                             }
 
-                            List<TVariable> list = getTVariables(Arrays.asList(a));
+                            Set<TVariable> list = getTVariables(Arrays.asList(a));
                             if (!list.isEmpty()) {
                                 if (logging) {
                                     mind.getLog().add(LogMode.ANALIZER, "Values : ");
@@ -115,7 +119,7 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "\t" + b.toString());
                             }
 
-                            List<TVariable> list;
+                            Set<TVariable> list;
                             if (a.getRight().isQuery()) {
                                 list = getTVariables(Arrays.asList(a));
                             } else if (b.getRight().isQuery()) {
@@ -158,9 +162,20 @@ public class Analiser {
         return result;
     }
 
+    private void calcFunctions(Domain d) {
+        for (Argument a : d.getArguments()) {
+            if (a.isFSet()) {
+                try {
+                    mind.getCalculator().calculate(a.getF());
+                } catch (RuntimeErrorException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     public boolean analiseTree(List<Domain> sequence, boolean logging) {
-        List<TVariable> vars = getTVariables(sequence);
-        return recurseTree(sequence, vars, 0, logging);
+        Set<TVariable> vars = getTVariables(sequence);
+        return recurseTree(sequence, new ArrayList<>(vars), 0, logging);
     }
 
     public boolean analiser(boolean logging) {
@@ -195,14 +210,10 @@ public class Analiser {
         return result;
     }
 
-    private List<TVariable> getTVariables(List<Domain> sequence) {
-        List<TVariable> list = new ArrayList<>();
+    private Set<TVariable> getTVariables(List<Domain> sequence) {
+        Set<TVariable> list = new HashSet<>();
         for (Domain d : sequence) {
-            for (Argument a : d.getArguments()) {
-                if (a.isTSet() && !list.contains(a)) {
-                    list.add(a.getT());
-                }
-            }
+            list.addAll(d.getTVariables());
         }
         return list;
     }

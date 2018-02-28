@@ -108,7 +108,7 @@ public class Kanger {
 //        } catch (RuntimeErrorException ex) {
 //            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
+//
         Screen.session(mind);
 
 //        mind.compileLine[jhjij("!@x ~a(x) || b(x);");

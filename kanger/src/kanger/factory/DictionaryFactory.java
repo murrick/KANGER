@@ -48,9 +48,11 @@ public class DictionaryFactory {
         return null;
     }
 
-    public Term get() {
+    public Term get(String name) {
         String temp = String.format("%c%d", Enums.CVC, ++cCvar);
-        return add(temp);
+        Term t =  add(temp);
+        t.setName(name);
+        return t;
     }
 
     public Term get(long id) {

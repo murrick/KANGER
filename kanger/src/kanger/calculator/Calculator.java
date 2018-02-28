@@ -85,12 +85,15 @@ public class Calculator {
         //fu.setA(arg);
 //        if (!fu.isCalculated(arg)) {
 //        flag = execute(fu);
+        int c = mind.getCalculated().size();
         if (execute(fu) == 1) {
             ++flag;
             fu.setCalculated(true);
-            mind.getLog().add(LogMode.ANALIZER, "Calculated function:");
-            mind.getLog().add(LogMode.ANALIZER, String.format("\t%s", fu.toString()));
-            mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
+            if(mind.getCalculated().size() != c) {
+                mind.getLog().add(LogMode.ANALIZER, "Calculated function:");
+                mind.getLog().add(LogMode.ANALIZER, String.format("\t%s", fu.toString() + (fu.getResult() != null ? " = " + fu.getResult().toString() : "")));
+                mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
+            }
         }
 
 //            flag = (arg.get(i).isCSet()) ? 1 : 0;

@@ -21,6 +21,7 @@ public class Term implements Comparable {
     private long id = -1;                // Идентификатор
     private Right right = null;          // Ссылка на правило
     private Term next = null;      // Следующая запись
+    private String name = "";       // Оригинальное имя c-переменной
 
     public Term() {
 
@@ -230,6 +231,14 @@ public class Term implements Comparable {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -126,9 +126,8 @@ public class Domain {
 
     public List<Domain> getCauses() {
         List<Domain> list = new ArrayList<>();
-        for (Argument a : arguments) {
-            if (a.isTSet() && !a.isEmpty()) {
-                TVariable t = a.getT();
+        for (TVariable t : getTVariables()) {
+            if (!t.isEmpty()) {
                 if (t.rewind()) {
                     do {
                         if (t.getDstSolve().getId() == id) {
@@ -173,14 +172,25 @@ public class Domain {
     private String formatParam(Argument t) {
         String s = "";
         if (t.isTSet()) {
-            s += t.getT().toString();
+//            s += t.getT().toString();
+            if (!t.isEmpty()) {
+                s += t.getT().getName() + ":" + t.getValue().toString();
+            } else {
+                s += t.getT().toString();
+            }
+
         } else if (t.isFSet()) {
             s += t.getF().toString();
-        } else {
+        } else if(!t.isEmpty() && t.getValue().isCVar()) {
+            s += t.getValue().getName();
+        } else if(!t.isEmpty()){
             s += t.getValue().toString();
+        } else {
+            s += "_";
         }
         return s;
     }
+
 
     public String toString() {
         String s = String.format("%c", antc ? Enums.ANT : Enums.SUC);
@@ -253,9 +263,25 @@ public class Domain {
         }
     }
 
+    private Set<TVariable> getTVariablesFromList(List<Argument> sequence) {
+        Set<TVariable> list = new HashSet<>();
+        for (Argument a : sequence) {
+            if (a.isTSet() && !list.contains(a.getT())) {
+                list.add(a.getT());
+            } else if(a.isFSet()){
+                list.addAll(getTVariablesFromList(a.getF().getArguments()));
+            }
+        }
+        return list;
+    }
+
+    public Set<TVariable> getTVariables() {
+        return getTVariablesFromList(arguments);
+    }
+
     public boolean contains(TVariable t) {
-        for (Argument a : arguments) {
-            if (a.isTSet() && a.getT().getId() == t.getId()) {
+        for (TVariable x : getTVariables()) {
+            if (x.getId() == t.getId()) {
                 return true;
             }
         }
@@ -278,8 +304,8 @@ public class Domain {
 //    }
 
     public boolean isDest() {
-        for(Argument a : arguments) {
-            if(a.isTSet() && !a.getT().isEmpty() && a.getT().getDstSolve().getId() == id) {
+        for(TVariable t : getTVariables()) {
+            if(!t.isEmpty() && t.getDstSolve().getId() == id) {
                 return true;
             }
         }

@@ -42,8 +42,9 @@ public class Mind {
     private Map<Domain, Set<Domain>> sources = new HashMap<>();
     private Map<Domain, Set<Domain>> destinations = new HashMap<>();
 
-    private Set<Long> substituted = new HashSet<>();
-    private Set<Long> calculated = new HashSet<>();
+    //TODO: Не годится при массовых посдстановках
+    private List<Long> substituted = new ArrayList<>();
+    private List<Long> calculated = new ArrayList<>();
 
     private final Calculator calculator = new Calculator(this);
     private final Analiser analiser = new Analiser(this);
@@ -522,12 +523,12 @@ public class Mind {
         return activeRights;
     }
 
-    public Set<Long> getSubstituted() {
+    public List<Long> getSubstituted() {
         return substituted;
     }
 
-    public Set<Long> getCalculated() {
-        return substituted;
+    public List<Long> getCalculated() {
+        return calculated;
     }
 
     public Set<Right> getActualRights() {

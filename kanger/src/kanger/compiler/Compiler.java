@@ -139,7 +139,7 @@ public class Compiler {
             p = new Argument(mind.getTVars().add());
             p.getT().setName(root.getLeft().getName());
         } else if ((root.getName().charAt(0) == Enums.AQN && !antc) || (root.getName().charAt(0) == Enums.PQN && antc)) {
-            p = new Argument(mind.getTerms().get());
+            p = new Argument(mind.getTerms().get(root.getLeft().getName()));
         }
         replacements.put(root.getLeft().getName(), p);
     }
