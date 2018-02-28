@@ -58,13 +58,12 @@ public class Mind {
     private Set<Long> substituted = new HashSet<>();
 
     private Set<Long> activeRights = new HashSet<>();
-    
+
     private Set<Long> acceptorDomains = new HashSet<>();
     private Set<Long> markAcceptor = new HashSet<>();
 
-	private Map<Long, Long> sources = new HashMap<>();
-	private Map<Long, Long> destinations = new HashMap<>();
-	
+    private Map<Domain, Domain> sources = new HashMap<>();
+    private Map<Domain, Domain> destinations = new HashMap<>();
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
@@ -72,15 +71,13 @@ public class Mind {
 
     private transient volatile int currentLevel = 0;
 
+    public Map<Long, Long> getDestinations() {
+        return destinations;
+    }
 
-	public Map<Long, Long> getDestinations() {
-		return destinations;
-	}
-
-
-	public Map<Long, Long> getSources() {
-		return sources;
-	}
+    public Map<Long, Long> getSources() {
+        return sources;
+    }
 
     public DictionaryFactory getTerms() {
         return terms;
@@ -175,7 +172,6 @@ public class Mind {
         return linker;
     }
 
-    
     public void mark() {
         terms.mark();
         predicates.mark();
@@ -333,7 +329,6 @@ public class Mind {
         }
     }
 
-    
     private void removeTVarRecords(Right r) {
         TVariable o = null;
         for (TVariable t = tVars.getRoot(); t != null; t = t.getNext()) {
@@ -498,7 +493,7 @@ public class Mind {
     public Set<Long> getAcceptorDomains() {
         return acceptorDomains;
     }
-    
+
     public void markAcceptors() {
         markAcceptor.clear();
         markAcceptor.addAll(acceptorDomains);
@@ -508,7 +503,7 @@ public class Mind {
         acceptorDomains.clear();
         acceptorDomains.addAll(markAcceptor);
     }
-    
+
     public Set<Long> getQueuedDomains() {
         return queuedDomains;
     }
@@ -520,8 +515,6 @@ public class Mind {
     public Set<Long> getSubstituted() {
         return substituted;
     }
-	
-	
 
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();

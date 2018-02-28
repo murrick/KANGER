@@ -9,6 +9,7 @@ public class TValue {
 
     private List<TSubst> values = new ArrayList<>();
     private int current = 0;
+    private long id = -1;
 
     public void setCurrent(int current) {
         this.current = current;
@@ -121,6 +122,14 @@ public class TValue {
         return -1;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public int size() {
         return values.size();
     }
@@ -128,6 +137,10 @@ public class TValue {
     @Override
     public String toString() {
         return getValue().toString();
+    }
+
+    public boolean equals(Object t) {
+        return !(t == null || !(t instanceof TValue)) && ((TValue) t).id == id;
     }
 
 }

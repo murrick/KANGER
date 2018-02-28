@@ -220,7 +220,7 @@ public class Term implements Comparable {
 
     @Override
     public boolean equals(Object t) {
-		return t != null && ((Term) t).getId() == id;
+            return !(t == null || !(t instanceof Term)) && ((Term) t).id == id;
 //        return !(t == null || value == null || !(t instanceof Term) || type != ((Term) t).getType()) && value.equals(((Term) t).getValue());
     }
 

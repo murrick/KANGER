@@ -147,6 +147,11 @@ public class Right {
         return orig;
     }
 
+    @Override
+    public boolean equals(Object t) {
+        return !(t == null || !(t instanceof Right)) && ((Right) t).id == id;
+    }
+
 //    @Override
 //    public boolean equals(Object o) {
 //        if (o == null || !(o instanceof Right)) {

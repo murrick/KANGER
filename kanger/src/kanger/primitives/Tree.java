@@ -117,4 +117,8 @@ public class Tree {
         }
     }
 
+    public boolean equals(Object t) {
+        return !(t == null || !(t instanceof Tree)) && ((Tree) t).id == id;
+    }
+
 }
