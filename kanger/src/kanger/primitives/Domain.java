@@ -98,21 +98,23 @@ public class Domain {
         }
     }
 
-    public boolean isAcceptor() {
-        return mind.getAcceptorDomains().contains(id);
-    }
 
     public boolean isQueued() {
         return mind.getQueuedDomains().contains(id);
     }
 
-    public void setAcceptor(boolean on) {
-        if (on) {
-            mind.getAcceptorDomains().add(id);
-        } else {
-            mind.getAcceptorDomains().remove(id);
-        }
-    }
+//    public boolean isAcceptor() {
+//        return mind.getAcceptorDomains().contains(id);
+//    }
+//
+//    public void setAcceptor(boolean on) {
+//        if (on) {
+//            mind.getAcceptorDomains().add(id);
+//        } else {
+//            mind.getAcceptorDomains().remove(id);
+//        }
+//    }
+//
 
     public void setQueued(boolean on) {
         if (on) {
@@ -157,8 +159,8 @@ public class Domain {
 //    for (TList t : d.getArguments()) {
 //        String name = "_";
 //        if (t.isCSet()) name = t.getC().toString();
-//        else if (t.isFSet() && t.getF().getR() != null)
-//            name = t.getF().toString(); // + "=" + t.getF().getR().toString();
+//        else if (t.isFSet() && t.getF().getResult() != null)
+//            name = t.getF().toString(); // + "=" + t.getF().getResult().toString();
 //        else if (t.isTSet() && t.getT().getOwner() != 0) name = t.getT().getValue().getTerm().getName();
 //        s += name;
 //        if (i + 1 != d.getPredicate().getRange()) {
@@ -212,7 +214,8 @@ public class Domain {
                 System.out.print(ex);
             }
         }
-        return s + ";" + (this.isAcceptor() ? " A " : "") + (right.isQuery() ? " Q " : "");
+        String suffix = isDest() || right.isQuery() ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + " " : "";
+        return s + ";" + suffix;
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
@@ -258,14 +261,30 @@ public class Domain {
         }
         return false;
     }
-		
-	public boolean isDestinationFor(Domain d) {
-	}
 
-	public void setDestinationFor(Domain d) {
-	
-	}
-		public boolean isDestination(){
-			
-		}
+//    public boolean isDestFor(Domain d) {
+//        return mind.getSources().containsKey(this) && mind.getSources().get(this).contains(d);
+//    }
+//
+//    public void setDestFor(Domain d) {
+//        if (!mind.getDestinations().containsKey(d)) {
+//            mind.getDestinations().put(d, new HashSet<>());
+//        }
+//        if (!mind.getSources().containsKey(this)) {
+//            mind.getSources().put(this, new HashSet<>());
+//        }
+//        mind.getDestinations().get(d).add(this);
+//        mind.getSources().get(this).add(d);
+//    }
+
+    public boolean isDest() {
+        for(Argument a : arguments) {
+            if(a.isTSet() && !a.getT().isEmpty() && a.getT().getDstSolve().getId() == id) {
+                return true;
+            }
+        }
+        return false;
+        //
+        // return mind.getSources().containsKey(this) && !mind.getSources().get(this).isEmpty();
+    }
 }

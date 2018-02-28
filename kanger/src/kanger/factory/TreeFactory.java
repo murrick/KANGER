@@ -68,9 +68,9 @@ public class TreeFactory {
                     break;
                 }
             }
-            root = saved;
-            lastID = saveLastID;
         }
+        root = saved;
+        lastID = saveLastID;
     }
 
     public int size() {

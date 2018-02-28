@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 // !@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z);
+
 /**
  * Created by murray on 26.05.15.
  */
 public class Analiser {
 
-    private static final boolean DEBUG_DISABLE_FALSE_CHECK = true;
+    private static final boolean DEBUG_DISABLE_FALSE_CHECK = false;
 
     private final Mind mind;
     private boolean isInsertion = false;
@@ -33,28 +34,64 @@ public class Analiser {
         if (index >= vars.size()) {
             for (int k = 0; k < sequence.size(); ++k) {
                 Domain a = sequence.get(k);
+
+                if(mind.getCalculator().exists(a.getPredicate())) {
+                    try {
+                        int res = mind.getCalculator().execute(a);
+
+                        if((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
+
+                            result = true;
+
+                            mind.getSolutions().add(a.toString());
+
+                            if (logging) {
+                                mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
+                                for (Domain x : sequence) {
+                                    mind.getLog().add(LogMode.ANALIZER, "\t" + x.toString());
+                                }
+                                mind.getLog().add(LogMode.ANALIZER, "Сoincidence : ");
+                                mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
+                            }
+
+                            List<TVariable> list = getTVariables(Arrays.asList(a));
+                            if (!list.isEmpty()) {
+                                if (logging) {
+                                    mind.getLog().add(LogMode.ANALIZER, "Values : ");
+                                }
+                                for (TVariable t : list) {
+                                    mind.getValues().add(t.getName() + "=" + t.getValue());
+                                    if (logging) {
+                                        mind.getLog().add(LogMode.ANALIZER, "\t" + t.getName() + "=" + t.getValue());
+                                    }
+                                }
+                            }
+
+                            if (logging) {
+                                mind.getLog().add(LogMode.ANALIZER, "===========================================");
+                            }
+
+                            break;
+                        }
+                    } catch (RuntimeErrorException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 for (int j = k + 1; j < sequence.size(); ++j) {
                     Domain b = sequence.get(j);
-                    if (a.getPredicate().getId() == b.getPredicate().getId()
-                            && a.isAntc() != b.isAntc()
-                            && (!a.isAcceptor() || a.getRight().isQuery())
-                            && (!b.isAcceptor() || b.getRight().isQuery())) {
+                    if (a.getPredicate().getId() == b.getPredicate().getId() && a.isAntc() != b.isAntc()) {
                         boolean equals = true;
-//                        if ((a.getRight().isQuery() && b.isAcceptor()) || (b.getRight().isQuery() && a.isAcceptor())) {
-//                            equals = false;
-//                        } else {
-                            for (int i = 0; i < a.getPredicate().getRange(); ++i) {
-                                Argument xa = a.getArguments().get(i);
-                                Argument xb = b.getArguments().get(i);
-                                if (!xa.isEmpty() && !xb.isEmpty()
-//                                        && (!a.getRight().isQuery() || !xa.isTSet() || xa.getT().getSrcSolve().getId() != b.getId())
-//                                        && (!b.getRight().isQuery() || !xb.isTSet() || xb.getT().getSrcSolve().getId() != a.getId())
-//                                        && !a.isAcceptor() && !b.isAcceptor()
-                                        && xa.getValue().getId() == xb.getValue().getId()) {
-                                } else {
-                                    equals = false;
-                                }
-//                            }
+                        for (int i = 0; i < a.getPredicate().getRange(); ++i) {
+                            Argument xa = a.getArguments().get(i);
+                            Argument xb = b.getArguments().get(i);
+                            if (!xa.isEmpty() && !xb.isEmpty()
+                                    && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
+                                    && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
+                                    && xa.getValue().getId() == xb.getValue().getId()) {
+                            } else {
+                                equals = false;
+                            }
                         }
                         if (equals) {
                             result = true;
@@ -105,8 +142,8 @@ public class Analiser {
 
                         }
                     } else {
-                    result = false;
-                    break;
+                        result = false;
+                        break;
                     }
                 }
             }

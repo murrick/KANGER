@@ -235,9 +235,10 @@ public class Term implements Comparable {
     @Override
     public int compareTo(Object x) {
         if (x == null || value == null || !(x instanceof Term) || type != ((Term) x).getType()) {
-            return -1;
+            return -2;
         } else {
-            return ((Comparable) value).compareTo(((Term) x).getValue());
+            int c = ((Comparable) value).compareTo(((Term) x).getValue());
+            return c > 0 ? 1 : (c < 0 ? -1 : 0);
         }
 
     }

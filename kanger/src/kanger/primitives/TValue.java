@@ -55,12 +55,6 @@ public class TValue {
         return values.get(current);
     }
 
-    public void setSrcSolve(Domain solve) {
-        if (!values.isEmpty()) {
-            values.get(current).setSrcSolve(solve);
-        }
-    }
-
     public Domain getSrcSolve() {
         if (!values.isEmpty()) {
             return values.get(current).getSrcSolve();
@@ -74,12 +68,6 @@ public class TValue {
             return values.get(current).getSrcValue();
         } else {
             return null;
-        }
-    }
-
-    public void setDstSolve(Domain solve) {
-        if (!values.isEmpty()) {
-            values.get(current).setDstSolve(solve);
         }
     }
 
@@ -98,7 +86,7 @@ public class TValue {
             return null;
         }
     }
-    
+
     public void setSuccess(boolean success) {
         if (!values.isEmpty()) {
             values.get(current).setSuccess(success);
@@ -134,6 +122,14 @@ public class TValue {
         return values.size();
     }
 
+    public boolean isDestFor(Domain d) {
+        if (!values.isEmpty()) {
+            return values.get(current).getSrcSolve().equals(d);
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return getValue().toString();
@@ -143,4 +139,33 @@ public class TValue {
         return !(t == null || !(t instanceof TValue)) && ((TValue) t).id == id;
     }
 
+    public void setDstSolve(Domain d) {
+        if (!values.isEmpty()) {
+            values.get(current).setSolves(d, null);
+        }
+    }
+
+    public void setSrcSolve(Domain d) {
+        if (!values.isEmpty()) {
+            values.get(current).setSolves(null, d);
+        }
+    }
+
+    public void delValue(Domain d) {
+        if (!values.isEmpty()) {
+            for(TSubst s : values) {
+                if(s.getDstSolve().getId() == d.getId()) {
+                    values.remove(s);
+                    break;
+                }
+            }
+
+            if (current > values.size()) {
+                current = values.size() - 1;
+            }
+            if (current < 0) {
+                current = 0;
+            }
+        }
+    }
 }

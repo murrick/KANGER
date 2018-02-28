@@ -1,13 +1,14 @@
 package kanger.calculator;
 
+import jdk.nashorn.internal.runtime.regexp.joni.constants.Arguments;
 import kanger.Mind;
 import kanger.compiler.SysOp;
 import kanger.enums.DataType;
 import kanger.enums.LibMode;
 import kanger.enums.Tools;
+import kanger.exception.TValueOutOfOrver;
 import kanger.interfaces.IRunnable;
-import kanger.primitives.Argument;
-import kanger.primitives.Term;
+import kanger.primitives.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -27,19 +28,32 @@ public class Functions {
 
     private final Map<String, SysOp> sysOps = new HashMap<String, SysOp>() {
 
+        private boolean isEmpty(Object d, int index) {
+            return ((Function) d).getArguments().get(index).isEmpty()
+                    || (((Function) d).getArguments().get(index).isFSet()
+                    && ((Function) d).getArguments().get(index).getF().getResult() == null)
+                    || (((Function) d).getArguments().get(index).isTSet()
+                    && ((Function) d).getArguments().get(index).getT().getSrcSolve().getId() == ((Function) d).getOwner().getId());
+        }
+
         /// Арифметика
         {
             put("_inc(1)", new SysOp(LibMode.FUNCTION, "_inc", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_add(arg.get(0).getValue(), mind.getTerms().add(1)));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_sub(arg.get(1).getValue(), mind.getTerms().add(1)));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _add(arg.get(0).getValue(), mind.getTerms().add(1)))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _sub(arg.get(1).getValue(), mind.getTerms().add(1)))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -49,16 +63,21 @@ public class Functions {
 
         {
             put("_dec(1)", new SysOp(LibMode.FUNCTION, "_dec", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_sub(arg.get(0).getValue(), mind.getTerms().add(1)));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_add(arg.get(1).getValue(), mind.getTerms().add(1)));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _sub(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _sub(arg.get(0).getValue(), mind.getTerms().add(1)))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _add(arg.get(1).getValue(), mind.getTerms().add(1)))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sub(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -68,16 +87,21 @@ public class Functions {
 
         {
             put("_bitnot(1)", new SysOp(LibMode.FUNCTION, "_bitnot", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_bitnot(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_bitnot(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _bitnot(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _bitnot(arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _bitnot(arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _bitnot(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -87,16 +111,21 @@ public class Functions {
 
         {
             put("_neg(1)", new SysOp(LibMode.FUNCTION, "_neg", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_neg(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_neg(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _neg(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _neg(arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _neg(arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _neg(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -106,16 +135,21 @@ public class Functions {
 
         {
             put("_val(1)", new SysOp(LibMode.FUNCTION, "_val", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(arg.get(0).getValue());
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(arg.get(1).getValue());
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, arg.get(0).getValue())) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, arg.get(1).getValue())) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -125,18 +159,25 @@ public class Functions {
 
         {
             put("_add(2)", new SysOp(LibMode.FUNCTION, "_add", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_add(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_sub(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(1).setValue(_sub(arg.get(2).getValue(), arg.get(0).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _add(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _add(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _sub(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _sub(arg.get(2).getValue(), arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _add(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -146,18 +187,25 @@ public class Functions {
 
         {
             put("_sub(2)", new SysOp(LibMode.FUNCTION, "_sub", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_sub(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_add(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(1).setValue(_sub(arg.get(0).getValue(), arg.get(2).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _sub(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _sub(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _add(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _sub(arg.get(0).getValue(), arg.get(2).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _sub(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -167,18 +215,25 @@ public class Functions {
 
         {
             put("_mul(2)", new SysOp(LibMode.FUNCTION, "_mul", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_mul(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && (double) arg.get(1).getValue().getValue() != 0) {
-                        arg.get(0).setValue(_div(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && arg.get(1).isEmpty() && !arg.get(2).isEmpty() && (double) arg.get(0).getValue().getValue() != 0) {
-                        arg.get(1).setValue(_div(arg.get(2).getValue(), arg.get(0).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _mul(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _mul(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
+                        if (!((Function) o).setParameter(1, _div(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(0).getValue().getValue() != 0) {
+                        if (!((Function) o).setParameter(1, _div(arg.get(2).getValue(), arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _mul(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -188,18 +243,25 @@ public class Functions {
 
         {
             put("_div(2)", new SysOp(LibMode.FUNCTION, "_div", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty() && (double) arg.get(1).getValue().getValue() != 0) {
-                        arg.get(2).setValue(_div(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_mul(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && arg.get(1).isEmpty() && !arg.get(2).isEmpty() && (double) arg.get(2).getValue().getValue() != 0) {
-                        arg.get(1).setValue(_div(arg.get(0).getValue(), arg.get(2).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _div(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
+                        if (!((Function) o).setParameter(2, _div(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _mul(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(2).getValue().getValue() != 0) {
+                        if (!((Function) o).setParameter(1, _div(arg.get(0).getValue(), arg.get(2).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _div(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -209,14 +271,17 @@ public class Functions {
 
         {
             put("_rem(2)", new SysOp(LibMode.FUNCTION, "_rem", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty() && (double) arg.get(1).getValue().getValue() != 0) {
-                        arg.get(2).setValue(_rem(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _rem(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
+                        if (!((Function) o).setParameter(2, _rem(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _rem(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -226,16 +291,21 @@ public class Functions {
 
         {
             put("_bitleft(2)", new SysOp(LibMode.FUNCTION, "_bitleft", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_bitleft(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_bitright(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _bitleft(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _bitleft(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _bitright(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitleft(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -245,16 +315,21 @@ public class Functions {
 
         {
             put("_bitright(2)", new SysOp(LibMode.FUNCTION, "_bitright", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_bitright(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_bitleft(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _bitright(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _bitright(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _bitleft(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitright(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -264,16 +339,21 @@ public class Functions {
 
         {
             put("_bitxor(2)", new SysOp(LibMode.FUNCTION, "_bitxor", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_bitxor(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_bitxor(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _bitxor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _bitxor(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _bitxor(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitxor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -283,14 +363,17 @@ public class Functions {
 
         {
             put("_bitand(2)", new SysOp(LibMode.FUNCTION, "_bitand", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_bitand(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _bitand(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _bitand(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitand(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -300,18 +383,25 @@ public class Functions {
 
         {
             put("_bitor(2)", new SysOp(LibMode.FUNCTION, "_bitor", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_bitor(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_bitandnot(arg.get(2).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && arg.get(1).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(1).setValue(_bitandnot(arg.get(2).getValue(), arg.get(0).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _bitor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _bitor(arg.get(0).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _bitandnot(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _bitandnot(arg.get(2).getValue(), arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -321,16 +411,21 @@ public class Functions {
 
         {
             put("log(1)", new SysOp(LibMode.FUNCTION, "log", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_log(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_exp(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _log(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _log(arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _exp(arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _log(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -340,16 +435,21 @@ public class Functions {
 
         {
             put("exp(1)", new SysOp(LibMode.FUNCTION, "exp", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_exp(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_log(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _exp(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _exp(arg.get(0).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _log(arg.get(1).getValue()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _exp(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -360,14 +460,19 @@ public class Functions {
         {
             put("pi(0)", new SysOp(LibMode.FUNCTION, "pi", 0, new IRunnable() {
                 @Override
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    arg.get(0).setValue(_pi());
-//                    if (arg.get(0).isEmpty()) {
-//                        arg.get(0).setValue(mind.getTerms().add(_pi()));
-//                    } else if (!arg.get(0).isEmpty() && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!((Function) o).setParameter(0, _pi())) {
+                        ret = 0;
+                    }
+//                    if (isEmpty(o, 0)) {
+//                        try {
+//                    ((Function)o).setParameter(1, mind.getTerms().add(_pi()));
+//                    } else if (!isEmpty(o, 0) && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
 //                    } else {
-//                        arg.get(0).setValue(null);
+//                        try {
+//                    ((Function)o).setParameter(1, null);
 //                        ret = 0;
 //                    }
                     return ret;
@@ -377,16 +482,23 @@ public class Functions {
 
         {
             put("sin(1)", new SysOp(LibMode.FUNCTION, "sin", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_sin(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_asin(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _sin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _sin(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _asin(arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -396,16 +508,23 @@ public class Functions {
 
         {
             put("asin()", new SysOp(LibMode.FUNCTION, "asin", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_asin(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_sin(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _asin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _asin(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _sin(arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _asin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -415,16 +534,23 @@ public class Functions {
 
         {
             put("cos(1)", new SysOp(LibMode.FUNCTION, "cos", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_cos(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_acos(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _cos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _cos(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _acos(arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _cos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -434,16 +560,23 @@ public class Functions {
 
         {
             put("acos(1)", new SysOp(LibMode.FUNCTION, "acos", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_acos(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_cos(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _acos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _acos(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _cos(arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _acos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -453,16 +586,23 @@ public class Functions {
 
         {
             put("tan(1)", new SysOp(LibMode.FUNCTION, "tan", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_tan(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_atan(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _tan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _tan(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _atan(arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _tan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -472,16 +612,23 @@ public class Functions {
 
         {
             put("atan(1)", new SysOp(LibMode.FUNCTION, "atan", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_atan(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_tan(arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _atan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _atan(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _tan(arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _atan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -491,14 +638,18 @@ public class Functions {
 
         {
             put("int(1)", new SysOp(LibMode.FUNCTION, "int", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_int(arg.get(0).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _int(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _int(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _int(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -508,14 +659,18 @@ public class Functions {
 
         {
             put("round(2)", new SysOp(LibMode.FUNCTION, "round", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_round(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _round(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _round(arg.get(0).getValue(), arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _round(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -525,14 +680,18 @@ public class Functions {
 
         {
             put("round(1)", new SysOp(LibMode.FUNCTION, "round", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_round(arg.get(0).getValue(), null));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _round(arg.get(0).getValue(), null).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _round(arg.get(0).getValue(), null))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _round(arg.get(0).getValue(), null).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -542,16 +701,23 @@ public class Functions {
 
         {
             put("sqrt(1)", new SysOp(LibMode.FUNCTION, "sqrt", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(_sqrt(arg.get(0).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
-                        arg.get(0).setValue(_pow(arg.get(1).getValue(), mind.getTerms().add(2)));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && _sqrt(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _sqrt(arg.get(0).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, _pow(arg.get(1).getValue(), mind.getTerms().add(2)))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sqrt(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -561,16 +727,23 @@ public class Functions {
 
         {
             put("pow(2)", new SysOp(LibMode.FUNCTION, "pow", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_pow(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_root(arg.get(2).getValue(), mind.getTerms().add(1)));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _pow(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _pow(arg.get(0).getValue(), arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _root(arg.get(2).getValue(), mind.getTerms().add(1)))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _pow(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -580,16 +753,23 @@ public class Functions {
 
         {
             put("root(2)", new SysOp(LibMode.FUNCTION, "root", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(2).isEmpty()) {
-                        arg.get(2).setValue(_root(arg.get(0).getValue(), arg.get(1).getValue()));
-                    } else if (arg.get(0).isEmpty() && !arg.get(2).isEmpty()) {
-                        arg.get(0).setValue(_pow(arg.get(2).getValue(), mind.getTerms().add(1)));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(2).isEmpty() && _root(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(2, _root(arg.get(0).getValue(), arg.get(1).getValue()))) {
+
+                            ret = 0;
+                        }
+                    } else if (isEmpty(o, 0) && !isEmpty(o, 2)) {
+                        if (!((Function) o).setParameter(1, _pow(arg.get(2).getValue(), mind.getTerms().add(1)))) {
+
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _root(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).setValue(null);
+                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -601,13 +781,16 @@ public class Functions {
         /// Строковые функции
         {
             put("strlen(1)", new SysOp(LibMode.FUNCTION, "strlen", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     Double result = arg.get(1).getValue() != null ? (Double) arg.get(1).getValue().getValue() : null;
 
                     if (src != null && result == null) {
-                        arg.get(1).setValue(mind.getTerms().add((double) src.length()));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add((double) src.length()))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -618,17 +801,22 @@ public class Functions {
 
         {
             put("mid(2)", new SysOp(LibMode.FUNCTION, "mid", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     Double pos = arg.get(1).getValue() != null ? (Double) arg.get(1).getValue().getValue() : null;
                     String result = arg.get(2).getValue() != null ? (String) arg.get(2).getValue().getValue() : null;
 
                     if (src != null && pos != null && result == null) {
-                        arg.get(2).setValue(mind.getTerms().add(pos - 1 >= src.length() ? "" : src.substring(pos.intValue() - 1)));
+                        if (!((Function) o).setParameter(2, mind.getTerms().add(pos - 1 >= src.length() ? "" : src.substring(pos.intValue() - 1)))) {
+                            ret = 0;
+                        }
                     } else if (src != null && pos == null && result != null) {
                         pos = (double) src.indexOf(result);
-                        arg.get(1).setValue(mind.getTerms().add(pos));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(pos))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -639,8 +827,9 @@ public class Functions {
 
         {
             put("mid(3)", new SysOp(LibMode.FUNCTION, "mid", 3, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     Double pos = arg.get(1).getValue() != null ? (Double) arg.get(1).getValue().getValue() : null;
                     Double len = arg.get(2).getValue() != null ? (Double) arg.get(2).getValue().getValue() : null;
@@ -653,16 +842,22 @@ public class Functions {
                                 len = (double) src.length();
                             }
                         }
-                        arg.get(3).setValue(mind.getTerms().add(src.substring(pos.intValue() - 1, pos.intValue() - 1 + len.intValue())));
+                        if (!((Function) o).setParameter(3, mind.getTerms().add(src.substring(pos.intValue() - 1, pos.intValue() - 1 + len.intValue())))) {
+                            ret = 0;
+                        }
 
                     } else if (src != null && (pos == null || len != null) && result != null) {
                         pos = (double) src.indexOf(result);
                         len = (double) result.length();
                         if (arg.get(1).getValue() == null) {
-                            arg.get(1).setValue(mind.getTerms().add(pos + 1));
+                            if (!((Function) o).setParameter(1, mind.getTerms().add(pos + 1))) {
+                                ret = 0;
+                            }
                         }
                         if (arg.get(2).getValue() == null) {
-                            arg.get(2).setValue(mind.getTerms().add(len));
+                            if (!((Function) o).setParameter(2, mind.getTerms().add(len))) {
+                                ret = 0;
+                            }
                         }
                     } else {
                         ret = 0;
@@ -674,8 +869,9 @@ public class Functions {
 
         {
             put("left(2)", new SysOp(LibMode.FUNCTION, "left", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     Double pos = arg.get(1).getValue() != null ? (Double) arg.get(1).getValue().getValue() : null;
                     String result = arg.get(2).getValue() != null ? (String) arg.get(2).getValue().getValue() : null;
@@ -684,10 +880,14 @@ public class Functions {
                         if (pos > src.length()) {
                             pos = (double) src.length();
                         }
-                        arg.get(2).setValue(mind.getTerms().add(src.substring(0, pos.intValue())));
+                        if (!((Function) o).setParameter(2, mind.getTerms().add(src.substring(0, pos.intValue())))) {
+                            ret = 0;
+                        }
                     } else if (src != null && pos == null && result != null) {
                         pos = (double) result.length();
-                        arg.get(1).setValue(mind.getTerms().add(pos));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(pos))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -698,8 +898,9 @@ public class Functions {
 
         {
             put("right(2)", new SysOp(LibMode.FUNCTION, "right", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     Double pos = arg.get(1).getValue() != null ? (Double) arg.get(1).getValue().getValue() : null;
                     String result = arg.get(2).getValue() != null ? (String) arg.get(2).getValue().getValue() : null;
@@ -708,10 +909,14 @@ public class Functions {
                         if (pos > src.length()) {
                             pos = (double) src.length();
                         }
-                        arg.get(2).setValue(mind.getTerms().add(src.substring(src.length() - pos.intValue())));
+                        if (!((Function) o).setParameter(2, mind.getTerms().add(src.substring(src.length() - pos.intValue())))) {
+                            ret = 0;
+                        }
                     } else if (src != null && pos == null && result != null) {
                         pos = (double) result.length();
-                        arg.get(1).setValue(mind.getTerms().add(pos));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(pos))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -722,13 +927,16 @@ public class Functions {
 
         {
             put("trim(1)", new SysOp(LibMode.FUNCTION, "trim", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     String result = arg.get(1).getValue() != null ? (String) arg.get(1).getValue().getValue() : null;
 
                     if (src != null && result == null) {
-                        arg.get(1).setValue(mind.getTerms().add(src.trim()));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(src.trim()))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -739,13 +947,16 @@ public class Functions {
 
         {
             put("uc(1)", new SysOp(LibMode.FUNCTION, "uc", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     String result = arg.get(1).getValue() != null ? (String) arg.get(1).getValue().getValue() : null;
 
                     if (src != null && result == null) {
-                        arg.get(1).setValue(mind.getTerms().add(src.toUpperCase()));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(src.toUpperCase()))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -756,13 +967,16 @@ public class Functions {
 
         {
             put("lc(1)", new SysOp(LibMode.FUNCTION, "lc", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     String result = arg.get(1).getValue() != null ? (String) arg.get(1).getValue().getValue() : null;
 
                     if (src != null && result == null) {
-                        arg.get(1).setValue(mind.getTerms().add(src.toLowerCase()));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(src.toLowerCase()))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -773,17 +987,22 @@ public class Functions {
 
         {
             put("at(2)", new SysOp(LibMode.FUNCTION, "at", 2, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     String sample = arg.get(1).getValue() != null ? (String) arg.get(1).getValue().getValue() : null;
                     Double result = arg.get(2).getValue() != null ? (Double) arg.get(2).getValue().getValue() : null;
 
                     if (src != null && sample != null && result == null) {
-                        arg.get(2).setValue(mind.getTerms().add((src.indexOf(sample) + 1)));
+                        if (!((Function) o).setParameter(2, mind.getTerms().add((src.indexOf(sample) + 1)))) {
+                            ret = 0;
+                        }
                     } else if (src != null && sample == null && result != null) {
                         if (result - 1 >= 0 && result - 1 < src.length()) {
-                            arg.get(1).setValue(mind.getTerms().add(src.substring(result.intValue() - 1)));
+                            if (!((Function) o).setParameter(1, mind.getTerms().add(src.substring(result.intValue() - 1)))) {
+                                ret = 0;
+                            }
                         }
                     } else {
                         ret = 0;
@@ -795,17 +1014,22 @@ public class Functions {
 
         {
             put("replace(3)", new SysOp(LibMode.FUNCTION, "replace", 3, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     String target = arg.get(1).getValue() != null ? (String) arg.get(1).getValue().getValue() : null;
                     String replacement = arg.get(2).getValue() != null ? (String) arg.get(2).getValue().getValue() : null;
                     String result = arg.get(3).getValue() != null ? (String) arg.get(3).getValue().getValue() : null;
 
                     if (src != null && target != null && replacement != null && result == null) {
-                        arg.get(3).setValue(mind.getTerms().add(src.replace(target, replacement)));
+                        if (!((Function) o).setParameter(3, mind.getTerms().add(src.replace(target, replacement)))) {
+                            ret = 0;
+                        }
                     } else if (src == null && target != null && replacement != null && result != null) {
-                        arg.get(0).setValue(mind.getTerms().add(result.replace(replacement, target)));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(result.replace(replacement, target)))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -816,15 +1040,20 @@ public class Functions {
 
         {
             put("chr(1)", new SysOp(LibMode.FUNCTION, "chr", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     Double src = arg.get(0).getValue() != null ? (Double) arg.get(0).getValue().getValue() : null;
                     String result = arg.get(1).getValue() != null ? (String) arg.get(1).getValue().getValue() : null;
 
                     if (src != null && result == null) {
-                        arg.get(1).setValue(mind.getTerms().add(String.format("%c", src.intValue())));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(String.format("%c", src.intValue())))) {
+                            ret = 0;
+                        }
                     } else if (src == null && result != null) {
-                        arg.get(0).setValue(mind.getTerms().add(result.charAt(0)));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(result.charAt(0)))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -835,15 +1064,20 @@ public class Functions {
 
         {
             put("asc(1)", new SysOp(LibMode.FUNCTION, "asc", 1, new IRunnable() {
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
                     String src = arg.get(0).getValue() != null ? (String) arg.get(0).getValue().getValue() : null;
                     Double result = arg.get(1).getValue() != null ? (Double) arg.get(1).getValue().getValue() : null;
 
                     if (src != null && result == null) {
-                        arg.get(1).setValue(mind.getTerms().add(src.charAt(0)));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(src.charAt(0)))) {
+                            ret = 0;
+                        }
                     } else if (src == null && result != null) {
-                        arg.get(0).setValue(mind.getTerms().add(String.format("%c", result.intValue())));
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(String.format("%c", result.intValue())))) {
+                            ret = 0;
+                        }
                     } else {
                         ret = 0;
                     }
@@ -856,14 +1090,19 @@ public class Functions {
         {
             put("now(0)", new SysOp(LibMode.FUNCTION, "now", 0, new IRunnable() {
                 @Override
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
-                    arg.get(0).setValue(_now());
-//                    if (arg.get(0).isEmpty()) {
-//                        arg.get(0).setValue(mind.getTerms().add(_pi()));
-//                    } else if (!arg.get(0).isEmpty() && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
+                    List<Argument> arg = ((Function) o).getArguments();
+                    if (!((Function) o).setParameter(0, _now())) {
+                        ret = 0;
+                    }
+//                    if (isEmpty(o, 0)) {
+//                        try {
+//                    ((Function)o).setParameter(1, mind.getTerms().add(_pi()));
+//                    } else if (!isEmpty(o, 0) && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
 //                    } else {
-//                        arg.get(0).setValue(null);
+//                        try {
+//                    ((Function)o).setParameter(1, null);
 //                        ret = 0;
 //                    }
                     return ret;
@@ -875,12 +1114,15 @@ public class Functions {
         {
             put("type(1)", new SysOp(LibMode.FUNCTION, "type", 1, new IRunnable() {
                 @Override
-                public Object run(List<Argument> arg) {
+                public Object run(Object o) {
                     int ret = 1;
+                    List<Argument> arg = ((Function) o).getArguments();
 
-                    if (!arg.get(0).isEmpty() && arg.get(1).isEmpty()) {
-                        arg.get(1).setValue(mind.getTerms().add(arg.get(0).getValue().getType().name().toLowerCase()));
-                    } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && arg.get(0).getValue().getType().name().toLowerCase().equals(arg.get(1).getValue().toString().toLowerCase())) {
+                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                        if (!((Function) o).setParameter(1, mind.getTerms().add(arg.get(0).getValue().getType().name().toLowerCase()))) {
+                            ret = 0;
+                        }
+                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && arg.get(0).getValue().getType().name().toLowerCase().equals(arg.get(1).getValue().toString().toLowerCase())) {
                         ret = 2;
                     } else {
                         ret = 0;

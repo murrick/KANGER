@@ -5,6 +5,8 @@ import kanger.enums.LibMode;
 import kanger.exception.RuntimeErrorException;
 import kanger.interfaces.IRunnable;
 import kanger.primitives.Argument;
+import kanger.primitives.Domain;
+import kanger.primitives.Function;
 
 import javax.script.ScriptException;
 import java.io.DataInputStream;
@@ -29,7 +31,10 @@ public class SysOp {
     public SysOp(final Mind mind) {
         proc = new IRunnable() {
             @Override
-            public Object run(List<Argument> arg) throws RuntimeErrorException {
+            public Object run(Object o) throws RuntimeErrorException {
+
+                List<Argument> arg = (o instanceof Domain) ? ((Domain) o).getArguments() : ((Function) o).getArguments();
+
                 int result = 1;
                 String script = "";
 //                Term rval = null;
@@ -64,9 +69,9 @@ public class SysOp {
                             Object val = mind.getScryptEngine().get(var);
                             if (val == null) {
                                 result = 0;
-                                arg.get(i++).setValue(null);
+                                arg.get(i++).delValue((o instanceof Domain) ? (Domain) o : ((Function) o).getOwner());
                             } else {
-                                arg.get(i++).setValue(mind.getTerms().add(val));
+                                arg.get(i++).setValue((o instanceof Domain) ? (Domain) o : ((Function) o).getOwner(), mind.getTerms().add(val));
                             }
                         }
 //                        if (result != 0 && rval != null) {

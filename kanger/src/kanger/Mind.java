@@ -39,6 +39,11 @@ public class Mind {
     private final LibraryStore library = new LibraryStore(this);
 
     private final Map<TVariable, TValue> tValues = new HashMap<>();
+    private Map<Domain, Set<Domain>> sources = new HashMap<>();
+    private Map<Domain, Set<Domain>> destinations = new HashMap<>();
+
+    private Set<Long> substituted = new HashSet<>();
+    private Set<Long> calculated = new HashSet<>();
 
     private final Calculator calculator = new Calculator(this);
     private final Analiser analiser = new Analiser(this);
@@ -55,15 +60,12 @@ public class Mind {
     private Set<Long> queuedDomains = new HashSet<>();
     private Set<Long> usedTrees = new HashSet<>();
     private Set<Long> closedTrees = new HashSet<>();
-    private Set<Long> substituted = new HashSet<>();
 
     private Set<Long> activeRights = new HashSet<>();
 
-    private Set<Long> acceptorDomains = new HashSet<>();
-    private Set<Long> markAcceptor = new HashSet<>();
+//    private Set<Long> acceptorDomains = new HashSet<>();
+//    private Set<Long> markAcceptor = new HashSet<>();
 
-    private Map<Domain, Domain> sources = new HashMap<>();
-    private Map<Domain, Domain> destinations = new HashMap<>();
 
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
@@ -71,11 +73,11 @@ public class Mind {
 
     private transient volatile int currentLevel = 0;
 
-    public Map<Long, Long> getDestinations() {
+    public Map<Domain, Set<Domain>> getDestinations() {
         return destinations;
     }
 
-    public Map<Long, Long> getSources() {
+    public Map<Domain, Set<Domain>> getSources() {
         return sources;
     }
 
@@ -135,7 +137,7 @@ public class Mind {
         this.currentLevel = currentLevel;
     }
 
-    public void resetDummy() {
+    public void clearSavedResults() {
         solves.reset();
         values.reset();
     }
@@ -189,16 +191,18 @@ public class Mind {
         rights.release();
         trees.release();
 
-        tValues.clear();
+        dropLinks();
     }
 
     public void clearQueryStatus() {
         usedDomains.clear();
         usedTrees.clear();
         closedTrees.clear();
-        acceptorDomains.clear();
+//        acceptorDomains.clear();
         queuedDomains.clear();
 
+//        sources.clear();
+//        destinations.clear();
     }
 
     public void clear() throws ParseErrorException {
@@ -282,6 +286,7 @@ public class Mind {
     /**
      * Удаление правила из дерева вывода
      * <p>
+     *
      * @param r
      */
     private void removeRightRecord(Right r) {
@@ -362,7 +367,7 @@ public class Mind {
 
     public void removeInsertionRight(Right r) {
         clearQueryStatus();
-        tValues.clear();
+        dropLinks();
 
         removeTVarRecords(r);
         removeCVarRecords(r);
@@ -471,7 +476,7 @@ public class Mind {
         return domainLinks;
     }
 
-//    public Map<Solve, Long> getSolveLinks() {
+    //    public Map<Solve, Long> getSolveLinks() {
 //        return solveLinks;
 //    }
     public Map<TVariable, Long> gettVariableLinks() {
@@ -490,19 +495,24 @@ public class Mind {
         return closedTrees;
     }
 
-    public Set<Long> getAcceptorDomains() {
-        return acceptorDomains;
+    public void dropLinks() {
+        tValues.clear();
+        sources.clear();
+        destinations.clear();
     }
-
-    public void markAcceptors() {
-        markAcceptor.clear();
-        markAcceptor.addAll(acceptorDomains);
-    }
-
-    public void releaseAcceptors() {
-        acceptorDomains.clear();
-        acceptorDomains.addAll(markAcceptor);
-    }
+//    public Set<Long> getAcceptorDomains() {
+//        return acceptorDomains;
+//    }
+//
+//    public void markAcceptors() {
+//        markAcceptor.clear();
+//        markAcceptor.addAll(acceptorDomains);
+//    }
+//
+//    public void releaseAcceptors() {
+//        acceptorDomains.clear();
+//        acceptorDomains.addAll(markAcceptor);
+//    }
 
     public Set<Long> getQueuedDomains() {
         return queuedDomains;
@@ -516,6 +526,10 @@ public class Mind {
         return substituted;
     }
 
+    public Set<Long> getCalculated() {
+        return substituted;
+    }
+
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();
         if (substituted.isEmpty()) {
@@ -523,9 +537,13 @@ public class Mind {
                 set.add(r);
             }
         } else {
-            for (long id : substituted) {
-                for (Domain d : tVars.get(id).getSolves()) {
-                    set.addAll(d.getPredicate().getRights());
+            if (tVars.size() > 0) {
+                for (long id : substituted) {
+                    if (tVars.get(id) != null) {
+                        for (Domain d : tVars.get(id).getSolves()) {
+                            set.addAll(d.getPredicate().getRights());
+                        }
+                    }
                 }
             }
         }

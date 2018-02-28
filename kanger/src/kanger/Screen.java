@@ -477,7 +477,7 @@ public class Screen {
             TVariable t = d.getArguments().get(level).getT();
             t.rewind();
             do {
-                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
+                if (t.getSrcSolve() != null && !t.getSrcSolve().getPredicate().equals(d.getPredicate().getId())) {
                     showPredRecurse(mind, level + 1, d, showCauses);
                 }
             } while (t.next());
@@ -493,7 +493,7 @@ public class Screen {
             System.out.printf("\tHas not solves\n");
         } else {
             for (Domain s : set) {
-                if (!s.isAcceptor()) {
+                if (!s.isDest()) {
                     showPredRecurse(mind, 0, s, showCauses);
                 }
             }

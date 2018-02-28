@@ -51,14 +51,25 @@ public class TSubst {
         return srcSolve;
     }
     
-    public void setSrcSolve(Domain solve) {
-        srcSolveValues.clear();
-        for(Argument a : solve.getArguments()) {
-            if(a.isTSet() && !a.getT().isEmpty()) {
-                srcSolveValues.put(a.getT(), a.getT().getValue());
+    public void setSolves(Domain dst, Domain src) {
+        if(dst != null) {
+            dstSolveValues.clear();
+            for (Argument a : dst.getArguments()) {
+                if (a.isTSet() && !a.getT().isEmpty()) {
+                    dstSolveValues.put(a.getT(), a.getT().getValue());
+                }
             }
+            this.dstSolve = dst;
         }
-        this.srcSolve = solve;
+        if(src != null) {
+            srcSolveValues.clear();
+            for (Argument a : src.getArguments()) {
+                if (a.isTSet() && !a.getT().isEmpty()) {
+                    srcSolveValues.put(a.getT(), a.getT().getValue());
+                }
+            }
+            this.srcSolve = src;
+        }
     }
 
     public Domain getDstSolve() {
@@ -78,16 +89,6 @@ public class TSubst {
         return dstSolve;
     }
     
-    public void setDstSolve(Domain solve) {
-        dstSolveValues.clear();
-        for(Argument a : solve.getArguments()) {
-            if(a.isTSet() && !a.getT().isEmpty()) {
-                dstSolveValues.put(a.getT(), a.getT().getValue());
-            }
-        }
-        this.dstSolve = solve;
-    }
-
     public boolean isSuccess() {
         return success;
     }
@@ -95,6 +96,5 @@ public class TSubst {
     public void setSuccess(boolean success) {
         this.success = success;
     }
-    
-    
+
 }

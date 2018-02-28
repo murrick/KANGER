@@ -26,7 +26,7 @@ public class Compiler {
     public Right compileLine(PTree root, boolean antc) throws ParseErrorException, RuntimeErrorException {
 
         //mind.getReplacements().reset();
-        mind.resetDummy();
+        mind.clearSavedResults();
         Right r = mind.getRights().add();
 
 //        NodeFactory n = new NodeFactory();
@@ -35,7 +35,7 @@ public class Compiler {
         Tree t = mind.getTrees().add();
         r.getTree().add(t);
         construct(r, t, root, antc, new HashMap<String, Argument>(), new ArrayList<Tree>());
-        mind.resetDummy();
+        mind.clearSavedResults();
 
 //        r.setT(t);
 
@@ -145,51 +145,55 @@ public class Compiler {
     }
 
     private Tree compilePredicate(Tree t, PTree root, boolean antc, Map<String, Argument> replacements) {
+        Domain d = mind.getDomains().add(mind.getRights().getRoot());
         List<Argument> arg = new ArrayList<>();
         Predicate pred = null;
         if (root.isSystem()) {
             // системный предикат
             // ПРОВЕРКА НЛ LB НЕ НУЖНА! Т.К. ОНА ОБРАБАТЫВАЕТСЯ
-            parseArgs(arg, root, 0, replacements);
+            parseArgs(d, arg, root, 0, replacements);
             pred = mind.getPredicates().add(root.getName(), arg.size());
         } else if (root.getLeft() == null) {
             pred = mind.getPredicates().add(root.getName(), 0);
         } else {
-            parseArgs(arg, root.getRight(), 1, replacements);
+            parseArgs(d, arg, root.getRight(), 1, replacements);
             pred = mind.getPredicates().add(root.getLeft().getName(), arg.size());
         }
-        t.getSequence().add(mind.getDomains().add(pred, antc, arg, mind.getRights().getRoot()));
+        d.setPredicate(pred);
+        d.setAntc(antc);
+        d.getArguments().addAll(arg);
+        t.getSequence().add(d);
         return t;
     }
 
-    private void parseArgs(List<Argument> arg, PTree root, int level, Map<String, Argument> replacements) {
+    private void parseArgs(Domain d, List<Argument> arg, PTree root, int level, Map<String, Argument> replacements) {
         int s;
 
         if (root == null) {
         } else if (root.isSystem()) {
             if (level == 0) {
-                parseArgs(arg, root.getLeft(), level + 1, replacements);
-                parseArgs(arg, root.getRight(), level + 1, replacements);
+                parseArgs(d, arg, root.getLeft(), level + 1, replacements);
+                parseArgs(d, arg, root.getRight(), level + 1, replacements);
             } else {
                 // системная функция
 
-                Function f = new Function();
-                parseArgs(f.getA(), root.getLeft(), level + 1, replacements);
-                parseArgs(f.getA(), root.getRight(), level + 1, replacements);
+                Function f = new Function(d, mind);
+                parseArgs(d, f.getArguments(), root.getLeft(), level + 1, replacements);
+                parseArgs(d, f.getArguments(), root.getRight(), level + 1, replacements);
                 f.setName(mind.getTerms().add(root.getName()));
-                f.setRange(f.getA().size());
+                f.setRange(f.getArguments().size());
                 Argument t = new Argument(f);
                 arg.add(t);
             }
         } else if (root.getName().charAt(0) == Enums.COMMA) {
-            parseArgs(arg, root.getLeft(), level + 1, replacements);
-            parseArgs(arg, root.getRight(), level + 1, replacements);
+            parseArgs(d, arg, root.getLeft(), level + 1, replacements);
+            parseArgs(d, arg, root.getRight(), level + 1, replacements);
         } else if (root.getName().charAt(0) == Enums.LB) {
             // вложенная функция
-            Function f = new Function();
-            parseArgs(f.getA(), root.getRight(), level + 1, replacements);
+            Function f = new Function(d, mind);
+            parseArgs(d, f.getArguments(), root.getRight(), level + 1, replacements);
             f.setName(mind.getTerms().add(root.getLeft().getName()));
-            f.setRange(f.getA().size());
+            f.setRange(f.getArguments().size());
             Argument t = new Argument(f);
             arg.add(t);
         } else {

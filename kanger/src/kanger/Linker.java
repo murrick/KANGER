@@ -7,7 +7,9 @@ package kanger;
 
 import java.util.Set;
 
+import kanger.compiler.SysOp;
 import kanger.enums.LogMode;
+import kanger.exception.RuntimeErrorException;
 import kanger.exception.TValueOutOfOrver;
 import kanger.primitives.Argument;
 import kanger.primitives.Domain;
@@ -27,26 +29,31 @@ public class Linker {
         this.mind = mind;
     }
 
-    private void linkDomains(Domain d1, Domain d2, int level, boolean logging, boolean occurrs) {
+    private boolean linkDomains(Domain d1, Domain d2, int level, boolean logging, boolean occurrs) {
         if (level >= d1.getPredicate().getRange()) {
+
+            execSystem(d1);
+            execSystem(d2);
+
             if (logging && occurrs) {
                 logComparsion(d1);
                 logComparsion(d2);
                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
             }
+
         } else {
             //ПОДСТАНОВКИ
             for (int i = 0; i <= level; ++i) {
+
                 if (d1.get(i).isTSet() && !d2.get(i).isEmpty() && !d1.get(i).getT().contains(d2.get(i).getValue())) {
                     try {
-                        TVariable t = d1.get(i).getT();
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
-                        if (!d2.isAcceptor() && !d2.getRight().isQuery()) {
-                            d1.setAcceptor(true);
-                        }
-                        TSubst s = t.setValue(d2.get(i).getValue());
-                        s.setSrcSolve(d2);
-                        s.setDstSolve(d1);
+//                        if (!d2.isAcceptor() && !d2.getRight().isQuery()) {
+//                            d1.setAcceptor(true);
+//                        }
+                        TSubst s = d1.get(i).getT().setValue(d2.get(i).getValue());
+                        s.setSolves(d1, d2);
+//                        d1.setDestFor(d2);
                         occurrs = true;
                         //}
                     } catch (TValueOutOfOrver ex) {
@@ -54,14 +61,13 @@ public class Linker {
                 }
                 if (d2.get(i).isTSet() && !d1.get(i).isEmpty() && !d2.get(i).getT().contains(d1.get(i).getValue())) {
                     try {
-                        TVariable t = d2.get(i).getT();
                         //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
-                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
-                            d2.setAcceptor(true);
-                        }
-                        TSubst s = t.setValue(d1.get(i).getValue());
-                        s.setSrcSolve(d1);
-                        s.setDstSolve(d2);
+//                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
+//                            d2.setAcceptor(true);
+//                        }
+                        TSubst s = d2.get(i).getT().setValue(d1.get(i).getValue());
+                        s.setSolves(d2, d1);
+//                        d2.setDestFor(d1);
                         occurrs = true;
                         //}
                     } catch (TValueOutOfOrver ex) {
@@ -89,10 +95,36 @@ public class Linker {
             }
             linkDomains(d1, d2, level + 1, logging, occurrs);
         }
+
+        return occurrs;
+    }
+
+    private boolean execSystem(Domain d) {
+        if (mind.getCalculator().exists(d.getPredicate())) {
+            try {
+                int result = mind.getCalculator().execute(d);
+                return true;
+            } catch (RuntimeErrorException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    private void calcFunctions(Domain d) {
+        for (Argument a : d.getArguments()) {
+            if (a.isFSet()) {
+                try {
+                    mind.getCalculator().calculate(a.getF());
+                } catch (RuntimeErrorException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private boolean logComparsion(Domain d) {
-        if (d.isAcceptor()) {
+        if (d.isDest()) {
             for (Argument a : d.getArguments()) {
                 if (a.isTSet() && a.getT().getDstSolve().getPredicate().getId() == d.getPredicate().getId()) {
                     boolean found = false;
@@ -124,13 +156,25 @@ public class Linker {
 
             for (Tree t1 : set) {
                 for (Tree t2 : set) {
-                    if (t1.getId() != t2.getId()) {
-                        for (Domain d1 : t1.getSequence()) {
-                            for (Domain d2 : t2.getSequence()) {
+                    for (Domain d1 : t1.getSequence()) {
+                        boolean occurrs = false;
+                        calcFunctions(d1);
+                        ;
+                        for (Domain d2 : t2.getSequence()) {
+                            calcFunctions(d2);
+
+                            if (t1.getId() != t2.getId()) {
+
                                 if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
-                                    linkDomains(d1, d2, 0, logging, false);
+                                    occurrs = linkDomains(d1, d2, 0, logging, false);
                                 }
                             }
+                            if (occurrs) {
+                                calcFunctions(d2);
+                            }
+                        }
+                        if (occurrs) {
+                            calcFunctions(d1);
                         }
                     }
                 }
@@ -144,7 +188,7 @@ public class Linker {
     }
 
     public void link(boolean logging) {
-        mind.getAcceptorDomains().clear();
+        mind.dropLinks();
         link(null, logging);
     }
 
@@ -156,6 +200,8 @@ public class Linker {
 //        }
 
         mind.getSubstituted().clear();
+        mind.getCalculated().clear();
+
         Set<Tree> set;
         if (r == null) {
             set = mind.getActualTrees();
@@ -165,12 +211,13 @@ public class Linker {
 
         do {
             mind.getSubstituted().clear();
+            mind.getCalculated().clear();
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
             }
             recurseLink(mind.getTVars().getRoot(), set, logging);
             set = mind.getActualTrees();
-        } while (mind.getSubstituted().size() > 0);
+        } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 
     }
 

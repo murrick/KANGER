@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="jline-1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jline-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jsr223.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/jsr223.jar!/" />
+    </SOURCES>
+  </library>
+</component>

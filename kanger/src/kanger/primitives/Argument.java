@@ -46,26 +46,41 @@ public class Argument {
         } else if (o instanceof TVariable) {
             return ((TVariable) o).getValue();
         } else if (o instanceof Function) {
-            return ((Function) o).getR();
+            return ((Function) o).getResult();
         } else {
             return null;
         }
     }
 
-    public boolean setValue(Term t) {
+    public boolean setValue(Function f, Term t) {
+        return setValue(f.getOwner(), t);
+    }
+
+    public boolean setValue(Domain d, Term t) {
         boolean result = true;
         if (o == null || o instanceof Term) {
             o = t;
         } else if (o instanceof TVariable) {
             try {
-                ((TVariable) o).setValue(t);
+                TSubst s = ((TVariable) o).setValue(t);
+                s.setSolves(d, d);
             } catch (TValueOutOfOrver tValueOutOfOrver) {
                 result = false;
             }
         } else if (o instanceof Function) {
-            ((Function) o).setR(t);
+            ((Function) o).setResult(t);
         }
         return result;
+    }
+
+    public void delValue(Domain d) {
+        if (o == null || o instanceof Term) {
+            o = null;
+        } else if (o instanceof TVariable) {
+            ((TVariable) o).delValue(d);
+        } else if (o instanceof Function) {
+            ((Function) o).clearResult(d);
+        }
     }
 
     public TVariable getT() {
@@ -127,6 +142,10 @@ public class Argument {
             }
             return false;
         }
+    }
+
+    public boolean isDestFor(Domain d) {
+        return isTSet() && getT().isDestFor(d);
     }
 
     @Override

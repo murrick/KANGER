@@ -26,8 +26,17 @@ public class DomainFactory {
         this.mind = mind;
     }
 
-    public Domain add(Predicate pred, boolean antc, List<Argument> arg, Right r) {
+    public Domain add(Right r) {
+        Domain p = new Domain(mind);
+        p.setNext(root);
+        p.setRight(r);
+        p.setId(lastID++);
+        root = p;
+        return p;
+    }
 
+
+    public Domain add(Predicate pred, boolean antc, List<Argument> arg, Right r) {
         Domain p = find(pred, antc, arg);
         if (p != null) {
             return p;
@@ -104,16 +113,16 @@ public class DomainFactory {
     }
 
     public void release() {
-        if(root != null && saved != null && root.getId() != saved.getId()) {
+        if (root != null && saved != null && root.getId() != saved.getId()) {
             for (Domain t = root; t != null; t = t.getNext()) {
-                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
                     t.setNext(null);
                     break;
                 }
             }
-            root = saved;
-            lastID = saveLastID;
         }
+        root = saved;
+        lastID = saveLastID;
     }
 
     public int size() {

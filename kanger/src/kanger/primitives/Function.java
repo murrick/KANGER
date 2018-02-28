@@ -24,13 +24,20 @@ public class Function {
     private boolean calculated = false;
     private boolean busy = false;                       // Предотвращение бесконечной рекурсии
 
-    public Function() {
+    private Domain owner = null;
+
+    private Mind mind = null;
+
+    public Function(Domain d, Mind mind) {
+        this.owner = d;
+        this.mind = mind;
     }
 
     public Function(DataInputStream dis, Mind mind) throws IOException {
         long id = dis.readLong();
         name = mind.getTerms().get(id);
         range = dis.readInt();
+        this.mind = mind;
 
 //        f = (FunctionDescriptor) mind.getFunctions().get(id);
 //        line.clear();
@@ -60,7 +67,7 @@ public class Function {
 //    }
 
     public Argument get(int i) {
-        if(i == range && range == arg.size()) {
+        if (i == range && range == arg.size()) {
             arg.add(new Argument());
         }
         return arg.get(i);
@@ -86,11 +93,14 @@ public class Function {
 //        return arg;
 //    }
 //
-    public List<Argument> getA() {
+    public List<Argument> getArguments() {
         return arg;
     }
 
-    public Term getR() {
+    public Term getResult() {
+        while (range + 1 > arg.size()) {
+            arg.add(new Argument());
+        }
         if (range + 1 == arg.size()) {
             return arg.get(range).getValue();
         } else {
@@ -98,21 +108,38 @@ public class Function {
         }
     }
 
-    public void setR(Argument r) {
-        if (range + 1 > arg.size()) {
+//    public void setResult(Domain d, Argument r) {
+//        if (range + 1 > arg.size()) {
+//            arg.add(new Argument());
+//        }
+//        arg.get(range).setValue(d, r.getValue());
+////        arg.get(range).setC(r.getC());
+////        arg.get(range).setT(r.getT());
+////        arg.get(range).setF(r.getF());
+//    }
+
+    public boolean setResult(Term r) {
+        while (range + 1 > arg.size()) {
             arg.add(new Argument());
         }
-        arg.get(range).setValue(r.getValue());
-//        arg.get(range).setC(r.getC());
-//        arg.get(range).setT(r.getT());
-//        arg.get(range).setF(r.getF());
+
+//        if ((arg.get(range).isEmpty() && r != null)
+//                || !arg.get(range).isEmpty() && r == null
+//                || (!arg.get(range).isEmpty() && r != null && arg.get(range).getValue().getId() != r.getId())) {
+//            mind.getCalculated().add(d.getId());
+//        }
+//        arg.get(range).setValue(d, r);
+
+        return setParameter(range, r);
     }
 
-    public void setR(Term r) {
-        if (range + 1 > arg.size()) {
-            arg.add(new Argument());
+    public boolean setParameter(int i, Term r) {
+        if ((arg.get(i).isEmpty() && r != null)
+                || !arg.get(i).isEmpty() && r == null
+                || (!arg.get(i).isEmpty() && r != null && arg.get(i).getValue().getId() != r.getId())) {
+            mind.getCalculated().add(owner.getId());
         }
-        arg.get(range).setValue(r);
+        return arg.get(i).setValue(owner, r);
     }
 
 //    public boolean isCalculated() {
@@ -170,6 +197,14 @@ public class Function {
         this.busy = busy;
     }
 
+    public Domain getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Domain owner) {
+        this.owner = owner;
+    }
+
     public String toString() {
         Operation op = Parser.getOp(name.toString());
         String s = "";
@@ -200,7 +235,7 @@ public class Function {
         return s + (r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
     }
 
-    //    public void setR(Term c) {
+    //    public void setResult(Term c) {
 //        if(f != null) {
 //            while(f.getRange() >= arg.size()) {
 //                arg.add(new TList());
@@ -247,4 +282,13 @@ public class Function {
     }
 
 
+    public void clearResult(Domain d) {
+        if (range + 1 > arg.size()) {
+            arg.add(new Argument());
+        }
+        if(!arg.get(range).isEmpty()) {
+            mind.getCalculated().add(d.getId());
+        }
+        arg.get(range).delValue(d);
+    }
 }

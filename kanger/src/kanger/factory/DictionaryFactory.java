@@ -93,10 +93,10 @@ public class DictionaryFactory {
                     break;
                 }
             }
-            root = saved;
-            cCvar = saveCcvar;
-            lastID = saveLastID;
         }
+        root = saved;
+        cCvar = saveCcvar;
+        lastID = saveLastID;
     }
 
     public int size() {

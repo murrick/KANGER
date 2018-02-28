@@ -4,15 +4,7 @@ import kanger.Mind;
 import kanger.compiler.SysOp;
 import kanger.enums.*;
 import kanger.exception.RuntimeErrorException;
-import kanger.interfaces.IRunnable;
 import kanger.primitives.*;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 //TODO: Следать пересчет функций централизованно отдельным проходом
 
@@ -48,7 +40,7 @@ public class Calculator {
         }
 //        List<Argument> arg = new ArrayList<>();
 
-        //fu.getA();
+        //fu.getArguments();
         //arg.clear();
 
         /* Проверка наличия всех параметров
@@ -66,7 +58,7 @@ public class Calculator {
 //                    fu.get(i).setValue(null);
 //                }
 //            } else if (fu.get(i).isFSet()) {
-//                fu.get(i).setValue(fu.get(i).getF().getR());
+//                fu.get(i).setValue(fu.get(i).getF().getResult());
 //            } else if (fu.get(i).isTSet() && fu.get(i).getT().getOwner() != 0) {
 //                fu.get(i).setValue(fu.get(i).getT().getValue());
 //            }
@@ -74,19 +66,19 @@ public class Calculator {
 //
         for (int i = 0; i <= fu.getRange(); ++i) {
             if (fu.get(i).isFSet() /* && !fu.get(i).getF().isBusy()*/) {
-//                fu.get(i).getF().setR(fu.get(i).getValue());
+//                fu.get(i).getF().setResult(fu.get(i).getValue());
                 if (calculate(fu.get(i).getF()) > 0) {
                     ++flag;
-//                    fu.get(i).setValue(fu.get(i).getF().getR());
+//                    fu.get(i).setValue(fu.get(i).getF().getResult());
                 }
             }
         }
 
 //        // Если еще не добавлен элемент результата - добавляем
-//        if (fu.getA().size() < fu.getRange() + 1) {
-//            fu.getA().add(new Argument());
+//        if (fu.getArguments().size() < fu.getRange() + 1) {
+//            fu.getArguments().add(new Argument());
 //        }
-//        fu.setR(result);
+//        fu.setResult(result);
 //        Argument tl = new Argument();
 //        arg.add(tl);
 //        tl.setC(result);
@@ -102,14 +94,14 @@ public class Calculator {
         }
 
 //            flag = (arg.get(i).isCSet()) ? 1 : 0;
-//        flag = (fu.getR() != null) ? 1 : 0;
+//        flag = (fu.getResult() != null) ? 1 : 0;
 //        if(!fu.isCalculated()) {
         for (int i = 0; i <= fu.getRange(); ++i) {
             if (fu.get(i).isFSet()) {
-//                fu.get(i).getF().setR(fu.get(i).getValue());
+//                fu.get(i).getF().setResult(fu.get(i).getValue());
                 if (calculate(fu.get(i).getF()) > 0) {
                     ++flag;
-//                    fu.get(i).setValue(fu.get(i).getF().getR());
+//                    fu.get(i).setValue(fu.get(i).getF().getResult());
                 }
             }
         }
@@ -123,10 +115,10 @@ public class Calculator {
 //            }
 //        }
 //        } else {
-//            flag = (fu.getR() != null) ? 1 : 0;
+//            flag = (fu.getResult() != null) ? 1 : 0;
 //        }
 
-        //func.setR(arg.get(i).getValue());
+        //func.setResult(arg.get(i).getValue());
         fu.setBusy(false);
         return flag;
     }
@@ -140,12 +132,12 @@ public class Calculator {
      * TRUE или FALSE, либо -1 если предикат не
      * системный
      */
-    public int execute(Predicate p, List<Argument> arg) throws RuntimeErrorException {
+    public int execute(Domain d) throws RuntimeErrorException {
         int k = -1;
-        String n = p.getName() + "(" + p.getRange() + ")";
+        String n = d.getPredicate().getName() + "(" + d.getPredicate().getRange() + ")";
         SysOp op = predicates.getSysOps().get(n) != null ? predicates.getSysOps().get(n) : mind.getLibrary().find(n);
         if (op != null) {
-            k = (Integer) op.getProc().run(arg);
+            k = (Integer) op.getProc().run(d);
         }
         return k;
     }
@@ -155,10 +147,10 @@ public class Calculator {
         String n = fu.getName() + "(" + fu.getRange() + ")";
         SysOp op = functions.getSysOps().get(n) != null ? functions.getSysOps().get(n) : mind.getLibrary().find(n);
         if (op != null) {
-            if (op.getRange() + 1 > fu.getA().size()) {
-                fu.getA().add(new Argument());
+            if (op.getRange() + 1 > fu.getArguments().size()) {
+                fu.getArguments().add(new Argument());
             }
-            k = (Integer) op.getProc().run(fu.getA());
+            k = (Integer) op.getProc().run(fu);
         }
         return k;
     }
@@ -175,6 +167,7 @@ public class Calculator {
         return op != null && functions.getSysOps().get(n).getMode() == LibMode.FUNCTION;
     }
 
+
     private SysOp findOp(String n) {
         if (predicates.getSysOps().containsKey(n))
             return predicates.getSysOps().get(n);
@@ -184,30 +177,39 @@ public class Calculator {
             return mind.getLibrary().find(n);
     }
 
-    public SysOp find(String key) {
-        SysOp op = findOp(key);
-        if (op != null) {
-            return op;
+    public SysOp find(Object o) {
+        if(o instanceof Predicate) {
+            String n = ((Predicate)o).getName() + "(" + ((Predicate)o).getRange() + ")";
+            return predicates.getSysOps().get(n) != null ? predicates.getSysOps().get(n) : mind.getLibrary().find(n);
+        } else if(o instanceof Function) {
+            String n = ((Function) o).getName() + "(" + ((Function) o).getRange() + ")";
+            return functions.getSysOps().get(n) != null ? functions.getSysOps().get(n) : mind.getLibrary().find(n);
         } else {
-            key = key.trim();
-            if (!key.isEmpty() && key.charAt(0) == Enums.ANT || key.charAt(0) == Enums.SUC || key.charAt(0) == Enums.DEL || key.charAt(0) == Enums.INS || key.charAt(0) == Enums.WIPE) {
-                key = key.substring(1);
-            }
-            if (!key.isEmpty() && key.charAt(key.length() - 1) == Enums.EOLN) {
-                key = key.substring(0, key.length() - 1);
-            }
-            op = findOp(key);
+            String key = o.toString();
+            SysOp op = findOp(key);
             if (op != null) {
                 return op;
-            } else if (key.contains("(") && key.contains(")") && key.split("\\(").length > 0) {
-                String n = key.split("\\(")[0];
-                int range = key.split("\\(")[1].split("\\)")[0].split(",").length;
-                if (range == 1 && key.split("\\(")[1].split("\\)")[0].split(",")[0].trim().isEmpty()) {
-                    range = 0;
-                }
-                return findOp(n + "(" + range + ")");
             } else {
-                return findOp(key + "(0)");
+                key = key.trim();
+                if (!key.isEmpty() && key.charAt(0) == Enums.ANT || key.charAt(0) == Enums.SUC || key.charAt(0) == Enums.DEL || key.charAt(0) == Enums.INS || key.charAt(0) == Enums.WIPE) {
+                    key = key.substring(1);
+                }
+                if (!key.isEmpty() && key.charAt(key.length() - 1) == Enums.EOLN) {
+                    key = key.substring(0, key.length() - 1);
+                }
+                op = findOp(key);
+                if (op != null) {
+                    return op;
+                } else if (key.contains("(") && key.contains(")") && key.split("\\(").length > 0) {
+                    String n = key.split("\\(")[0];
+                    int range = key.split("\\(")[1].split("\\)")[0].split(",").length;
+                    if (range == 1 && key.split("\\(")[1].split("\\)")[0].split(",")[0].trim().isEmpty()) {
+                        range = 0;
+                    }
+                    return findOp(n + "(" + range + ")");
+                } else {
+                    return findOp(key + "(0)");
+                }
             }
         }
     }

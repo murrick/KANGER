@@ -104,6 +104,13 @@ public class TVariable {
         }
     }
 
+    public void delValue(Domain d) {
+        if (mind.getTValues().containsKey(this)) {
+            mind.getTValues().get(this).delValue(d);
+            mind.getSubstituted().add(id);
+        }
+    }
+
     public TSubst addValue(Term value) throws TValueOutOfOrver {
         if (!mind.getTValues().containsKey(this)) {
             mind.getTValues().put(this, new TValue());
@@ -172,6 +179,14 @@ public class TVariable {
         }
     }
 
+    public void setSrcSolve(Domain d) {
+        if (mind.getTValues().containsKey(this)) {
+            mind.getTValues().put(this, new TValue());
+        } else {
+            mind.getTValues().get(this).setSrcSolve(d);
+        }
+    }
+
     public Domain getSrcValue() {
         if (mind.getTValues().containsKey(this)) {
             return mind.getTValues().get(this).getSrcValue();
@@ -180,18 +195,19 @@ public class TVariable {
         }
     }
 
-    public void setSrcSolve(Domain s) {
-        if (!mind.getTValues().containsKey(this)) {
-            mind.getTValues().put(this, new TValue());
-        }
-        mind.getTValues().get(this).setSrcSolve(s);
-    }
-
     public Domain getDstSolve() {
         if (mind.getTValues().containsKey(this)) {
             return mind.getTValues().get(this).getDstSolve();
         } else {
             return null;
+        }
+    }
+
+    public void setDstSolve(Domain d) {
+        if (mind.getTValues().containsKey(this)) {
+            mind.getTValues().put(this, new TValue());
+        } else {
+            mind.getTValues().get(this).setDstSolve(d);
         }
     }
 
@@ -203,11 +219,12 @@ public class TVariable {
         }
     }
 
-    public void setDstSolve(Domain s) {
-        if (!mind.getTValues().containsKey(this)) {
-            mind.getTValues().put(this, new TValue());
+    public boolean isDestFor(Domain d) {
+        if (mind.getTValues().containsKey(this)) {
+            return mind.getTValues().get(this).isDestFor(d);
+        } else {
+            return false;
         }
-        mind.getTValues().get(this).setDstSolve(s);
     }
 
     //    public Predicate getPredicate() {
