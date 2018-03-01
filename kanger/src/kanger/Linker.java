@@ -157,25 +157,20 @@ public class Linker {
             for (Tree t1 : set) {
                 for (Tree t2 : set) {
                     for (Domain d1 : t1.getSequence()) {
-                        boolean occurrs = false;
-                        calcFunctions(d1);
-                        ;
+                        
+                        
                         for (Domain d2 : t2.getSequence()) {
-                            calcFunctions(d2);
+                            
 
                             if (t1.getId() != t2.getId()) {
 
                                 if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
-                                    occurrs = linkDomains(d1, d2, 0, logging, false);
+                                    linkDomains(d1, d2, 0, logging, false);
                                 }
                             }
-                            if (occurrs) {
-                                calcFunctions(d2);
-                            }
+                        
                         }
-                        if (occurrs) {
-                            calcFunctions(d1);
-                        }
+                       
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package kanger.calculator;
 
-import jdk.nashorn.internal.runtime.regexp.joni.constants.Arguments;
 import kanger.Mind;
 import kanger.compiler.SysOp;
 import kanger.enums.DataType;
@@ -47,7 +46,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _sub(arg.get(1).getValue(), mind.getTerms().add(1)))) {
+                        if (!((Function) o).setParameter(0, _sub(arg.get(1).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
@@ -71,7 +70,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _add(arg.get(1).getValue(), mind.getTerms().add(1)))) {
+                        if (!((Function) o).setParameter(0, _add(arg.get(1).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sub(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
@@ -95,7 +94,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _bitnot(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _bitnot(arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _bitnot(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
@@ -119,7 +118,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _neg(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _neg(arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _neg(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
@@ -143,7 +142,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, arg.get(1).getValue())) {
+                        if (!((Function) o).setParameter(0, arg.get(1).getValue())) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
@@ -167,7 +166,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _sub(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _sub(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
@@ -195,7 +194,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _add(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _add(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
@@ -223,7 +222,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
-                        if (!((Function) o).setParameter(1, _div(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _div(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(0).getValue().getValue() != 0) {
@@ -251,7 +250,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _mul(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _mul(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(2).getValue().getValue() != 0) {
@@ -299,7 +298,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _bitright(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _bitright(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitleft(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
@@ -323,7 +322,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _bitleft(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _bitleft(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitright(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
@@ -347,7 +346,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _bitxor(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _bitxor(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitxor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
@@ -391,7 +390,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _bitandnot(arg.get(2).getValue(), arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _bitandnot(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
@@ -419,7 +418,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _exp(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _exp(arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _log(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
@@ -443,7 +442,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _log(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _log(arg.get(1).getValue()))) {
                             ret = 0;
                         }
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _exp(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
@@ -491,7 +490,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _asin(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _asin(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
@@ -517,7 +516,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _sin(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _sin(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
@@ -543,7 +542,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _acos(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _acos(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
@@ -569,7 +568,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _cos(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _cos(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
@@ -595,7 +594,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _atan(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _atan(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
@@ -621,7 +620,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _tan(arg.get(1).getValue()))) {
+                        if (!((Function) o).setParameter(0, _tan(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
@@ -710,7 +709,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
-                        if (!((Function) o).setParameter(1, _pow(arg.get(1).getValue(), mind.getTerms().add(2)))) {
+                        if (!((Function) o).setParameter(0, _pow(arg.get(1).getValue(), mind.getTerms().add(2)))) {
 
                             ret = 0;
                         }
@@ -736,7 +735,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _root(arg.get(2).getValue(), mind.getTerms().add(1)))) {
+                        if (!((Function) o).setParameter(0, _root(arg.get(2).getValue(), mind.getTerms().add(1)))) {
 
                             ret = 0;
                         }
@@ -762,7 +761,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (isEmpty(o, 0) && !isEmpty(o, 2)) {
-                        if (!((Function) o).setParameter(1, _pow(arg.get(2).getValue(), mind.getTerms().add(1)))) {
+                        if (!((Function) o).setParameter(0, _pow(arg.get(2).getValue(), mind.getTerms().add(1)))) {
 
                             ret = 0;
                         }
@@ -1027,7 +1026,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (src == null && target != null && replacement != null && result != null) {
-                        if (!((Function) o).setParameter(1, mind.getTerms().add(result.replace(replacement, target)))) {
+                        if (!((Function) o).setParameter(0, mind.getTerms().add(result.replace(replacement, target)))) {
                             ret = 0;
                         }
                     } else {
@@ -1051,7 +1050,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (src == null && result != null) {
-                        if (!((Function) o).setParameter(1, mind.getTerms().add(result.charAt(0)))) {
+                        if (!((Function) o).setParameter(0, mind.getTerms().add(result.charAt(0)))) {
                             ret = 0;
                         }
                     } else {
@@ -1075,7 +1074,7 @@ public class Functions {
                             ret = 0;
                         }
                     } else if (src == null && result != null) {
-                        if (!((Function) o).setParameter(1, mind.getTerms().add(String.format("%c", result.intValue())))) {
+                        if (!((Function) o).setParameter(0, mind.getTerms().add(String.format("%c", result.intValue())))) {
                             ret = 0;
                         }
                     } else {
