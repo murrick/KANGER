@@ -39,10 +39,10 @@ public class TSubst {
     }
 
     public Domain getSrcValue() {
-        for(Argument a : srcSolve.getArguments()) {
-            if(a.isTSet() && srcSolveValues.containsKey(a.getT())) {
+        for(TVariable t : srcSolve.getTVariables()) {
+            if(srcSolveValues.containsKey(t)) {
                 try {
-                    a.getT().setValue(srcSolveValues.get(a.getT()));
+                    t.setValue(srcSolveValues.get(t));
                 } catch (TValueOutOfOrver ex) {
                     //
                 }
@@ -54,18 +54,18 @@ public class TSubst {
     public void setSolves(Domain dst, Domain src) {
         if(dst != null) {
             dstSolveValues.clear();
-            for (Argument a : dst.getArguments()) {
-                if (a.isTSet() && !a.getT().isEmpty()) {
-                    dstSolveValues.put(a.getT(), a.getT().getValue());
+            for (TVariable t : dst.getTVariables()) {
+                if (!t.isEmpty()) {
+                    dstSolveValues.put(t, t.getValue());
                 }
             }
             this.dstSolve = dst;
         }
         if(src != null) {
             srcSolveValues.clear();
-            for (Argument a : src.getArguments()) {
-                if (a.isTSet() && !a.getT().isEmpty()) {
-                    srcSolveValues.put(a.getT(), a.getT().getValue());
+            for (TVariable t : src.getTVariables()) {
+                if (!t.isEmpty()) {
+                    srcSolveValues.put(t, t.getValue());
                 }
             }
             this.srcSolve = src;
@@ -77,10 +77,10 @@ public class TSubst {
     }
 
     public Domain getDstValue() {
-        for(Argument a : dstSolve.getArguments()) {
-            if(a.isTSet() && dstSolveValues.containsKey(a.getT())) {
+        for(TVariable t : dstSolve.getTVariables()) {
+            if(dstSolveValues.containsKey(t)) {
                 try {
-                    a.getT().setValue(dstSolveValues.get(a.getT()));
+                    t.setValue(dstSolveValues.get(t));
                 } catch (TValueOutOfOrver ex) {
                     //
                 }
