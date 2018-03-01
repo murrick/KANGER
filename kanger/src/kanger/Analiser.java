@@ -81,17 +81,17 @@ public class Analiser {
                 for (int j = k + 1; j < sequence.size(); ++j) {
                     Domain b = sequence.get(j);
                     if (a.getPredicate().getId() == b.getPredicate().getId()
-                            && a.isAntc() != b.isAntc()) {
-//                            && (!a.isDest() || a.getRight().isQuery() || b.getRight().isQuery())
-//                            && (!b.isDest() || b.getRight().isQuery() || a.getRight().isQuery())) {
+                            && a.isAntc() != b.isAntc()
+                            && (!a.isDest() || a.getRight().isQuery() || b.getRight().isQuery())
+                            && (!b.isDest() || b.getRight().isQuery() || a.getRight().isQuery())) {
                         boolean equals = true;
                         for (int i = 0; i < a.getPredicate().getRange(); ++i) {
                             Argument xa = a.getArguments().get(i);
                             Argument xb = b.getArguments().get(i);
                             if (!xa.isEmpty() && !xb.isEmpty()
                                     && !(xa.isTSet() && xb.isTSet() && xa.getT().getId() == xb.getT().getId())
-                                    && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
-                                    && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
+//                                    && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
+//                                    && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
                                     && xa.getValue().getId() == xb.getValue().getId()) {
                             } else {
                                 equals = false;
@@ -186,6 +186,12 @@ public class Analiser {
         if (logging) {
             mind.getLog().add(LogMode.ANALIZER, "============= ANALISER ====================");
         }
+
+//        for(Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
+//            if(p.checkSolves())
+//                return true;
+//        }
+//        return false;
 
         Set<Tree> query = new HashSet<>();
         for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {

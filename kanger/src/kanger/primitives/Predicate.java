@@ -86,6 +86,25 @@ public class Predicate {
         return set;
     }
 
+    public boolean checkSolves() {
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(this.equals(d.getPredicate())) {
+                for(Domain q = mind.getDomains().getRoot(); q != null; q = d.getNext()) {
+                    if(this.equals(q.getPredicate())) {
+                        for(int i=0; i<d.getPredicate().getRange(); ++i) {
+                            if(!d.getArguments().get(i).isEmpty()
+                                && !q.getArguments().get(i).isEmpty()
+                            && d.getArguments().get(i).getValue().getId() == q.getArguments().get(i).getValue().getId()) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public Set<Right> getRights() {
         Set<Right> set = new HashSet<>();
         for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
