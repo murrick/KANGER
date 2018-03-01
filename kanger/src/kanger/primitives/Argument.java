@@ -145,19 +145,19 @@ public class Argument {
     }
 
     public boolean isDestFor(Domain d) {
-        return isTSet() && getT().isDestFor(d);
-//        if (isTSet())
-//            return getT().isDestFor(d);
-//        else if (isFSet()) {
-//            for (TVariable t : getF().getTVariables()) {
-//                if (t.isDestFor(d)) {
-//                    return true;
-//                }
-//            }
-//            return false;
-//        } else {
-//            return false;
-//        }
+//        return isTSet() && getT().isDestFor(d);
+        if (isTSet())
+            return getT().isDestFor(d);
+        else if (isFSet()) {
+            for (TVariable t : getF().getTVariables()) {
+                if (t.isDestFor(d)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
 
     @Override

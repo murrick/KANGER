@@ -209,15 +209,15 @@ public class Domain {
                 System.out.print(ex);
             }
         }
-        switch (mind.getDebugLevel()) {
-            case Enums.DEBUG_LEVEL_VALUES:
-            case Enums.DEBUG_LEVEL_PRO:
-                String suffix = isDest() || right.isQuery() ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + " " : "";
-                return s + ";" + suffix;
-            default:
-                return s;
+
+        String suffix = "";
+        if ((mind.getDebugLevel() & Enums.DEBUG_OPTION_STATUS) != 0) {
+            suffix = isDest() || right.isQuery() ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + " " : "";
         }
+        return s + ";" + suffix;
     }
+
+
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);

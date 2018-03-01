@@ -238,11 +238,12 @@ public class TVariable {
 //
     @Override
     public String toString() {
-        switch (mind.getDebugLevel()) {
-            case Enums.DEBUG_LEVEL_VALUES:
-                return name + (isEmpty() ? "" : ":" + getValue().toString());
-            case Enums.DEBUG_LEVEL_PRO:
-                return String.format("%c%d%s", Enums.TVC, id, isEmpty() ? "" : ":" + getValue().toString());
+        String v = ((mind.getDebugLevel() &  Enums.DEBUG_OPTION_VALUES) != 0) ? (isEmpty() ? "" : ":" + getValue().toString()) : "";
+        switch (mind.getDebugLevel() & 0x00FF) {
+            case Enums.DEBUG_LEVEL_INFO:
+                return name + v;
+            case Enums.DEBUG_LEVEL_DEBUG:
+                return String.format("%c%d%s", Enums.TVC, id, v);
             default:
                 return name;
         }
