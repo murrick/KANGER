@@ -52,7 +52,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -76,7 +76,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sub(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -100,7 +100,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _bitnot(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -124,7 +124,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _neg(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -148,7 +148,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -176,7 +176,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _add(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -204,7 +204,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _sub(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -232,7 +232,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _mul(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -260,7 +260,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _div(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -280,7 +280,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _rem(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -304,7 +304,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitleft(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -328,7 +328,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitright(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -352,7 +352,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitxor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -372,7 +372,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitand(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -400,7 +400,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(2).delValue(((Function) o).getOwner());
+//                        arg.get(2).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -424,7 +424,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _log(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -448,7 +448,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _exp(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -497,7 +497,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -523,7 +523,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _asin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -549,7 +549,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _cos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -575,7 +575,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _acos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -601,7 +601,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _tan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -627,7 +627,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _atan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -648,7 +648,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _int(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -669,7 +669,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _round(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -690,7 +690,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _round(arg.get(0).getValue(), null).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -716,7 +716,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sqrt(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -742,7 +742,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _pow(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
@@ -768,7 +768,7 @@ public class Functions {
                     } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _root(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
-                        arg.get(1).delValue(((Function) o).getOwner());
+//                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }
                     return ret;
