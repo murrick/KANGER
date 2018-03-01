@@ -469,9 +469,11 @@ public class Screen {
 
     private static void showPredRecurse(Mind mind, int index, List<TVariable> tvars, Domain d, boolean showCauses) {
         if (index >= tvars.size()) {
-            System.out.printf("\t%s\n", d.toString());
-            if (showCauses) {
-                showCauses(mind, d, 0);
+            if(!d.isDest()) {
+                System.out.printf("\t%s\n", d.toString());
+                if (showCauses) {
+                    showCauses(mind, d, 0);
+                }
             }
         } else {
             TVariable t = tvars.get(index);
@@ -491,9 +493,9 @@ public class Screen {
             System.out.printf("\tHas not solves\n");
         } else {
             for (Domain s : set) {
-                if (!s.isDest()) {
+//                if (!s.isDest()) {
                     showPredRecurse(mind, 0, s.getTVariables(true), s, showCauses);
-                }
+//                }
             }
         }
     }
@@ -562,16 +564,18 @@ public class Screen {
 
     //
 //
-    public static List<List<String>> formatTree(Right r) {
+    public static List<List<String>> formatTree(Mind mind, Right r) {
+        int save = mind.getDebugLevel();
+        mind.setDebugLevel(mind.getDebugLevel() & ~Enums.DEBUG_OPTION_VALUES);
         List<List<String>> list = new ArrayList<>();
         int depth = 0;
         for (Tree t : r.getTree()) {
             List<String> v = new ArrayList<>();
-            v.add(t.isClosed() ? "C" : (t.isUsed() ? "U" : ""));
+//            v.add(t.isClosed() ? "C" : (t.isUsed() ? "U" : ""));
             list.add(v);
             int len = 0;
             for (Domain d : t.getSequence()) {
-                String s = d.toString() + (d.isUsed() ? " *" : "");
+                String s = d.toString(); // + (d.isUsed() ? " *" : "");
                 len = Math.max(len, s.length());
                 v.add(s);
             }
@@ -594,12 +598,12 @@ public class Screen {
                 v.add(s);
             }
         }
-
+        mind.setDebugLevel(save);
         return list;
     }
 
-    public static void showTree(Right r) {
-        List<List<String>> net = formatTree(r);
+    public static void showTree(Mind mind, Right r) {
+        List<List<String>> net = formatTree(mind, r);
         if (net.size() > 0 && net.get(0).size() > 0) {
             for (int i = 0; i < net.get(0).size(); ++i) {
                 for (int k = 0; k < net.size(); ++k) {
@@ -618,7 +622,7 @@ public class Screen {
         for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
             if (showTree || r.getOrig().isEmpty()) {
                 System.out.printf("\n -- Right %03d: %s\n", r.getId(), r.getOrig());
-                showTree(r);
+                showTree(mind, r);
             } else {
                 System.out.printf("Right %03d: %s\n", r.getId(), r.getOrig());
             }
@@ -741,24 +745,16 @@ public class Screen {
 
     public static void killRight(Mind mind) {
         System.out.printf("Enter Right Number: ");
-        int i = Integer.parseInt(new Scanner(System.in).nextLine());
-        if (--i >= mind.getRights().size()) {
+        int id = Integer.parseInt(new Scanner(System.in).nextLine());
+        Right r = mind.getRights().get(id);
+        if (r == null) {
             System.out.printf("ERROR: Wrong number\n");
             return;
         }
-        System.out.printf("Are you sure to remove right " + (i + 1) + " [y/N]? ");
+        System.out.println(r.getOrig());
+        System.out.printf("Are you sure to remove right " + id + " [y/N]? ");
         String s = new Scanner(System.in).nextLine();
         if (s.charAt(0) == 'Y' || s.charAt(0) == 'y') {
-
-            mind.clearQueryStatus();
-            mind.getTValues().clear();
-
-            Right q = null;
-            Right r = mind.getRights().getRoot();
-            for (int k = 0; k < i; ++k) {
-                q = r;
-                r = r.getNext();
-            }
 
             mind.removeInsertionRight(r);
             mind.setChanged(true);

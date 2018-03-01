@@ -183,8 +183,8 @@ public class Term implements Comparable {
     public String toString() {
         if (value != null) {
             if (isCVar()) {
-                switch (mind.getDebugLevel()) {
-                    case Enums.DEBUG_LEVEL_PRO:
+                switch (mind.getDebugLevel() & 0x00FF) {
+                    case Enums.DEBUG_LEVEL_DEBUG:
                         return value.toString();
                     default:
                         return name;

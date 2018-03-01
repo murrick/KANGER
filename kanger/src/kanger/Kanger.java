@@ -2,6 +2,7 @@ package kanger;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import kanger.exception.ParseErrorException;
 import kanger.exception.RuntimeErrorException;
 
@@ -101,7 +102,9 @@ public class Kanger {
                     + "!a(mmm); "
                     + "!a(nnn); "
                     + "!b(ooo); "
-                    + "!d(v);");
+                    + "!d(v); "
+                    + "!@x n(x) || ~n(x); "
+                    + "!@x a(x) -> ~n(x); ");
 
         } catch (ParseErrorException ex) {
             Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);

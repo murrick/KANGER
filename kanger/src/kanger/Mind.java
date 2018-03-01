@@ -34,7 +34,7 @@ public class Mind {
     private final TreeFactory trees = new TreeFactory(this);                               // Список секвенций
 
     private final HypotesesStore hypoteses = new HypotesesStore();                    // Список гипотез
-    private final LogStore log = new LogStore();                                      // Протокол вывода
+    private final LogStore log = new LogStore(this);                                      // Протокол вывода
     private final SolutionsStore solves = new SolutionsStore();                             // Список пешений
     private final ValuesStore values = new ValuesStore();                             // Список величин
     private final LibraryStore library = new LibraryStore(this);
@@ -72,7 +72,7 @@ public class Mind {
     private transient Map<TVariable, Long> tVariableLinks = null;
 
     private transient volatile int currentLevel = 0;
-    private int debugLevel = 3;
+    private int debugLevel = Enums.DEBUG_LEVEL_DEBUG | (Enums.DEBUG_OPTION_STATUS | Enums.DEBUG_OPTION_VALUES);
 
     public int getDebugLevel() {
         return debugLevel;
