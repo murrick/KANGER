@@ -3,17 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="4d378ebb-e889-4573-8a06-af13aa70b62e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/Kanger.java" afterPath="$PROJECT_DIR$/src/kanger/Kanger.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/Mind.java" afterPath="$PROJECT_DIR$/src/kanger/Mind.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/Screen.java" afterPath="$PROJECT_DIR$/src/kanger/Screen.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/compiler/Parser.java" afterPath="$PROJECT_DIR$/src/kanger/compiler/Parser.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/enums/Enums.java" afterPath="$PROJECT_DIR$/src/kanger/enums/Enums.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/TValue.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/TValue.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/TVariable.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/TVariable.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Term.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Term.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/stores/LogStore.java" afterPath="$PROJECT_DIR$/src/kanger/stores/LogStore.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -244,7 +233,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="master" />
+        <entry key="$PROJECT_DIR$/.." value="max" />
       </map>
     </option>
   </component>
@@ -549,7 +538,14 @@
       <option name="project" value="LOCAL" />
       <updated>1519835786581</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="что-то промежуточное">
+      <created>1519912075094</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1519912075094</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -601,7 +597,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ОЩУЩЕНИЕ ЧТО ВЫВОД ЗАРАБОТАЛ&#10;&#10;Conflicts:&#10;&#9;kanger/src/kanger/Analiser.java&#10;&#9;kanger/src/kanger/Linker.java" />
     <MESSAGE value="Системные предикаты и функции" />
-    <option name="LAST_COMMIT_MESSAGE" value="Системные предикаты и функции" />
+    <MESSAGE value="что-то промежуточное" />
+    <option name="LAST_COMMIT_MESSAGE" value="что-то промежуточное" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -918,6 +915,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -980,6 +978,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="43" column="23" lean-forward="false" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
