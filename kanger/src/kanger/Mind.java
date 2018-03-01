@@ -234,6 +234,7 @@ public class Mind {
 
         int pos = 0;
         Object[] t = null;
+        release();
         while ((t = Tools.extractLine(src, pos)) != null) {
             pos = (int) t[1];
             String line = (String) t[0];
