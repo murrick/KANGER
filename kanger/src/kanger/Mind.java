@@ -6,6 +6,7 @@ import kanger.compiler.PTree;
 import kanger.compiler.Parser;
 import kanger.compiler.SysOp;
 import kanger.enums.Enums;
+import kanger.enums.LogMode;
 import kanger.enums.Tools;
 import kanger.exception.ParseErrorException;
 import kanger.exception.RuntimeErrorException;
@@ -33,7 +34,7 @@ public class Mind {
     private final TreeFactory trees = new TreeFactory(this);                               // Список секвенций
 
     private final HypotesesStore hypoteses = new HypotesesStore();                    // Список гипотез
-    private final LogStore log = new LogStore();                                      // Протокол вывода
+    private final LogStore log = new LogStore(this);                                      // Протокол вывода
     private final SolutionsStore solves = new SolutionsStore();                             // Список пешений
     private final ValuesStore values = new ValuesStore();                             // Список величин
     private final LibraryStore library = new LibraryStore(this);
@@ -42,7 +43,6 @@ public class Mind {
     private Map<Domain, Set<Domain>> sources = new HashMap<>();
     private Map<Domain, Set<Domain>> destinations = new HashMap<>();
 
-    //TODO: Не годится при массовых посдстановках
     private List<Long> substituted = new ArrayList<>();
     private List<Long> calculated = new ArrayList<>();
 
@@ -67,12 +67,20 @@ public class Mind {
 //    private Set<Long> acceptorDomains = new HashSet<>();
 //    private Set<Long> markAcceptor = new HashSet<>();
 
-
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
     private transient volatile int currentLevel = 0;
+    private int debugLevel = Enums.DEBUG_LEVEL_DEBUG | (Enums.DEBUG_OPTION_STATUS | Enums.DEBUG_OPTION_VALUES);
+
+    public int getDebugLevel() {
+        return debugLevel;
+    }
+
+    public void setDebugLevel(int debugLevel) {
+        this.debugLevel = debugLevel;
+    }
 
     public Map<Domain, Set<Domain>> getDestinations() {
         return destinations;
@@ -193,6 +201,7 @@ public class Mind {
         trees.release();
 
         dropLinks();
+        clearQueryStatus();
     }
 
     public void clearQueryStatus() {
@@ -225,12 +234,18 @@ public class Mind {
 
         int pos = 0;
         Object[] t = null;
+        release();
         while ((t = Tools.extractLine(src, pos)) != null) {
             pos = (int) t[1];
             String line = (String) t[0];
             compileLine(line);
         }
-        //analiser.link(true);
+        linker.link(true);
+        if(analiser.analiser(true)) {
+            getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
+        } else {
+            mark();
+        }
     }
 
     public Object compileLine(String line) throws ParseErrorException, RuntimeErrorException {
@@ -367,14 +382,15 @@ public class Mind {
     }
 
     public void removeInsertionRight(Right r) {
-        clearQueryStatus();
-        dropLinks();
+        release();
 
         removeTVarRecords(r);
         removeCVarRecords(r);
         removeDomainRecords(r);
         removeTreeRecords(r);
         removeRightRecord(r);
+
+        mark();
     }
 
     public String getSourceFileName() {
@@ -528,12 +544,12 @@ public class Mind {
     }
 
     public List<Long> getCalculated() {
-        return calculated;
+        return substituted;
     }
 
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();
-        if (substituted.isEmpty()) {
+        if (substituted.isEmpty() && calculated.isEmpty()) {
             for (Right r = rights.getRoot(); r != null; r = r.getNext()) {
                 set.add(r);
             }
@@ -541,11 +557,14 @@ public class Mind {
             if (tVars.size() > 0) {
                 for (long id : substituted) {
                     if (tVars.get(id) != null) {
-                        for (Domain d : tVars.get(id).getSolves()) {
+                        for (Domain d : tVars.get(id).getUsage()) {
                             set.addAll(d.getPredicate().getRights());
                         }
                     }
                 }
+            }
+            for (long id : calculated) {
+                set.addAll(domains.get(id).getPredicate().getRights());
             }
         }
         return set;

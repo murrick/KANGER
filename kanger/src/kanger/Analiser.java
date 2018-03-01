@@ -39,10 +39,6 @@ public class Analiser {
                     try {
                         int res = mind.getCalculator().execute(a);
 
-                        if(res == 1) {
-//                            calcFunctions(a);
-                        }
-
                         if((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
 
                             result = true;
@@ -58,7 +54,7 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
                             }
 
-                            Set<TVariable> list = getTVariables(Arrays.asList(a));
+                            List<TVariable> list = a.getRight().getTVariables(true);
                             if (!list.isEmpty()) {
                                 if (logging) {
                                     mind.getLog().add(LogMode.ANALIZER, "Values : ");
@@ -119,11 +115,11 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "\t" + b.toString());
                             }
 
-                            Set<TVariable> list;
+                            List<TVariable> list;
                             if (a.getRight().isQuery()) {
-                                list = getTVariables(Arrays.asList(a));
+                                list = a.getTVariables(true);
                             } else if (b.getRight().isQuery()) {
-                                list = getTVariables(Arrays.asList(b));
+                                list = b.getTVariables(true);
                             } else {
                                 list = getTVariables(Arrays.asList(a, b));
                             }
@@ -162,20 +158,21 @@ public class Analiser {
         return result;
     }
 
-    private void calcFunctions(Domain d) {
-        for (Argument a : d.getArguments()) {
-            if (a.isFSet()) {
-                try {
-                    mind.getCalculator().calculate(a.getF());
-                } catch (RuntimeErrorException e) {
-                    e.printStackTrace();
+    public boolean analiseTree(List<Domain> domains, boolean logging) {
+        List<TVariable> vars = getTVariables(domains);
+        return recurseTree(domains, vars, 0, logging);
+    }
+
+    private List<TVariable> getTVariables(List<Domain> domains) {
+        List<TVariable> list = new ArrayList<>();
+        for(Domain d : domains) {
+            for(TVariable t : d.getTVariables(true)) {
+                if(!list.contains(t)) {
+                    list.add(t);
                 }
             }
         }
-    }
-    public boolean analiseTree(List<Domain> sequence, boolean logging) {
-        Set<TVariable> vars = getTVariables(sequence);
-        return recurseTree(sequence, new ArrayList<>(vars), 0, logging);
+        return list;
     }
 
     public boolean analiser(boolean logging) {
@@ -208,14 +205,6 @@ public class Analiser {
         }
 
         return result;
-    }
-
-    private Set<TVariable> getTVariables(List<Domain> sequence) {
-        Set<TVariable> list = new HashSet<>();
-        for (Domain d : sequence) {
-            list.addAll(d.getTVariables());
-        }
-        return list;
     }
 
     //    ///////////////////////////////

@@ -124,13 +124,13 @@ public class Argument {
             return false;
         } else {
             Argument a = (Argument) x;
-            if (o instanceof Term
+            if ((o instanceof Term)
                     && ((o == null && a.o == null)
                     || (o != null && a.o != null && ((!((Term) o).isCVar() && a.o.equals(o))
                     || (((Term) o).isCVar() && ((Term) a.o).isCVar()))))) {
                 return true;
 
-            } else if (o instanceof Function
+            } else if ((o instanceof Function)
                     && ((o == null && a.o == null) || (o != null && a.o != null && ((Function) a.o).equals(o)))) {
                 return true;
 
@@ -145,11 +145,12 @@ public class Argument {
     }
 
     public boolean isDestFor(Domain d) {
-        if(isTSet()) {
+//        return isTSet() && getT().isDestFor(d);
+        if (isTSet())
             return getT().isDestFor(d);
-        } else if(isFSet()){
-            for(TVariable t : getF().getTVariables()) {
-                if(t.isDestFor(d)) {
+        else if (isFSet()) {
+            for (TVariable t : getF().getTVariables()) {
+                if (t.isDestFor(d)) {
                     return true;
                 }
             }

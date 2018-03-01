@@ -124,7 +124,12 @@ public class TValue {
 
     public boolean isDestFor(Domain d) {
         if (!values.isEmpty()) {
-            return values.get(current).getSrcSolve().equals(d);
+            for(TSubst t : values) {
+                if(t.getSrcSolve().getId() == d.getId()) {
+                    return true;
+                }
+            }
+            return false;
         } else {
             return false;
         }

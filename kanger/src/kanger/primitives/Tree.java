@@ -1,6 +1,7 @@
 package kanger.primitives;
 
 import kanger.Mind;
+import kanger.enums.Tools;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -120,5 +121,18 @@ public class Tree {
     public boolean equals(Object t) {
         return !(t == null || !(t instanceof Tree)) && ((Tree) t).id == id;
     }
+
+    public List<TVariable> getTVariables(boolean full) {
+        List<TVariable> list = new ArrayList<>();
+        for(Domain d : sequence) {
+            for(TVariable t : d.getTVariables(full)) {
+                if(!list.contains(t)) {
+                    list.add(t);
+                }
+            }
+        }
+        return list;
+    }
+
 
 }

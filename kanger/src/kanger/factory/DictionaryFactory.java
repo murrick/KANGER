@@ -29,7 +29,7 @@ public class DictionaryFactory {
         if (p != null) {
             return p;
         } else {
-            p = new Term(o);
+            p = new Term(o, mind);
             p.setNext(root);
             root = p;
             p.setRight(mind.getRights().getRoot());
@@ -39,7 +39,7 @@ public class DictionaryFactory {
     }
 
     public Term find(Object o) {
-        Term t = new Term(o);
+        Term t = new Term(o, mind);
         for (Term dic = root; dic != null; dic = dic.getNext()) {
             if (dic.compareTo(t) == 0) {
                 return dic;
@@ -50,7 +50,7 @@ public class DictionaryFactory {
 
     public Term get(String name) {
         String temp = String.format("%c%d", Enums.CVC, ++cCvar);
-        Term t =  add(temp);
+        Term t = add(temp);
         t.setName(name);
         return t;
     }

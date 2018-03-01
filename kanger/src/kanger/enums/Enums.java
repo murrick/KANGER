@@ -147,5 +147,11 @@ public class Enums {
         }
     };
 
+    public static final int DEBUG_LEVEL_QUIET = 0;
+    public static final int DEBUG_LEVEL_INFO = 1;
+    public static final int DEBUG_LEVEL_DEBUG = 2;
+
+    public static final int DEBUG_OPTION_VALUES = 0x100;
+    public static final int DEBUG_OPTION_STATUS = 0x200;
 
 }

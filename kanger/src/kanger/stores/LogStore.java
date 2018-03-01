@@ -1,5 +1,6 @@
 package kanger.stores;
 
+import kanger.Mind;
 import kanger.Screen;
 import kanger.primitives.LogEntry;
 import kanger.primitives.Right;
@@ -17,6 +18,11 @@ public class LogStore {
 
     private List<LogEntry> root = null;
     private boolean enableLogging = true;
+    private Mind mind = null;
+
+    public LogStore(Mind mind) {
+        this.mind = mind;
+    }
 
     public LogEntry add(LogMode m, Right r) {
         if (!enableLogging) {
@@ -27,7 +33,7 @@ public class LogStore {
             root.add(new LogEntry(LogMode.ANALIZER, "LOG START AT " + new Date(System.currentTimeMillis()) + " --"));
         }
         LogEntry log = null;
-        List<List<String>> net = Screen.formatTree(r);
+        List<List<String>> net = Screen.formatTree(mind, r);
         for (int i = 0; i < net.get(0).size(); ++i) {
             String s = "";
             for (int k = 0; k < net.size(); ++k) {
@@ -80,7 +86,7 @@ public class LogStore {
         if (root == null || root.size() == 0) {
             return null;
         } else {
-            if(mode == LogMode.ALL) {
+            if (mode == LogMode.ALL) {
                 return root.get(root.size() - 1);
             } else {
                 for (int i = root.size() - 1; i >= 0; --i) {
