@@ -4,6 +4,7 @@ import kanger.Mind;
 import kanger.compiler.Operation;
 import kanger.compiler.Parser;
 import kanger.enums.Enums;
+import kanger.enums.Tools;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -126,17 +127,9 @@ public class Domain {
 
     public List<Domain> getCauses() {
         List<Domain> list = new ArrayList<>();
-        for (Argument a : arguments) {
-            if (a.isTSet() && !a.isEmpty()) {
-                TVariable t = a.getT();
-                if (t.rewind()) {
-                    do {
-                        if (t.getDstSolve().getId() == id) {
-                            list.add(t.getSrcValue());
-                            break;
-                        }
-                    } while (t.next());
-                }
+        for (TVariable t : getTVariables(true)) {
+            if (t.getDstSolve().getId() == id) {
+                list.add(t.getSrcValue());
             }
         }
         return list;
@@ -172,12 +165,14 @@ public class Domain {
 //    return s;
     private String formatParam(Argument t) {
         String s = "";
-        if (t.isTSet()) {
-            s += t.getT().toString();
-        } else if (t.isFSet()) {
+        if (t.isFSet()) {
             s += t.getF().toString();
-        } else {
+        } else if (t.isTSet()) {
+            s += t.getT().toString();
+        } else if (!t.isEmpty()) {
             s += t.getValue().toString();
+        } else {
+            s += "_";
         }
         return s;
     }
@@ -214,8 +209,14 @@ public class Domain {
                 System.out.print(ex);
             }
         }
-        String suffix = isDest() || right.isQuery() ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + " " : "";
-        return s + ";" + suffix;
+        switch (mind.getDebugLevel()) {
+            case Enums.DEBUG_LEVEL_VALUES:
+            case Enums.DEBUG_LEVEL_PRO:
+                String suffix = isDest() || right.isQuery() ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + " " : "";
+                return s + ";" + suffix;
+            default:
+                return s;
+        }
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
@@ -254,8 +255,8 @@ public class Domain {
     }
 
     public boolean contains(TVariable t) {
-        for (Argument a : arguments) {
-            if (a.isTSet() && a.getT().getId() == t.getId()) {
+        for (TVariable x : getTVariables(true)) {
+            if (x.getId() == t.getId()) {
                 return true;
             }
         }
@@ -278,13 +279,17 @@ public class Domain {
 //    }
 
     public boolean isDest() {
-        for(Argument a : arguments) {
-            if(a.isTSet() && !a.getT().isEmpty() && a.getT().getDstSolve().getId() == id) {
+        for (TVariable t : getTVariables(false)) {
+            if (!t.isEmpty() && t.getDstSolve().getId() == id) {
                 return true;
             }
         }
         return false;
         //
         // return mind.getSources().containsKey(this) && !mind.getSources().get(this).isEmpty();
+    }
+
+    public List<TVariable> getTVariables(boolean full) {
+        return Tools.getTVariables(arguments, full);
     }
 }

@@ -5,7 +5,9 @@ import kanger.Mind;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -102,5 +104,19 @@ public class Predicate {
     @Override
     public boolean equals(Object t) {
         return !(t == null || !(t instanceof Predicate)) && ((Predicate) t).id == id;
+    }
+
+    public List<TVariable> getTVariables(boolean full) {
+        List<TVariable> list = new ArrayList<>();
+        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if(d.getPredicate().id == id) {
+                for(TVariable t : d.getTVariables(full)) {
+                    if(!list.contains(t)) {
+                        list.add(t);
+                    }
+                }
+            }
+        }
+        return list;
     }
 }

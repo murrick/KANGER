@@ -54,7 +54,7 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
                             }
 
-                            List<TVariable> list = getTVariables(Arrays.asList(a));
+                            List<TVariable> list = a.getRight().getTVariables(true);
                             if (!list.isEmpty()) {
                                 if (logging) {
                                     mind.getLog().add(LogMode.ANALIZER, "Values : ");
@@ -117,9 +117,9 @@ public class Analiser {
 
                             List<TVariable> list;
                             if (a.getRight().isQuery()) {
-                                list = getTVariables(Arrays.asList(a));
+                                list = a.getTVariables(true);
                             } else if (b.getRight().isQuery()) {
-                                list = getTVariables(Arrays.asList(b));
+                                list = b.getTVariables(true);
                             } else {
                                 list = getTVariables(Arrays.asList(a, b));
                             }
@@ -158,9 +158,21 @@ public class Analiser {
         return result;
     }
 
-    public boolean analiseTree(List<Domain> sequence, boolean logging) {
-        List<TVariable> vars = getTVariables(sequence);
-        return recurseTree(sequence, vars, 0, logging);
+    public boolean analiseTree(List<Domain> domains, boolean logging) {
+        List<TVariable> vars = getTVariables(domains);
+        return recurseTree(domains, vars, 0, logging);
+    }
+
+    private List<TVariable> getTVariables(List<Domain> domains) {
+        List<TVariable> list = new ArrayList<>();
+        for(Domain d : domains) {
+            for(TVariable t : d.getTVariables(true)) {
+                if(!list.contains(t)) {
+                    list.add(t);
+                }
+            }
+        }
+        return list;
     }
 
     public boolean analiser(boolean logging) {
@@ -193,18 +205,6 @@ public class Analiser {
         }
 
         return result;
-    }
-
-    private List<TVariable> getTVariables(List<Domain> sequence) {
-        List<TVariable> list = new ArrayList<>();
-        for (Domain d : sequence) {
-            for (Argument a : d.getArguments()) {
-                if (a.isTSet() && !list.contains(a)) {
-                    list.add(a.getT());
-                }
-            }
-        }
-        return list;
     }
 
     //    ///////////////////////////////

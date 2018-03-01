@@ -12,7 +12,7 @@ import java.util.Set;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
- *
+ * <p>
  * Список правил
  */
 public class Right {
@@ -110,30 +110,30 @@ public class Right {
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();
         Set<Predicate> preds = new HashSet<>();
-        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
-            if(d.getRight().getId() == id) {
+        for (Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if (d.getRight().getId() == id) {
                 preds.add(d.getPredicate());
             }
         }
-        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
-            if(d.getRight().getId() != id && preds.contains(d.getPredicate())) {
+        for (Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if (d.getRight().getId() != id && preds.contains(d.getPredicate())) {
                 set.add(d.getRight());
             }
         }
         return set;
     }
-    
+
     public Set<Tree> getActualTrees() {
         Set<Tree> set = new HashSet<>();
         Set<Predicate> preds = new HashSet<>();
-        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
-            if(d.getRight().getId() == id) {
+        for (Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if (d.getRight().getId() == id) {
                 preds.add(d.getPredicate());
             }
         }
-        for(Tree t = mind.getTrees().getRoot(); t != null; t=t.getNext()) {
-            for(Domain d : t.getSequence()) {
-                if(preds.contains(d.getPredicate())) {
+        for (Tree t = mind.getTrees().getRoot(); t != null; t = t.getNext()) {
+            for (Domain d : t.getSequence()) {
+                if (preds.contains(d.getPredicate())) {
                     set.add(t);
                     break;
                 }
@@ -141,7 +141,7 @@ public class Right {
         }
         return set;
     }
-    
+
     @Override
     public String toString() {
         return orig;
@@ -150,6 +150,18 @@ public class Right {
     @Override
     public boolean equals(Object t) {
         return !(t == null || !(t instanceof Right)) && ((Right) t).id == id;
+    }
+
+    public List<TVariable> getTVariables(boolean full) {
+        List<TVariable> list = new ArrayList<>();
+        for (Tree x : tree) {
+            for (TVariable t : x.getTVariables(full)) {
+                if (!list.contains(t)) {
+                    list.add(t);
+                }
+            }
+        }
+        return list;
     }
 
 //    @Override

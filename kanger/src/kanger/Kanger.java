@@ -95,19 +95,19 @@ public class Kanger {
 //            e.printStackTrace();
 //        }
 
-//        try {
-//
-//            mind.compile("!@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z); "
-//                    + "!a(mmm); "
-//                    + "!a(nnn); "
-//                    + "!b(ooo); "
-//                    + "!d(v);");
-//
-//        } catch (ParseErrorException ex) {
-//            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (RuntimeErrorException ex) {
-//            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+
+            mind.compile("!@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z); "
+                    + "!a(mmm); "
+                    + "!a(nnn); "
+                    + "!b(ooo); "
+                    + "!d(v);");
+
+        } catch (ParseErrorException ex) {
+            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RuntimeErrorException ex) {
+            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         Screen.session(mind);
 

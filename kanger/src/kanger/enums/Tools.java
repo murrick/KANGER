@@ -2,11 +2,16 @@ package kanger.enums;
 
 import kanger.compiler.Parser;
 import kanger.exception.ParseErrorException;
+import kanger.primitives.Argument;
+import kanger.primitives.Domain;
+import kanger.primitives.TVariable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by murray on 07.06.15.
@@ -46,7 +51,7 @@ public abstract class Tools {
                 || ch == Enums.CVC || ch == Enums.TVC || ch == Enums.COMMA || ch == Enums.EOLN || ch == ' ');
     }
 
-//    public static String cutBraces(String a) {
+    //    public static String cutBraces(String a) {
 //        if (a.length() > 1 && ((a.charAt(0) == '\"' && a.charAt(a.length() - 1) == '\"') || (a.charAt(0) == '\'' && a.charAt(a.length() - 1) == '\''))) {
 //            a = a.substring(1, a.length() - 1);
 //        }
@@ -204,12 +209,12 @@ public abstract class Tools {
 
     public static Object[] extractLine(String line, int pos) throws ParseErrorException {
         pos = Parser.skipSpaces(line, pos);
-        if(pos < line.length()) {
+        if (pos < line.length()) {
             int start = pos;
-            if(line.charAt(pos) == 0) {
+            if (line.charAt(pos) == 0) {
                 return null;
-            } else if(line.charAt(pos) == Enums.REM) {
-                while(pos < line.length() && line.charAt(pos) != '\n' && line.charAt(pos) != '\r') {
+            } else if (line.charAt(pos) == Enums.REM) {
+                while (pos < line.length() && line.charAt(pos) != '\n' && line.charAt(pos) != '\r') {
                     ++pos;
                 }
             } else {
@@ -228,5 +233,24 @@ public abstract class Tools {
             return null;
         }
     }
+
+    public static List<TVariable> getTVariables(List<Argument> arg, boolean full) {
+        List<TVariable> list = new ArrayList<>();
+        for (Argument a : arg) {
+            if (a.isTSet() && !list.contains(a)) {
+                list.add(a.getT());
+            } else if (full && a.isFSet()) {
+                List<TVariable> temp = getTVariables(a.getF().getArguments(), full);
+                for (TVariable t : temp) {
+                    if (!list.contains(t)) {
+                        list.add(t);
+                    }
+                }
+            }
+
+        }
+        return list;
+    }
+
 
 }

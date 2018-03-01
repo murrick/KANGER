@@ -467,22 +467,20 @@ public class Screen {
         }
     }
 
-    private static void showPredRecurse(Mind mind, int level, Domain d, boolean showCauses) {
-        if (level >= d.getPredicate().getRange()) {
+    private static void showPredRecurse(Mind mind, int index, List<TVariable> tvars, Domain d, boolean showCauses) {
+        if (index >= tvars.size()) {
             System.out.printf("\t%s\n", d.toString());
             if (showCauses) {
                 showCauses(mind, d, 0);
             }
-        } else if (d.getArguments().get(level).isTSet()) {
-            TVariable t = d.getArguments().get(level).getT();
+        } else {
+            TVariable t = tvars.get(index);
             t.rewind();
             do {
-                if (t.getSrcSolve() != null && !t.getSrcSolve().getPredicate().equals(d.getPredicate().getId())) {
-                    showPredRecurse(mind, level + 1, d, showCauses);
-                }
+//                if (t.getSrcSolve() != null && !t.getSrcSolve().getPredicate().equals(d.getPredicate().getId())) {
+                    showPredRecurse(mind, index + 1, tvars, d, showCauses);
+//                }
             } while (t.next());
-        } else {
-            showPredRecurse(mind, level + 1, d, showCauses);
         }
     }
 
@@ -494,7 +492,7 @@ public class Screen {
         } else {
             for (Domain s : set) {
                 if (!s.isDest()) {
-                    showPredRecurse(mind, 0, s, showCauses);
+                    showPredRecurse(mind, 0, s.getTVariables(true), s, showCauses);
                 }
             }
         }

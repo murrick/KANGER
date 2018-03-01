@@ -2,6 +2,7 @@ package kanger.primitives;
 
 import java.io.*;
 import java.util.*;
+
 import kanger.*;
 import kanger.enums.*;
 import kanger.exception.*;
@@ -17,7 +18,7 @@ public class TVariable {
     private String name = "";               // Оригинальное подкванторное имя
     private Term area = null;               // Ссылка на область определения
 
-//    private Term value = null;            // Текущее подставленное значение
+    //    private Term value = null;            // Текущее подставленное значение
 //    private int owner = 0;                  // level подставившего значение
 //    private Solve s = null;                 // Текущее подставленное решение
     private Right right = null;             // Ссылка на правило
@@ -95,7 +96,7 @@ public class TVariable {
             mind.getTValues().put(this, new TValue());
         }
         if (!isInside(value)) {
-            if(mind.getTValues().get(this).contains(value) == -1) {
+            if (mind.getTValues().get(this).contains(value) == -1) {
                 mind.getSubstituted().add(id);
             }
             return mind.getTValues().get(this).setValue(value);
@@ -116,7 +117,7 @@ public class TVariable {
             mind.getTValues().put(this, new TValue());
         }
         if (!isInside(value)) {
-            if(mind.getTValues().get(this).contains(value) == -1) {
+            if (mind.getTValues().get(this).contains(value) == -1) {
                 mind.getSubstituted().add(id);
             }
             return mind.getTValues().get(this).addValue(value);
@@ -125,7 +126,7 @@ public class TVariable {
         }
     }
 
-//    public int getOwner() {
+    //    public int getOwner() {
 //        if (mind.getTValues().containsKey(this)) {
 //            return mind.getTValues().get(this).getLevel();
 //        } else {
@@ -237,10 +238,13 @@ public class TVariable {
 //
     @Override
     public String toString() {
-        if (/*getOwner() == 0 || */getValue() == null) {
-            return String.format("%c%d", Enums.TVC, id);
-        } else {
-            return String.format("%c%d:%s", Enums.TVC, id, getValue().toString());
+        switch (mind.getDebugLevel()) {
+            case Enums.DEBUG_LEVEL_VALUES:
+                return name + (isEmpty() ? "" : ":" + getValue().toString());
+            case Enums.DEBUG_LEVEL_PRO:
+                return String.format("%c%d%s", Enums.TVC, id, isEmpty() ? "" : ":" + getValue().toString());
+            default:
+                return name;
         }
     }
 
@@ -318,10 +322,10 @@ public class TVariable {
         return list;
     }
 
-    public Set<Domain> getSolves() {
+    public Set<Domain> getUsage() {
         Set<Domain> set = new HashSet<>();
-        for(Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
-            if(d.contains(this)) {
+        for (Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
+            if (d.contains(this)) {
                 set.add(d);
             }
         }

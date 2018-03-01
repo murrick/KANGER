@@ -21,9 +21,12 @@ public class Term implements Comparable {
     private long id = -1;                // Идентификатор
     private Right right = null;          // Ссылка на правило
     private Term next = null;      // Следующая запись
+    private String name = "";             // Оригинальное имя c-переменной
 
-    public Term() {
+    private Mind mind = null;
 
+    public Term(Mind mind) {
+        this.mind = mind;
     }
 
 //    public Term(StringBuffer str, int pos) throws ParseErrorException {
@@ -45,13 +48,15 @@ public class Term implements Comparable {
 //        construct(str.substring(c, stop));
 //    }
 
-    public Term(Object str) {
+    public Term(Object str, Mind mind) {
 //        sourceLength = str.length();
         construct(str);
+        this.mind = mind;
     }
 
     public Term(DataInputStream din, Mind mind) throws IOException, ClassNotFoundException {
         id = din.readLong();
+        this.mind = mind;
         mind.getDictionaryLinks().put(this, din.readLong());
         int typeIndex = din.readInt();
         type = DataType.values()[typeIndex];
@@ -177,7 +182,14 @@ public class Term implements Comparable {
 
     public String toString() {
         if (value != null) {
-            if (type == DataType.DATE) {
+            if (isCVar()) {
+                switch (mind.getDebugLevel()) {
+                    case Enums.DEBUG_LEVEL_PRO:
+                        return value.toString();
+                    default:
+                        return name;
+                }
+            } else if (type == DataType.DATE) {
                 return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format((Date) value);
             } else {
                 return value.toString();
@@ -220,7 +232,7 @@ public class Term implements Comparable {
 
     @Override
     public boolean equals(Object t) {
-            return !(t == null || !(t instanceof Term)) && ((Term) t).id == id;
+        return !(t == null || !(t instanceof Term)) && ((Term) t).id == id;
 //        return !(t == null || value == null || !(t instanceof Term) || type != ((Term) t).getType()) && value.equals(((Term) t).getValue());
     }
 
@@ -230,6 +242,14 @@ public class Term implements Comparable {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

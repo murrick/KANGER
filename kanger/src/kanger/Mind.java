@@ -6,6 +6,7 @@ import kanger.compiler.PTree;
 import kanger.compiler.Parser;
 import kanger.compiler.SysOp;
 import kanger.enums.Enums;
+import kanger.enums.LogMode;
 import kanger.enums.Tools;
 import kanger.exception.ParseErrorException;
 import kanger.exception.RuntimeErrorException;
@@ -66,12 +67,20 @@ public class Mind {
 //    private Set<Long> acceptorDomains = new HashSet<>();
 //    private Set<Long> markAcceptor = new HashSet<>();
 
-
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
     private transient volatile int currentLevel = 0;
+    private int debugLevel = 3;
+
+    public int getDebugLevel() {
+        return debugLevel;
+    }
+
+    public void setDebugLevel(int debugLevel) {
+        this.debugLevel = debugLevel;
+    }
 
     public Map<Domain, Set<Domain>> getDestinations() {
         return destinations;
@@ -229,7 +238,12 @@ public class Mind {
             String line = (String) t[0];
             compileLine(line);
         }
-        //analiser.link(true);
+        linker.link(true);
+        if(analiser.analiser(true)) {
+            getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
+        } else {
+            mark();
+        }
     }
 
     public Object compileLine(String line) throws ParseErrorException, RuntimeErrorException {
@@ -532,7 +546,7 @@ public class Mind {
 
     public Set<Right> getActualRights() {
         Set<Right> set = new HashSet<>();
-        if (substituted.isEmpty()) {
+        if (substituted.isEmpty() && calculated.isEmpty()) {
             for (Right r = rights.getRoot(); r != null; r = r.getNext()) {
                 set.add(r);
             }
@@ -540,11 +554,14 @@ public class Mind {
             if (tVars.size() > 0) {
                 for (long id : substituted) {
                     if (tVars.get(id) != null) {
-                        for (Domain d : tVars.get(id).getSolves()) {
+                        for (Domain d : tVars.get(id).getUsage()) {
                             set.addAll(d.getPredicate().getRights());
                         }
                     }
                 }
+            }
+            for (long id : calculated) {
+                set.addAll(domains.get(id).getPredicate().getRights());
             }
         }
         return set;

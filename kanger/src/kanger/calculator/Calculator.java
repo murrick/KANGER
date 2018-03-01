@@ -89,7 +89,7 @@ public class Calculator {
             ++flag;
             fu.setCalculated(true);
             mind.getLog().add(LogMode.ANALIZER, "Calculated function:");
-            mind.getLog().add(LogMode.ANALIZER, String.format("\t%s", fu.toString()));
+            mind.getLog().add(LogMode.ANALIZER, String.format("\t%s", fu.toString() + (fu.getResult() == null ? "" : " = " + fu.getResult())));
             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
         }
 

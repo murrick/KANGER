@@ -4,6 +4,7 @@ import kanger.Mind;
 import kanger.compiler.Operation;
 import kanger.compiler.Parser;
 import kanger.enums.Enums;
+import kanger.enums.Tools;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -20,7 +21,7 @@ public class Function {
 
     private Term name = null;
     private int range = 0;
-    private final List<Argument> arg = new ArrayList<>();     // Параметры
+    private final List<Argument> arguments = new ArrayList<>();     // Параметры
     private boolean calculated = false;
     private boolean busy = false;                       // Предотвращение бесконечной рекурсии
 
@@ -46,11 +47,11 @@ public class Function {
 //            Argument a = new Argument(dis, mind);
 //            line.add(a);
 //        }
-        arg.clear();
+        arguments.clear();
         int count = dis.readInt();
         while (count-- > 0) {
             Argument a = new Argument(dis, mind);
-            arg.add(a);
+            arguments.add(a);
         }
     }
 
@@ -67,10 +68,10 @@ public class Function {
 //    }
 
     public Argument get(int i) {
-        if (i == range && range == arg.size()) {
-            arg.add(new Argument());
+        if (i == range && range == arguments.size()) {
+            arguments.add(new Argument());
         }
-        return arg.get(i);
+        return arguments.get(i);
     }
 
     public int getRange() {
@@ -86,66 +87,66 @@ public class Function {
 //    }
 
 //    public void setA(List<Argument> list) {
-//        arg = list;
+//        arguments = list;
 //    }
 
     //    public List<Argument> getArguments() {
-//        return arg;
+//        return arguments;
 //    }
 //
     public List<Argument> getArguments() {
-        return arg;
+        return arguments;
     }
 
     public Term getResult() {
-        while (range + 1 > arg.size()) {
-            arg.add(new Argument());
+        while (range + 1 > arguments.size()) {
+            arguments.add(new Argument());
         }
-        if (range + 1 == arg.size()) {
-            return arg.get(range).getValue();
+        if (range + 1 == arguments.size()) {
+            return arguments.get(range).getValue();
         } else {
             return null;
         }
     }
 
 //    public void setResult(Domain d, Argument r) {
-//        if (range + 1 > arg.size()) {
-//            arg.add(new Argument());
+//        if (range + 1 > arguments.size()) {
+//            arguments.add(new Argument());
 //        }
-//        arg.get(range).setValue(d, r.getValue());
-////        arg.get(range).setC(r.getC());
-////        arg.get(range).setT(r.getT());
-////        arg.get(range).setF(r.getF());
+//        arguments.get(range).setValue(d, r.getValue());
+////        arguments.get(range).setC(r.getC());
+////        arguments.get(range).setT(r.getT());
+////        arguments.get(range).setF(r.getF());
 //    }
 
     public boolean setResult(Term r) {
-        while (range + 1 > arg.size()) {
-            arg.add(new Argument());
+        while (range + 1 > arguments.size()) {
+            arguments.add(new Argument());
         }
 
-//        if ((arg.get(range).isEmpty() && r != null)
-//                || !arg.get(range).isEmpty() && r == null
-//                || (!arg.get(range).isEmpty() && r != null && arg.get(range).getValue().getId() != r.getId())) {
+//        if ((arguments.get(range).isEmpty() && r != null)
+//                || !arguments.get(range).isEmpty() && r == null
+//                || (!arguments.get(range).isEmpty() && r != null && arguments.get(range).getValue().getId() != r.getId())) {
 //            mind.getCalculated().add(d.getId());
 //        }
-//        arg.get(range).setValue(d, r);
+//        arguments.get(range).setValue(d, r);
 
         return setParameter(range, r);
     }
 
     public boolean setParameter(int i, Term r) {
-        if ((arg.get(i).isEmpty() && r != null)
-                || !arg.get(i).isEmpty() && r == null
-                || (!arg.get(i).isEmpty() && r != null && arg.get(i).getValue().getId() != r.getId())) {
+        if ((arguments.get(i).isEmpty() && r != null)
+                || !arguments.get(i).isEmpty() && r == null
+                || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
             mind.getCalculated().add(owner.getId());
         }
-        return arg.get(i).setValue(owner, r);
+        return arguments.get(i).setValue(owner, r);
     }
 
 //    public boolean isCalculated() {
 //        int i = 0;
 //        for (; i <= range; ++i) {
-//            if (arg.get(i) == null || !arg.get(i).isCSet()) {
+//            if (arguments.get(i) == null || !arguments.get(i).isCSet()) {
 //                return false;
 //            }
 //        }
@@ -168,11 +169,7 @@ public class Function {
         if (t.isFSet()) {
             s += (isOp ? "(" : "") + t.getF().toString() + (isOp ? ")" : "");
         } else if (t.isTSet()) {
-            if (!t.isEmpty()) {
-                s += t.getT().getName() + ":" + t.getValue().toString();
-            } else {
-                s += t.getT().toString();
-            }
+            s += t.getT().toString();
         } else if (!t.isEmpty()) {
             s += t.getValue().toString();
         } else {
@@ -211,7 +208,7 @@ public class Function {
         if (op == null || op.getRange() != range) {
             s = String.format("%s(", name.toString());
             for (int i = 0; i < range; ++i) {
-                s += formatParam(arg.get(i));
+                s += formatParam(arguments.get(i));
                 if (i + 1 < range) {
                     s += (char) Enums.COMMA;
                 }
@@ -219,28 +216,28 @@ public class Function {
             s += ")";
         } else if (op.getRange() == 1) {
             if (op.isPost()) {
-                s = formatParam(arg.get(0)) + op.getName();
+                s = formatParam(arguments.get(0)) + op.getName();
             } else {
-                s = op.getName() + formatParam(arg.get(0));
+                s = op.getName() + formatParam(arguments.get(0));
             }
         } else {
             for (int i = 0; i < op.getRange(); ++i) {
-                s += formatParam(arg.get(i));
+                s += formatParam(arguments.get(i));
                 if (i + 1 < op.getRange()) {
                     s += " " + op.getName() + " ";
                 }
             }
         }
-        Argument r = range < arg.size() ? arg.get(range) : null;
-        return s + (r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
+        Argument r = range < arguments.size() ? arguments.get(range) : null;
+        return s /*+ (r != null && r.getValue() != null ? (" = " + r.getValue()) : "")*/;
     }
 
     //    public void setResult(Term c) {
 //        if(f != null) {
-//            while(f.getRange() >= arg.size()) {
-//                arg.add(new TList());
+//            while(f.getRange() >= arguments.size()) {
+//                arguments.add(new TList());
 //            }
-//            arg.get(f.getRange()).setC(c);
+//            arguments.get(f.getRange()).setC(c);
 //        }
 //
 //    }
@@ -251,8 +248,8 @@ public class Function {
 //            a.writeCompiledData(dos);
 //        }
         dos.writeInt(range);
-        dos.writeInt(arg.size());
-        for (Argument a : arg) {
+        dos.writeInt(arguments.size());
+        for (Argument a : arguments) {
             a.writeCompiledData(dos);
         }
     }
@@ -269,11 +266,11 @@ public class Function {
             if (range != fo.getRange()) {
                 return false;
             }
-            if (fo.arg.size() != arg.size()) {
+            if (fo.arguments.size() != arguments.size()) {
                 return false;
             }
-            for (int i = 0; i < arg.size(); ++i) {
-                if (!fo.arg.get(i).equals(arg.get(i))) {
+            for (int i = 0; i < arguments.size(); ++i) {
+                if (!fo.arguments.get(i).equals(arguments.get(i))) {
                     return false;
                 }
             }
@@ -283,12 +280,17 @@ public class Function {
 
 
     public void clearResult(Domain d) {
-        if (range + 1 > arg.size()) {
-            arg.add(new Argument());
+        if (range + 1 > arguments.size()) {
+            arguments.add(new Argument());
         }
-        if(!arg.get(range).isEmpty()) {
+        if (!arguments.get(range).isEmpty()) {
             mind.getCalculated().add(d.getId());
         }
-        arg.get(range).delValue(d);
+        arguments.get(range).delValue(d);
     }
+
+    public List<TVariable> getTVariables() {
+        return Tools.getTVariables(arguments, true);
+    }
+
 }
