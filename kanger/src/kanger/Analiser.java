@@ -80,12 +80,16 @@ public class Analiser {
 
                 for (int j = k + 1; j < sequence.size(); ++j) {
                     Domain b = sequence.get(j);
-                    if (a.getPredicate().getId() == b.getPredicate().getId() && a.isAntc() != b.isAntc()) {
+                    if (a.getPredicate().getId() == b.getPredicate().getId()
+                            && a.isAntc() != b.isAntc()) {
+//                            && (!a.isDest() || a.getRight().isQuery() || b.getRight().isQuery())
+//                            && (!b.isDest() || b.getRight().isQuery() || a.getRight().isQuery())) {
                         boolean equals = true;
                         for (int i = 0; i < a.getPredicate().getRange(); ++i) {
                             Argument xa = a.getArguments().get(i);
                             Argument xb = b.getArguments().get(i);
                             if (!xa.isEmpty() && !xb.isEmpty()
+                                    && !(xa.isTSet() && xb.isTSet() && xa.getT().getId() == xb.getT().getId())
                                     && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
                                     && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
                                     && xa.getValue().getId() == xb.getValue().getId()) {

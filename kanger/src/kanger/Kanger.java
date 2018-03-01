@@ -102,8 +102,9 @@ public class Kanger {
                     + "!a(mmm); "
                     + "!a(nnn); "
                     + "!b(ooo); "
-                    + "!d(v); "
-                    + "!@x a(x) -> ~n(x); ");
+                    + "!d(v); " +
+                    "!@x ~(n(x) && ~n(x)); " +
+                    "!@x a(x) -> ~n(x); ");
 
         } catch (ParseErrorException ex) {
             Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);

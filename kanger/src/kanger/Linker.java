@@ -42,9 +42,9 @@ public class Linker {
 
         } else {
             //ПОДСТАНОВКИ
-            for (int i = 0; i <= level; ++i) {
-
-                if (d1.get(i).isTSet() && !d2.get(i).isEmpty() && !d1.get(i).getT().contains(d2.get(i).getValue())) {
+            //for (int i = 0; i <= level; ++i) {
+                int i = level;
+                if (d1.get(i).isTSet() && !d2.get(i).isEmpty() && !d2.isDest() && !d1.get(i).getT().contains(d2.get(i).getValue())) {
                     try {
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
 //                        if (!d2.isAcceptor() && !d2.getRight().isQuery()) {
@@ -58,7 +58,7 @@ public class Linker {
                     } catch (TValueOutOfOrver ex) {
                     }
                 }
-                if (d2.get(i).isTSet() && !d1.get(i).isEmpty() && !d2.get(i).getT().contains(d1.get(i).getValue())) {
+                if (d2.get(i).isTSet() && !d1.get(i).isEmpty() && !d1.isDest() && !d2.get(i).getT().contains(d1.get(i).getValue())) {
                     try {
                         //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
 //                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
@@ -91,7 +91,7 @@ public class Linker {
 //                        return false;
 //                    }
                 }
-            }
+//            }
             linkDomains(d1, d2, level + 1, logging, occurrs);
         }
 
@@ -197,11 +197,11 @@ public class Linker {
         mind.getCalculated().clear();
 
         Set<Tree> set;
-//        if (r == null) {
+        if (r == null) {
             set = mind.getActualTrees();
-//        } else {
-//            set = r.getActualTrees();
-//        }
+        } else {
+            set = r.getActualTrees();
+        }
 
         do {
             mind.getSubstituted().clear();
@@ -211,7 +211,7 @@ public class Linker {
             }
             recurseLink(mind.getTVars().getRoot(), set, logging);
             calcFunctions(set);
-//            set = mind.getActualTrees();
+            set = mind.getActualTrees();
         } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 
     }

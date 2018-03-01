@@ -544,7 +544,7 @@ public class Mind {
     }
 
     public List<Long> getCalculated() {
-        return substituted;
+        return calculated;
     }
 
     public Set<Right> getActualRights() {

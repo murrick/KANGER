@@ -39,35 +39,35 @@ public class TSubst {
     }
 
     public Domain getSrcValue() {
-        for(TVariable t : srcSolve.getTVariables()) {
-            if(srcSolveValues.containsKey(t)) {
-                try {
-                    t.setValue(srcSolveValues.get(t));
-                } catch (TValueOutOfOrver ex) {
-                    //
-                }
-            }
-        }
+//        for(TVariable t : srcSolve.getTVariables(true)) {
+//            if(srcSolveValues.containsKey(t)) {
+//                try {
+//                    t.setValue(srcSolveValues.get(t));
+//                } catch (TValueOutOfOrver ex) {
+
+//                }
+//            }
+//        }
         return srcSolve;
     }
     
     public void setSolves(Domain dst, Domain src) {
         if(dst != null) {
-            dstSolveValues.clear();
-            for (TVariable t : dst.getTVariables()) {
-                if (!t.isEmpty()) {
-                    dstSolveValues.put(t, t.getValue());
-                }
-            }
+//            dstSolveValues.clear();
+//            for (TVariable t : dst.getTVariables(true)) {
+//                if (!t.isEmpty()) {
+//                    dstSolveValues.put(t, t.getValue());
+//                }
+//            }
             this.dstSolve = dst;
         }
         if(src != null) {
-            srcSolveValues.clear();
-            for (TVariable t : src.getTVariables()) {
-                if (!t.isEmpty()) {
-                    srcSolveValues.put(t, t.getValue());
-                }
-            }
+//            srcSolveValues.clear();
+//            for (TVariable t : src.getTVariables(true)) {
+//                if (!t.isEmpty()) {
+//                    srcSolveValues.put(t, t.getValue());
+//                }
+//            }
             this.srcSolve = src;
         }
     }
@@ -77,15 +77,15 @@ public class TSubst {
     }
 
     public Domain getDstValue() {
-        for(TVariable t : dstSolve.getTVariables()) {
-            if(dstSolveValues.containsKey(t)) {
-                try {
-                    t.setValue(dstSolveValues.get(t));
-                } catch (TValueOutOfOrver ex) {
-                    //
-                }
-            }
-        }
+//        for(TVariable t : dstSolve.getTVariables(true)) {
+//            if(dstSolveValues.containsKey(t)) {
+//                try {
+//                    t.setValue(dstSolveValues.get(t));
+//                } catch (TValueOutOfOrver ex) {
+
+//                }
+//            }
+//        }
         return dstSolve;
     }
     
