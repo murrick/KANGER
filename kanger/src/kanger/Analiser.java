@@ -1,5 +1,6 @@
 package kanger;
 
+import kanger.compiler.Parser;
 import kanger.compiler.SysOp;
 import kanger.enums.Enums;
 import kanger.enums.LogMode;
@@ -169,7 +170,7 @@ public class Analiser {
 
             if (result) {
                 for (Domain d : sequence) {
-                    if (!d.isClosed() && !d.isDest()) {
+                    if (!d.isClosed() && !d.isDest() && !d.isSystem()) {
                         result = false;
                         if (logging) {
                             mind.getLog().add(LogMode.ANALIZER, "NOT in condition: " + d.toString());
@@ -181,7 +182,7 @@ public class Analiser {
                 if (result) {
                     t.setClosed(true);
                     for (Domain d : sequence) {
-                        if (d.isClosed() || d.isDest()) {
+                        if (d.isClosed() || d.isDest() || d.isSystem()) {
 //                            if (d.getRight().isQuery()) {
                             int sz =  mind.getSolutions().size();
                                 mind.getSolutions().add(d);

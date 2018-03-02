@@ -220,7 +220,6 @@ public class Domain {
     }
 
 
-
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);
         dos.writeLong(right.getId());
@@ -308,4 +307,7 @@ public class Domain {
     }
 
 
+    public boolean isSystem() {
+        return Parser.getOp(predicate.getName()) != null;
+    }
 }
