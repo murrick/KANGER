@@ -121,6 +121,18 @@ public class Tree {
         return list;
     }
 
+    public List<Function> getFunctions() {
+        List<Function> list = new ArrayList<>();
+        for(Domain d : sequence) {
+            for(Function t : d.getFunctions()) {
+                if(!list.contains(t)) {
+                    list.add(t);
+                }
+            }
+        }
+        return list;
+    }
+
     public boolean isClosed() {
         return mind.getClosedTrees().contains(id);
     }

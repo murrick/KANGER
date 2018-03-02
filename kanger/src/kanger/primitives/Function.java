@@ -5,6 +5,7 @@ import kanger.compiler.Operation;
 import kanger.compiler.Parser;
 import kanger.enums.Enums;
 import kanger.enums.Tools;
+import kanger.exception.TValueOutOfOrver;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -67,13 +68,13 @@ public class Function {
 //        line.add(t);
 //    }
 
-    public Argument get(int i) {
-        if (i == range && range == arguments.size()) {
-            arguments.add(new Argument());
-        }
-        return arguments.get(i);
-    }
-
+    //    public Argument get(int i) {
+//        if (i == range && range == arguments.size()) {
+//            arguments.add(new Argument());
+//        }
+//        return arguments.get(i);
+//    }
+//
     public int getRange() {
         return range;
     }
@@ -99,11 +100,8 @@ public class Function {
     }
 
     public Term getResult() {
-        while (range + 1 > arguments.size()) {
-            arguments.add(new Argument());
-        }
-        if (range + 1 == arguments.size()) {
-            return arguments.get(range).getValue();
+        if (mind.getFValues().containsKey(this)) {
+            return mind.getFValues().get(this).getValue();
         } else {
             return null;
         }
@@ -119,28 +117,29 @@ public class Function {
 ////        arguments.get(range).setF(r.getF());
 //    }
 
-    public boolean setResult(Term r) {
-        while (range + 1 > arguments.size()) {
-            arguments.add(new Argument());
+    public TSubst setResult(Term r) {
+        if (!mind.getFValues().containsKey(this)) {
+            mind.getFValues().put(this, new TValue());
         }
-
-//        if ((arguments.get(range).isEmpty() && r != null)
-//                || !arguments.get(range).isEmpty() && r == null
-//                || (!arguments.get(range).isEmpty() && r != null && arguments.get(range).getValue().getId() != r.getId())) {
-//            mind.getCalculated().add(d.getId());
-//        }
-//        arguments.get(range).setValue(d, r);
-
-        return setParameter(range, r);
+        if (mind.getFValues().get(this).contains(r) == -1) {
+            mind.getCalculated().add(owner.getId());
+        }
+        return mind.getFValues().get(this).setValue(r);
     }
 
     public boolean setParameter(int i, Term r) {
-        if ((arguments.get(i).isEmpty() && r != null)
-                || !arguments.get(i).isEmpty() && r == null
-                || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
-            mind.getCalculated().add(owner.getId());
-        }
-        return arguments.get(i).setValue(owner, r);
+//        if(i == range) {
+//            TSubst s = setResult(r);
+//            s.setSolves(owner, owner);
+//            return true;
+//        } else {
+            if ((arguments.get(i).isEmpty() && r != null)
+                    || !arguments.get(i).isEmpty() && r == null
+                    || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
+                mind.getCalculated().add(owner.getId());
+            }
+            return arguments.get(i).setValue(owner, r);
+//        }
     }
 
 //    public boolean isCalculated() {
@@ -280,17 +279,57 @@ public class Function {
 
 
     public void clearResult(Domain d) {
-        if (range + 1 > arguments.size()) {
-            arguments.add(new Argument());
+        if (mind.getFValues().containsKey(this)) {
+            mind.getFValues().get(this).delValue(d);
+            mind.getCalculated().add(owner.getId());
         }
-        if (!arguments.get(range).isEmpty()) {
-            mind.getCalculated().add(d.getId());
-        }
-        arguments.get(range).delValue(d);
     }
 
     public List<TVariable> getTVariables() {
         return Tools.getTVariables(arguments, true);
+    }
+
+
+    public boolean contains(Term value) {
+        if (mind.getFValues().containsKey(this)) {
+            return mind.getFValues().get(this).contains(value) >= 0;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isEmpty() {
+        if (mind.getFValues().containsKey(this)) {
+            return mind.getFValues().get(this).size() == 0;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean rewind() {
+        if (mind.getFValues().containsKey(this)) {
+            if (mind.getFValues().get(this).size() > 0) {
+                mind.getFValues().get(this).setCurrent(0);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean next() {
+        if (mind.getFValues().containsKey(this)) {
+            if (mind.getFValues().get(this).getCurrent() + 1 < mind.getFValues().get(this).size()) {
+                mind.getFValues().get(this).setCurrent(mind.getFValues().get(this).getCurrent() + 1);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
 }

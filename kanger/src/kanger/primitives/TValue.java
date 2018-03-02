@@ -23,25 +23,25 @@ public class TValue {
         return values.isEmpty() ? null : values.get(current).getValue();
     }
 
-    public TSubst get(int i) {
-        if (values.isEmpty() || i >= values.size() || i < 0) {
-            return null;
-        }
-        return values.get(i);
-    }
-
-    public TSubst addValue(Term v) {
-        int i = contains(v);
-        if (i == -1) {
-            TSubst s = new TSubst();
-            s.setValue(v);
-            values.add(s);
-            return s;
-        } else {
-            return values.get(i);
-        }
-    }
-
+//    public TSubst get(int i) {
+//        if (values.isEmpty() || i >= values.size() || i < 0) {
+//            return null;
+//        }
+//        return values.get(i);
+//    }
+//
+//    public TSubst addValue(Term v) {
+//        int i = contains(v);
+//        if (i == -1) {
+//            TSubst s = new TSubst();
+//            s.setValue(v);
+//            values.add(s);
+//            return s;
+//        } else {
+//            return values.get(i);
+//        }
+//    }
+//
     public TSubst setValue(Term v) {
         int i = contains(v);
         if (i == -1) {
@@ -103,7 +103,7 @@ public class TValue {
 
     public int contains(Term v) {
         for (int i = 0; i < values.size(); ++i) {
-            if (values.get(i).getValue().equals(v)) {
+            if (values.get(i).getValue() != null && values.get(i).getValue().equals(v)) {
                 return i;
             }
         }

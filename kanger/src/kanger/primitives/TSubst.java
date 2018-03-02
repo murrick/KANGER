@@ -22,9 +22,9 @@ public class TSubst {
     private boolean success = false;
     
     private Domain srcSolve = null;
-    private Map<TVariable, Term> srcSolveValues = new HashMap<>();
     private Domain dstSolve = null;
-    private Map<TVariable, Term> dstSolveValues = new HashMap<>();
+//    private Map<TVariable, Term> srcSolveValues = new HashMap<>();
+//    private Map<TVariable, Term> dstSolveValues = new HashMap<>();
 
     public Term getValue() {
         return value;

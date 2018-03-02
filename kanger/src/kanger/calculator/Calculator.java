@@ -64,10 +64,10 @@ public class Calculator {
 //            }
 //        }
 //
-        for (int i = 0; i <= fu.getRange(); ++i) {
-            if (fu.get(i).isFSet() /* && !fu.get(i).getF().isBusy()*/) {
+        for (int i = 0; i < fu.getRange(); ++i) {
+            if (fu.getArguments().get(i).isFSet() /* && !fu.get(i).getF().isBusy()*/) {
 //                fu.get(i).getF().setResult(fu.get(i).getValue());
-                if (calculate(fu.get(i).getF()) > 0) {
+                if (calculate(fu.getArguments().get(i).getF()) > 0) {
                     ++flag;
 //                    fu.get(i).setValue(fu.get(i).getF().getResult());
                 }
@@ -96,10 +96,10 @@ public class Calculator {
 //            flag = (arg.get(i).isCSet()) ? 1 : 0;
 //        flag = (fu.getResult() != null) ? 1 : 0;
 //        if(!fu.isCalculated()) {
-        for (int i = 0; i <= fu.getRange(); ++i) {
-            if (fu.get(i).isFSet()) {
+        for (int i = 0; i < fu.getRange(); ++i) {
+            if (fu.getArguments().get(i).isFSet()) {
 //                fu.get(i).getF().setResult(fu.get(i).getValue());
-                if (calculate(fu.get(i).getF()) > 0) {
+                if (calculate(fu.getArguments().get(i).getF()) > 0) {
                     ++flag;
 //                    fu.get(i).setValue(fu.get(i).getF().getResult());
                 }
@@ -147,10 +147,16 @@ public class Calculator {
         String n = fu.getName() + "(" + fu.getRange() + ")";
         SysOp op = functions.getSysOps().get(n) != null ? functions.getSysOps().get(n) : mind.getLibrary().find(n);
         if (op != null) {
-            if (op.getRange() + 1 > fu.getArguments().size()) {
-                fu.getArguments().add(new Argument());
-            }
+            //if (op.getRange() + 1 > fu.getArguments().size()) {
+//            if(fu.getOwner().isUsed()) {
+                fu.getArguments().add(new Argument(fu.getResult()));
+//            } else {
+//                fu.getArguments().add(new Argument());
+//            }
+
+            //}
             k = (Integer) op.getProc().run(fu);
+            fu.getArguments().remove(op.getRange());
         }
         return k;
     }

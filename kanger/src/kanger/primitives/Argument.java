@@ -68,7 +68,8 @@ public class Argument {
                 result = false;
             }
         } else if (o instanceof Function) {
-            ((Function) o).setResult(t);
+            TSubst s = ((Function) o).setResult(t);
+            s.setSolves(d, d);
         }
         return result;
     }

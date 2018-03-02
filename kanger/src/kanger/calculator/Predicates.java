@@ -25,7 +25,7 @@ public class Predicates {
                     || (((Domain) d).getArguments().get(index).isFSet()
                     && ((Domain) d).getArguments().get(index).getF().getResult() == null)
                     || (((Domain) d).getArguments().get(index).isTSet()
-                    && ((Domain) d).getArguments().get(index).getT().getSrcSolve().getId() == ((Domain) d).getId());
+                    && !((Domain) d).getArguments().get(index).getT().isSubstituted());
         }
 
         /// Системные предикаты

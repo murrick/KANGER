@@ -112,19 +112,19 @@ public class TVariable {
         }
     }
 
-    public TSubst addValue(Term value) throws TValueOutOfOrver {
-        if (!mind.getTValues().containsKey(this)) {
-            mind.getTValues().put(this, new TValue());
-        }
-        if (!isInside(value)) {
-            if (mind.getTValues().get(this).contains(value) == -1) {
-                mind.getSubstituted().add(id);
-            }
-            return mind.getTValues().get(this).addValue(value);
-        } else {
-            throw new TValueOutOfOrver(value.toString());
-        }
-    }
+//    public TSubst addValue(Term value) throws TValueOutOfOrver {
+//        if (!mind.getTValues().containsKey(this)) {
+//            mind.getTValues().put(this, new TValue());
+//        }
+//        if (!isInside(value)) {
+//            if (mind.getTValues().get(this).contains(value) == -1) {
+//                mind.getSubstituted().add(id);
+//            }
+//            return mind.getTValues().get(this).addValue(value);
+//        } else {
+//            throw new TValueOutOfOrver(value.toString());
+//        }
+//    }
 
     //    public int getOwner() {
 //        if (mind.getTValues().containsKey(this)) {
@@ -313,16 +313,16 @@ public class TVariable {
         }
     }
 
-    public List<TSubst> getQueued() {
-        List<TSubst> list = new ArrayList<>();
-        if (mind.getTValues().containsKey(this) && mind.getTValues().get(this).getCurrent() + 1 < mind.getTValues().get(this).size()) {
-            for (int i = mind.getTValues().get(this).getCurrent() + 1; i < mind.getTValues().get(this).size(); ++i) {
-                list.add(mind.getTValues().get(this).get(i));
-            }
-        }
-        return list;
-    }
-
+//    public List<TSubst> getQueued() {
+//        List<TSubst> list = new ArrayList<>();
+//        if (mind.getTValues().containsKey(this) && mind.getTValues().get(this).getCurrent() + 1 < mind.getTValues().get(this).size()) {
+//            for (int i = mind.getTValues().get(this).getCurrent() + 1; i < mind.getTValues().get(this).size(); ++i) {
+//                list.add(mind.getTValues().get(this).get(i));
+//            }
+//        }
+//        return list;
+//    }
+//
     public Set<Domain> getUsage() {
         Set<Domain> set = new HashSet<>();
         for (Domain d = mind.getDomains().getRoot(); d != null; d = d.getNext()) {
@@ -332,5 +332,9 @@ public class TVariable {
         }
         return set;
 
+    }
+
+    public boolean isSubstituted() {
+        return mind.getSubstituted().contains(id);
     }
 }

@@ -28,11 +28,11 @@ public class Functions {
     private final Map<String, SysOp> sysOps = new HashMap<String, SysOp>() {
 
         private boolean isEmpty(Object d, int index) {
-            return ((Function) d).getArguments().get(index).isEmpty()
-                    || (((Function) d).getArguments().get(index).isFSet()
-                    && ((Function) d).getArguments().get(index).getF().getResult() == null)
-                    || (((Function) d).getArguments().get(index).isTSet()
-                    && ((Function) d).getArguments().get(index).getT().getSrcSolve().getId() == ((Function) d).getOwner().getId());
+            return ((Function) d).getArguments().get(index).isEmpty();
+//                    || (((Function) d).getArguments().get(index).isFSet()
+//                    && ((Function) d).getArguments().get(index).getF().getResult() == null)
+//                    || (((Function) d).getArguments().get(index).isTSet()
+//                    && !((Function) d).getArguments().get(index).getT().isSubstituted());
         }
 
         /// Арифметика

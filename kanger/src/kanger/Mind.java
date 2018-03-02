@@ -40,6 +40,7 @@ public class Mind {
     private final LibraryStore library = new LibraryStore(this);
 
     private final Map<TVariable, TValue> tValues = new HashMap<>();
+    private final Map<Function, TValue> fValues = new HashMap<>();
     private Map<Domain, Set<Domain>> sources = new HashMap<>();
     private Map<Domain, Set<Domain>> destinations = new HashMap<>();
 
@@ -137,6 +138,10 @@ public class Mind {
 
     public Map<TVariable, TValue> getTValues() {
         return tValues;
+    }
+
+    public Map<Function, TValue> getFValues() {
+        return fValues;
     }
 
     public int getCurrentLevel() {
@@ -519,6 +524,7 @@ public class Mind {
 
     public void dropLinks() {
         tValues.clear();
+        fValues.clear();
         sources.clear();
         destinations.clear();
     }

@@ -4,6 +4,7 @@ import kanger.compiler.Parser;
 import kanger.exception.ParseErrorException;
 import kanger.primitives.Argument;
 import kanger.primitives.Domain;
+import kanger.primitives.Function;
 import kanger.primitives.TVariable;
 
 import java.text.ParseException;
@@ -237,7 +238,7 @@ public abstract class Tools {
     public static List<TVariable> getTVariables(List<Argument> arg, boolean full) {
         List<TVariable> list = new ArrayList<>();
         for (Argument a : arg) {
-            if (a.isTSet() && !list.contains(a)) {
+            if (a.isTSet() && !list.contains(a.getT())) {
                 list.add(a.getT());
             } else if (full && a.isFSet()) {
                 List<TVariable> temp = getTVariables(a.getF().getArguments(), full);
@@ -252,5 +253,14 @@ public abstract class Tools {
         return list;
     }
 
+    public static List<Function> getFunctions(List<Argument> arg) {
+        List<Function> list = new ArrayList<>();
+        for (Argument a : arg) {
+            if (a.isFSet() && !list.contains(a.getF())) {
+                list.add(a.getF());
+            }
+        }
+        return list;
+    }
 
 }

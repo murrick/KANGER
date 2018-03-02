@@ -294,6 +294,10 @@ public class Domain {
         return Tools.getTVariables(arguments, full);
     }
 
+    public List<Function> getFunctions() {
+        return Tools.getFunctions(arguments);
+    }
+
     public boolean isClosed() {
         return mind.getClosedDimains().contains(id);
     }

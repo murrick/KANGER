@@ -467,20 +467,30 @@ public class Screen {
         }
     }
 
-    private static void showPredRecurse(Mind mind, int index, List<TVariable> tvars, Domain d, boolean showCauses) {
-        if (index >= tvars.size()) {
-            if (!d.isDest()) {
-                System.out.printf("\t%s\n", d.toString());
-                if (showCauses) {
-                    showCauses(mind, d, 0);
+    private static void showPredRecurse(Mind mind, List<TVariable> tvars, int tIndex, List<Function> fus, int fIndex, Domain d, boolean showCauses) {
+        if (tIndex >= tvars.size()) {
+            if (fIndex >= fus.size()) {
+                if (!d.isDest()) {
+                    System.out.printf("\t%s\n", d.toString());
+                    if (showCauses) {
+                        showCauses(mind, d, 0);
+                    }
                 }
+            } else {
+                Function f = fus.get(fIndex);
+                f.rewind();
+                do {
+//                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
+                    showPredRecurse(mind, tvars, tIndex, fus, fIndex + 1, d, showCauses);
+//                }
+                } while (f.next());
             }
         } else {
-            TVariable t = tvars.get(index);
+            TVariable t = tvars.get(tIndex);
             t.rewind();
             do {
 //                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
-                showPredRecurse(mind, index + 1, tvars, d, showCauses);
+                showPredRecurse(mind, tvars, tIndex + 1, fus, fIndex, d, showCauses);
 //                }
             } while (t.next());
         }
@@ -494,7 +504,7 @@ public class Screen {
         } else {
             for (Domain s : set) {
 //                if (!s.isDest()) {
-                showPredRecurse(mind, 0, s.getTVariables(true), s, showCauses);
+                showPredRecurse(mind, s.getTVariables(true), 0, s.getFunctions(), 0, s, showCauses);
 //                }
             }
         }
@@ -571,7 +581,7 @@ public class Screen {
         int depth = 0;
         for (Tree t : r.getTree()) {
             List<String> v = new ArrayList<>();
-            if(t.isClosed() || t.isClosed()) {
+            if (t.isClosed() || t.isClosed()) {
                 v.add((t.isClosed() ? "C" : "") + (t.isUsed() ? "U" : ""));
             }
             list.add(v);
