@@ -52,6 +52,7 @@ public class Linker {
 //                        }
                         TSubst s = d1.get(i).getT().setValue(d2.get(i).getValue());
                         s.setSolves(d1, d2);
+						d1.setUsed(true);
 //                        d1.setDestFor(d2);
                         occurrs = true;
                         //}
@@ -66,6 +67,7 @@ public class Linker {
 //                        }
                         TSubst s = d2.get(i).getT().setValue(d1.get(i).getValue());
                         s.setSolves(d2, d1);
+						d2.setUsed(true);
 //                        d2.setDestFor(d1);
                         occurrs = true;
                         //}
@@ -201,6 +203,7 @@ public class Linker {
             set = mind.getActualTrees();
         } else {
             set = r.getActualTrees();
+			mind.clearQueryStatus();
         }
 
         do {

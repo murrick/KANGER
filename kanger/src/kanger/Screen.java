@@ -428,7 +428,7 @@ public class Screen {
 //     * Returns 0 if all parameters defined
 //     * or count of undefined
 //     */
-//    public static String formatPred(Predicate p, Solve s) {
+//    public static String formatPred(Predicate p, Solution s) {
 //        String str = String.format("%c%s(", s.isAntc() ? Enums.ANT : Enums.SUC, p.getName());
 //        for (int i = 0; i < p.getRange(); ++i) {
 //            if (s.get(i) != null && s.get(i).getTerm().getType() == Enums.T_STRING) {
@@ -571,7 +571,9 @@ public class Screen {
         int depth = 0;
         for (Tree t : r.getTree()) {
             List<String> v = new ArrayList<>();
-//            v.add(t.isClosed() ? "C" : (t.isUsed() ? "U" : ""));
+            if(t.isClosed() || t.isClosed()) {
+                v.add((t.isClosed() ? "C" : "") + (t.isUsed() ? "U" : ""));
+            }
             list.add(v);
             int len = 0;
             for (Domain d : t.getSequence()) {

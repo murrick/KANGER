@@ -103,8 +103,8 @@ public class PredicateFactory {
         List<Long[]> links = new ArrayList<>();
         //TODO: Save causes
 //        for(Predicate p = root; p != null; p = p.getNext()) {
-//            for(Solve s = p.getSolve(); s != null; s = s.getNext()) {
-//                for(Solve x : s.getCauses()) {
+//            for(Solution s = p.getSolve(); s != null; s = s.getNext()) {
+//                for(Solution x : s.getCauses()) {
 //                    links.add(new Long[]{s.getPredicate().getId(), s.getId(), x.getPredicate().getId(), x.getId()});
 //                }
 //            }
@@ -136,9 +136,9 @@ public class PredicateFactory {
 //        count = dis.readInt();
 //        while (count-- > 0) {
 //            Predicate p = get(dis.readLong());
-//            Solve s = p.getSolve(dis.readLong());
+//            Solution s = p.getSolve(dis.readLong());
 //            Predicate xp = get(dis.readLong());
-//            Solve xs = xp.getSolve(dis.readLong());
+//            Solution xs = xp.getSolve(dis.readLong());
 //            s.getCauses().add(xs);
 //        }
     }

@@ -1,5 +1,9 @@
 package kanger.stores;
 
+import kanger.Mind;
+import kanger.primitives.Domain;
+import kanger.primitives.Solution;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,21 +12,29 @@ import java.util.List;
  */
 public class SolutionsStore {
 
-    private List<String> root = null;
+    private List<Solution> root = null;
     private boolean enableStore = true;
 
-    public Boolean add(String s) {
+    private Mind mind = null;
+
+    public SolutionsStore(Mind mind) {
+        this.mind = mind;
+    }
+
+    public Solution add(Domain d) {
         if (!enableStore) {
-            return false;
+            return null;
         }
         if (root == null) {
             root = new ArrayList<>();
         }
+        Solution s = new Solution(d, mind);
         if (!root.contains(s)) {
             root.add(s);
-            return true;
+        } else {
+            s = root.get(root.indexOf(s));
         }
-        return false;
+        return s;
     }
 
     public void enable(boolean e) {
@@ -33,15 +45,15 @@ public class SolutionsStore {
         return enableStore;
     }
 
-    public String get(int index) {
+    public Solution get(int index) {
         return root.get(index);
     }
 
-    public int find(String o) {
+    public int find(Solution o) {
         return root.indexOf(o);
     }
 
-    public Object getRoot() {
+    public List<Solution> getRoot() {
         return root;
     }
 

@@ -20,7 +20,7 @@ public class TVariable {
 
     //    private Term value = null;            // Текущее подставленное значение
 //    private int owner = 0;                  // level подставившего значение
-//    private Solve s = null;                 // Текущее подставленное решение
+//    private Solution s = null;                 // Текущее подставленное решение
     private Right right = null;             // Ссылка на правило
     private long id = -1;                   // Идентификатор переменной
     //    private Predicate p = null;             // Предикат в котором произошла подстановка
@@ -188,14 +188,14 @@ public class TVariable {
         }
     }
 
-    public Domain getSrcValue() {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).getSrcValue();
-        } else {
-            return null;
-        }
-    }
-
+//    public Domain getSrcValue() {
+//        if (mind.getTValues().containsKey(this)) {
+//            return mind.getTValues().get(this).getSrcSolve();
+//        } else {
+//            return null;
+//        }
+//    }
+//
     public Domain getDstSolve() {
         if (mind.getTValues().containsKey(this)) {
             return mind.getTValues().get(this).getDstSolve();
@@ -212,14 +212,14 @@ public class TVariable {
         }
     }
 
-    public Domain getDstValue() {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).getDstValue();
-        } else {
-            return null;
-        }
-    }
-
+//    public Domain getDstValue() {
+//        if (mind.getTValues().containsKey(this)) {
+//            return mind.getTValues().get(this).getDstSolve();
+//        } else {
+//            return null;
+//        }
+//    }
+//
     public boolean isDestFor(Domain d) {
         if (mind.getTValues().containsKey(this)) {
             return mind.getTValues().get(this).isDestFor(d);

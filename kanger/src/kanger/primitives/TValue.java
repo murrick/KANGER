@@ -63,13 +63,13 @@ public class TValue {
         }
     }
 
-    public Domain getSrcValue() {
-        if (!values.isEmpty()) {
-            return values.get(current).getSrcValue();
-        } else {
-            return null;
-        }
-    }
+//    public Domain getSrcValue() {
+//        if (!values.isEmpty()) {
+//            return values.get(current).getSrcValue();
+//        } else {
+//            return null;
+//        }
+//    }
 
     public Domain getDstSolve() {
         if (!values.isEmpty()) {
@@ -79,13 +79,13 @@ public class TValue {
         }
     }
 
-    public Domain getDstValue() {
-        if (!values.isEmpty()) {
-            return values.get(current).getDstValue();
-        } else {
-            return null;
-        }
-    }
+//    public Domain getDstValue() {
+//        if (!values.isEmpty()) {
+//            return values.get(current).getDstValue();
+//        } else {
+//            return null;
+//        }
+//    }
 
     public void setSuccess(boolean success) {
         if (!values.isEmpty()) {

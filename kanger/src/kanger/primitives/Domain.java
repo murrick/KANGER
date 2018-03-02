@@ -128,8 +128,8 @@ public class Domain {
     public List<Domain> getCauses() {
         List<Domain> list = new ArrayList<>();
         for (TVariable t : getTVariables(true)) {
-            if (t.getDstSolve().getId() == id) {
-                list.add(t.getSrcValue());
+            if (t.getDstSolve().getId() == id && t.getSrcSolve().getId() != id) {
+                list.add(t.getSrcSolve());
             }
         }
         return list;
@@ -212,7 +212,9 @@ public class Domain {
 
         String suffix = "";
         if ((mind.getDebugLevel() & Enums.DEBUG_OPTION_STATUS) != 0) {
-            suffix = isDest() || right.isQuery() ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + " " : "";
+            suffix = isDest() || right.isQuery() || isUsed() || isClosed()
+                    ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + (isUsed() ? "U" : "") + (this.isClosed() ? "C" : "") + " "
+                    : "";
         }
         return s + ";" + suffix;
     }
@@ -292,4 +294,18 @@ public class Domain {
     public List<TVariable> getTVariables(boolean full) {
         return Tools.getTVariables(arguments, full);
     }
+
+    public boolean isClosed() {
+        return mind.getClosedDimains().contains(id);
+    }
+
+    public void setClosed(boolean closed) {
+        if (closed) {
+            mind.getClosedDimains().add(id);
+        } else {
+            mind.getClosedDimains().remove(id);
+        }
+    }
+
+
 }

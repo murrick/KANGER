@@ -1,7 +1,6 @@
 package kanger.primitives;
 
 import kanger.Mind;
-import kanger.enums.Tools;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -40,18 +39,6 @@ public class Tree {
 
     public List<Domain> getSequence() {
         return sequence;
-    }
-
-    public boolean isClosed() {
-        return mind.getClosedTrees().contains(id);
-    }
-
-    public void setClosed(boolean closed) {
-        if (closed) {
-            mind.getClosedTrees().add(id);
-        } else {
-            mind.getClosedTrees().remove(id);
-        }
     }
 
     public boolean isUsed() {
@@ -134,5 +121,16 @@ public class Tree {
         return list;
     }
 
+    public boolean isClosed() {
+        return mind.getClosedTrees().contains(id);
+    }
+
+    public void setClosed(boolean closed) {
+        if (closed) {
+            mind.getClosedTrees().add(id);
+        } else {
+            mind.getClosedTrees().remove(id);
+        }
+    }
 
 }

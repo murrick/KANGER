@@ -29,21 +29,31 @@ public class Analiser {
         this.mind = mind;
     }
 
-    private boolean recurseTree(List<Domain> sequence, List<TVariable> vars, int index, boolean logging) {
+    private boolean recurseTree(Tree t, Tree src, List<TVariable> vars, int index, boolean logging) {
         boolean result = false;
         if (index >= vars.size()) {
+
+            List<Domain> sequence = new ArrayList<>();
+            sequence.addAll(t.getSequence());
+            if (src != null) {
+                sequence.addAll(src.getSequence());
+            }
+
+
+//            mind.getClosedDimains().clear();
+
             for (int k = 0; k < sequence.size(); ++k) {
                 Domain a = sequence.get(k);
 
-                if(mind.getCalculator().exists(a.getPredicate())) {
+                if (mind.getCalculator().exists(a.getPredicate())) {
                     try {
                         int res = mind.getCalculator().execute(a);
 
-                        if((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
+                        if ((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
 
                             result = true;
 
-                            mind.getSolutions().add(a.toString());
+                            mind.getSolutions().add(a);
 
                             if (logging) {
                                 mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
@@ -59,10 +69,10 @@ public class Analiser {
                                 if (logging) {
                                     mind.getLog().add(LogMode.ANALIZER, "Values : ");
                                 }
-                                for (TVariable t : list) {
-                                    mind.getValues().add(t.getName() + "=" + t.getValue());
+                                for (TVariable tv : list) {
+                                    mind.getValues().add(tv, a);
                                     if (logging) {
-                                        mind.getLog().add(LogMode.ANALIZER, "\t" + t.getName() + "=" + t.getValue());
+                                        mind.getLog().add(LogMode.ANALIZER, "\t" + tv.getName() + "=" + tv.getValue());
                                     }
                                 }
                             }
@@ -100,14 +110,18 @@ public class Analiser {
                         if (equals) {
                             result = true;
 
-                            if (a.getRight().isQuery()) {
-                                mind.getSolutions().add(b.toString());
-                            } else if ((b.getRight().isQuery())) {
-                                mind.getSolutions().add(a.toString());
-                            } else {
-                                mind.getSolutions().add(a.toString());
-                                mind.getSolutions().add(b.toString());
-                            }
+                            a.setClosed(true);
+                            b.setClosed(true);
+                            t.setUsed(true);
+
+//                            if (a.getRight().isQuery()) {
+//                                mind.getSolutions().add(b.toString());
+//                            } else if ((b.getRight().isQuery())) {
+//                                mind.getSolutions().add(a.toString());
+//                            } else {
+//                                mind.getSolutions().add(a.toString());
+//                                mind.getSolutions().add(b.toString());
+//                            }
 
                             if (logging) {
                                 mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
@@ -119,42 +133,72 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, "\t" + b.toString());
                             }
 
-                            List<TVariable> list;
-                            if (a.getRight().isQuery()) {
-                                list = a.getTVariables(true);
-                            } else if (b.getRight().isQuery()) {
-                                list = b.getTVariables(true);
-                            } else {
-                                list = getTVariables(Arrays.asList(a, b));
-                            }
-
-                            if (!list.isEmpty()) {
-                                if (logging) {
-                                    mind.getLog().add(LogMode.ANALIZER, "Values : ");
-                                }
-                                for (TVariable t : list) {
-                                    mind.getValues().add(t.getName() + "=" + t.getValue());
-                                    if (logging) {
-                                        mind.getLog().add(LogMode.ANALIZER, "\t" + t.getName() + "=" + t.getValue());
-                                    }
-                                }
-                            }
+//                            List<TVariable> list;
+//                            if (a.getRight().isQuery()) {
+//                                list = a.getTVariables(true);
+//                            } else if (b.getRight().isQuery()) {
+//                                list = b.getTVariables(true);
+//                            } else {
+//                                list = getTVariables(Arrays.asList(a, b));
+//                            }
+//
+//                            if (!list.isEmpty()) {
+//                                if (logging) {
+//                                    mind.getLog().add(LogMode.ANALIZER, "Values : ");
+//                                }
+//                                for (TVariable tv : list) {
+//                                    mind.getValues().add(tv.getName() + "=" + tv.getValue());
+//                                    if (logging) {
+//                                        mind.getLog().add(LogMode.ANALIZER, "\t" + tv.getName() + "=" + tv.getValue());
+//                                    }
+//                                }
+//                            }
 
                             if (logging) {
                                 mind.getLog().add(LogMode.ANALIZER, "===========================================");
                             }
 
                         }
-                    } else {
+//                    } else {
+//                        if()
+//                        result = false;
+//                        break;
+                    }
+                }
+            }
+
+            if (result) {
+                for (Domain d : sequence) {
+                    if (!d.isClosed() && !d.isDest()) {
                         result = false;
-                        break;
+                        if (logging) {
+                            mind.getLog().add(LogMode.ANALIZER, "NOT in condition: " + d.toString());
+                            mind.getLog().add(LogMode.ANALIZER, "===========================================");
+                        }
+
+                    }
+                }
+                if (result) {
+                    t.setClosed(true);
+                    for (Domain d : sequence) {
+                        if (d.isClosed() || d.isDest()) {
+//                            if (d.getRight().isQuery()) {
+                            int sz =  mind.getSolutions().size();
+                                mind.getSolutions().add(d);
+
+                                if(sz != mind.getSolutions().size()) {
+                                    for (TVariable tv : d.getTVariables(true)) {
+                                        mind.getValues().add(tv, d);
+                                    }
+                                }
+                        }
                     }
                 }
             }
         } else {
             vars.get(index).rewind();
             do {
-                if (recurseTree(sequence, vars, index + 1, logging)) {
+                if (recurseTree(t, src, vars, index + 1, logging)) {
                     result = true;
                 }
             } while (vars.get(index).next());
@@ -162,16 +206,24 @@ public class Analiser {
         return result;
     }
 
-    public boolean analiseTree(List<Domain> domains, boolean logging) {
-        List<TVariable> vars = getTVariables(domains);
-        return recurseTree(domains, vars, 0, logging);
+    public boolean analiseTree(Tree t, Tree src, boolean logging) {
+        mind.getClosedDimains().clear();
+        List<TVariable> vars = t.getTVariables(true);
+        if (src != null) {
+            for (TVariable tv : src.getTVariables(true)) {
+                if (!vars.contains(tv)) {
+                    vars.add(tv);
+                }
+            }
+        }
+        return recurseTree(t, src, vars, 0, logging);
     }
 
     private List<TVariable> getTVariables(List<Domain> domains) {
         List<TVariable> list = new ArrayList<>();
-        for(Domain d : domains) {
-            for(TVariable t : d.getTVariables(true)) {
-                if(!list.contains(t)) {
+        for (Domain d : domains) {
+            for (TVariable t : d.getTVariables(true)) {
+                if (!list.contains(t)) {
                     list.add(t);
                 }
             }
@@ -201,14 +253,11 @@ public class Analiser {
         }
 
         for (Tree t = mind.getTrees().getRoot(); t != null; t = t.getNext()) {
-            if (analiseTree(t.getSequence(), logging)) {
+            if (analiseTree(t, null, logging)) {
                 result = true;
             }
             for (Tree x : query) {
-                List<Domain> actual = new ArrayList<>();
-                actual.addAll(t.getSequence());
-                actual.addAll(x.getSequence());
-                if (analiseTree(actual, logging)) {
+                if (analiseTree(t, x, logging)) {
                     result = true;
                 }
             }
@@ -251,7 +300,7 @@ public class Analiser {
             }
         }
 //        else if (target.getWidth() == 1 && target.getHeight() == 1) {
-//            Solve s = target.getT().getD().getPredicate().deleteSolve(target.getT().getD().getArguments());
+//            Solution s = target.getT().getD().getPredicate().deleteSolve(target.getT().getD().getArguments());
 //            if (withRelatedRights && s != null) {
 //                if (s.getRight() != null) {
 //                    rr.add(s.getRight());
@@ -376,7 +425,7 @@ public class Analiser {
 //                                mind.getText().append(line);
 //                                mind.getText().append("\r");
                                 //mind.compileLine(line);
-                                mind.getLog().add(LogMode.SOLVES, String.format("\tSolve 000:\t%s", line));
+                                mind.getLog().add(LogMode.SOLVES, String.format("\tSolution 000:\t%s", line));
 //                                res = true;
                                 mind.getLog().add(LogMode.ANALIZER, "SUCCESS: New Right Accepted");
                             } else {
@@ -386,8 +435,8 @@ public class Analiser {
                                     int i = 0;
                                     for (Hypotese s : (List<Hypotese>) mind.getHypotesisStore().getRoot()) {
 //                                        mind.getText().append(String.format("%c%s", Enums.ANT, s.toString()) + "\r");
-                                        mind.getSolutions().add(String.format("%c%s", Enums.ANT, s.toString()));
-                                        mind.getLog().add(LogMode.SAVED, String.format("\tSolve %03d: \t%s", ++i, String.format("%c%s", Enums.ANT, s.toString())));
+//                                        mind.getSolutions().add(String.format("%c%s", Enums.ANT, s.toString()));
+                                        mind.getLog().add(LogMode.SAVED, String.format("\tSolution %03d: \t%s", ++i, String.format("%c%s", Enums.ANT, s.toString())));
                                     }
                                 }
                                 mind.getLog().add(LogMode.ANALIZER, "SUCCESS: New solves: " + mind.getHypotesisStore().size());
@@ -524,8 +573,8 @@ public class Analiser {
                                         int i = 0;
                                         for (Hypotese s : (List<Hypotese>) mind.getHypotesisStore().getRoot()) {
 //                                            mind.getText().append(String.format("%c%s", Enums.ANT, s.toString()) + "\r");
-                                            mind.getSolutions().add(String.format("%c%s", Enums.ANT, s.toString()));
-                                            mind.getLog().add(LogMode.SAVED, String.format("\tSolve %03d: \t%s", ++i, String.format("%c%s", Enums.ANT, s.toString())));
+//                                            mind.getSolutions().add(String.format("%c%s", Enums.ANT, s.toString()));
+                                            mind.getLog().add(LogMode.SAVED, String.format("\tSolution %03d: \t%s", ++i, String.format("%c%s", Enums.ANT, s.toString())));
                                         }
                                     }
                                     if (killedRights.size() != 0) {
@@ -589,15 +638,15 @@ public class Analiser {
         if (mind.getSolutions().size() > 0) {
             mind.getLog().add(LogMode.SOLVES, "Solves:");
             int i = 0;
-            for (String log : (List<String>) mind.getSolutions().getRoot()) {
-                mind.getLog().add(LogMode.SOLVES, String.format("\tSolve %03d: %s", ++i, log));
+            for (Solution log : mind.getSolutions().getRoot()) {
+                mind.getLog().add(LogMode.SOLVES, String.format("\tSolution %03d: %s", ++i, log.toString()));
             }
         }
         if (mind.getValues().size() > 0) {
             mind.getLog().add(LogMode.VALUES, "Values:");
             int i = 0;
-            for (String log : (List<String>) mind.getValues().getRoot()) {
-                mind.getLog().add(LogMode.VALUES, String.format("\tSolve %03d: %s", ++i, log));
+            for (TMeaning log : mind.getValues().getRoot()) {
+                mind.getLog().add(LogMode.VALUES, String.format("\tSolution %03d: %s", ++i, log.toString()));
             }
         }
 

@@ -35,8 +35,8 @@ public class Mind {
 
     private final HypotesesStore hypoteses = new HypotesesStore();                    // Список гипотез
     private final LogStore log = new LogStore(this);                                      // Протокол вывода
-    private final SolutionsStore solves = new SolutionsStore();                             // Список пешений
-    private final ValuesStore values = new ValuesStore();                             // Список величин
+    private final SolutionsStore solves = new SolutionsStore(this);                             // Список пешений
+    private final ValuesStore values = new ValuesStore(this);                             // Список величин
     private final LibraryStore library = new LibraryStore(this);
 
     private final Map<TVariable, TValue> tValues = new HashMap<>();
@@ -60,6 +60,7 @@ public class Mind {
     private Set<Long> usedDomains = new HashSet<>();
     private Set<Long> queuedDomains = new HashSet<>();
     private Set<Long> usedTrees = new HashSet<>();
+    private Set<Long> closedDimains = new HashSet<>();
     private Set<Long> closedTrees = new HashSet<>();
 
     private Set<Long> activeRights = new HashSet<>();
@@ -207,7 +208,7 @@ public class Mind {
     public void clearQueryStatus() {
         usedDomains.clear();
         usedTrees.clear();
-        closedTrees.clear();
+        closedDimains.clear();
 //        acceptorDomains.clear();
         queuedDomains.clear();
 
@@ -459,7 +460,7 @@ public class Mind {
             d.getKey().setRight(rights.get(d.getValue()));
         }
         //TODO: Загрузка causes
-//        for(Map.Entry<Solve,Long> d: solveLinks.entrySet()) {
+//        for(Map.Entry<Solution,Long> d: solveLinks.entrySet()) {
 //            d.getKey().setRight(rights.get(d.getValue()));
 //        }
         for (Map.Entry<TVariable, Long> d : tVariableLinks.entrySet()) {
@@ -493,7 +494,7 @@ public class Mind {
         return domainLinks;
     }
 
-    //    public Map<Solve, Long> getSolveLinks() {
+    //    public Map<Solution, Long> getSolveLinks() {
 //        return solveLinks;
 //    }
     public Map<TVariable, Long> gettVariableLinks() {
@@ -506,6 +507,10 @@ public class Mind {
 
     public Set<Long> getUsedTrees() {
         return usedTrees;
+    }
+
+    public Set<Long> getClosedDimains() {
+        return closedDimains;
     }
 
     public Set<Long> getClosedTrees() {

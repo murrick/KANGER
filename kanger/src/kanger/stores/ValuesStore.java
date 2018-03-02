@@ -1,5 +1,10 @@
 package kanger.stores;
 
+import kanger.Mind;
+import kanger.primitives.Domain;
+import kanger.primitives.TMeaning;
+import kanger.primitives.TVariable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,21 +13,30 @@ import java.util.List;
  */
 public class ValuesStore {
 
-    private List<String> root = null;
+    private List<TMeaning> root = null;
     private boolean enableStore = true;
 
-    public Boolean add(String s) {
+    private Mind mind = null;
+
+    public ValuesStore(Mind mind) {
+        this.mind = mind;
+    }
+
+    public TMeaning add(TVariable t, Domain d) {
         if(!enableStore) {
-            return false;
+            return null;
         }
         if (root == null) {
             root = new ArrayList<>();
         }
-        if (!root.contains(s)) {
-            root.add(s);
-            return true;
+        TMeaning m = new TMeaning(t);
+        m.setSolution(mind.getSolutions().add(d));
+        if (!root.contains(m)) {
+            root.add(m);
+        } else {
+            m = root.get(root.indexOf(m));
         }
-        return false;
+        return m;
     }
 
     public void enable(boolean e) {
@@ -33,15 +47,15 @@ public class ValuesStore {
         return enableStore;
     }
 
-    public String get(int index) {
+    public TMeaning get(int index) {
         return root.get(index);
     }
 
-    public int find(String s) {
+    public int find(TMeaning s) {
         return root.indexOf(s);
     }
 
-    public Object getRoot() {
+    public List<TMeaning> getRoot() {
         return root;
     }
 

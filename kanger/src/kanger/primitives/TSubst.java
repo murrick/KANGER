@@ -38,7 +38,7 @@ public class TSubst {
         return srcSolve;
     }
 
-    public Domain getSrcValue() {
+//    public Domain getSrcValue() {
 //        for(TVariable t : srcSolve.getTVariables(true)) {
 //            if(srcSolveValues.containsKey(t)) {
 //                try {
@@ -48,8 +48,8 @@ public class TSubst {
 //                }
 //            }
 //        }
-        return srcSolve;
-    }
+//        return srcSolve;
+//    }
     
     public void setSolves(Domain dst, Domain src) {
         if(dst != null) {
@@ -76,7 +76,7 @@ public class TSubst {
         return dstSolve;
     }
 
-    public Domain getDstValue() {
+//    public Domain getDstValue() {
 //        for(TVariable t : dstSolve.getTVariables(true)) {
 //            if(dstSolveValues.containsKey(t)) {
 //                try {
@@ -86,8 +86,8 @@ public class TSubst {
 //                }
 //            }
 //        }
-        return dstSolve;
-    }
+//        return dstSolve;
+//    }
     
     public boolean isSuccess() {
         return success;
