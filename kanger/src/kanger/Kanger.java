@@ -103,7 +103,7 @@ public class Kanger {
                     + "!a(nnn); "
                     + "!b(ooo); "
                     + "!d(v); " +
-                    "!@x ~(n(x) && ~n(x)); " +
+                    
                     "!@x a(x) -> ~n(x); ");
 
         } catch (ParseErrorException ex) {

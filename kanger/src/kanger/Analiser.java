@@ -82,14 +82,14 @@ public class Analiser {
                     Domain b = sequence.get(j);
                     if (a.getPredicate().getId() == b.getPredicate().getId()
                             && a.isAntc() != b.isAntc()
-                            && (!a.isDest() || a.getRight().isQuery() || b.getRight().isQuery())
-                            && (!b.isDest() || b.getRight().isQuery() || a.getRight().isQuery())) {
+                            && (!a.isDest() || a.getRight().isQuery() || a.isUsed())
+                            && (!b.isDest() || b.getRight().isQuery() || b.isUsed())) {
                         boolean equals = true;
                         for (int i = 0; i < a.getPredicate().getRange(); ++i) {
                             Argument xa = a.getArguments().get(i);
                             Argument xb = b.getArguments().get(i);
                             if (!xa.isEmpty() && !xb.isEmpty()
-                                    && !(xa.isTSet() && xb.isTSet() && xa.getT().getId() == xb.getT().getId())
+//                                    && !(xa.isTSet() && xb.isTSet() && xa.getT().getId() == xb.getT().getId())
 //                                    && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
 //                                    && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
                                     && xa.getValue().getId() == xb.getValue().getId()) {
