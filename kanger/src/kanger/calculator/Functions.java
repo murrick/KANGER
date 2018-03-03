@@ -27,13 +27,7 @@ public class Functions {
 
     private final Map<String, SysOp> sysOps = new HashMap<String, SysOp>() {
 
-        private boolean isEmpty(Object d, int index) {
-            return ((Function) d).getArguments().get(index).isEmpty();
-//                    || (((Function) d).getArguments().get(index).isFSet()
-//                    && ((Function) d).getArguments().get(index).getF().getResult() == null)
-//                    || (((Function) d).getArguments().get(index).isTSet()
-//                    && !((Function) d).getArguments().get(index).getT().isSubstituted());
-        }
+        
 
         /// Арифметика
         {
@@ -41,15 +35,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _add(arg.get(0).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _sub(arg.get(1).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -65,15 +59,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _sub(arg.get(0).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _add(arg.get(1).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sub(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _sub(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -89,15 +83,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _bitnot(arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _bitnot(arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _bitnot(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _bitnot(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -113,15 +107,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _neg(arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _neg(arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _neg(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _neg(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -137,15 +131,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, arg.get(0).getValue())) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, arg.get(1).getValue())) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -161,19 +155,19 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _add(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _sub(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (arg.get(0).isDefined() && !arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(1, _sub(arg.get(2).getValue(), arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _add(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _add(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -189,19 +183,19 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _sub(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _add(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (arg.get(0).isDefined() && !arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(1, _sub(arg.get(0).getValue(), arg.get(2).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _sub(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _sub(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -217,19 +211,19 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _mul(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && (double) arg.get(1).getValue().getValue() != 0) {
                         if (!((Function) o).setParameter(0, _div(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(0).getValue().getValue() != 0) {
+                    } else if (arg.get(0).isDefined() && !arg.get(1).isDefined() && arg.get(2).isDefined() && (double) arg.get(0).getValue().getValue() != 0) {
                         if (!((Function) o).setParameter(1, _div(arg.get(2).getValue(), arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _mul(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _mul(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -245,19 +239,19 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined() && (double) arg.get(1).getValue().getValue() != 0) {
                         if (!((Function) o).setParameter(2, _div(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _mul(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2) && (double) arg.get(2).getValue().getValue() != 0) {
+                    } else if (arg.get(0).isDefined() && !arg.get(1).isDefined() && arg.get(2).isDefined() && (double) arg.get(2).getValue().getValue() != 0) {
                         if (!((Function) o).setParameter(1, _div(arg.get(0).getValue(), arg.get(2).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _div(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _div(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -273,11 +267,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2) && (double) arg.get(1).getValue().getValue() != 0) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined() && (double) arg.get(1).getValue().getValue() != 0) {
                         if (!((Function) o).setParameter(2, _rem(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _rem(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _rem(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -293,15 +287,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _bitleft(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _bitright(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitleft(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _bitleft(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -317,15 +311,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _bitright(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _bitleft(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitright(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _bitright(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -341,15 +335,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _bitxor(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _bitxor(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitxor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _bitxor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -365,11 +359,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _bitand(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitand(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _bitand(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -385,19 +379,19 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _bitor(arg.get(0).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _bitandnot(arg.get(2).getValue(), arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && isEmpty(o, 1) && !isEmpty(o, 2)) {
+                    } else if (arg.get(0).isDefined() && !arg.get(1).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(1, _bitandnot(arg.get(2).getValue(), arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _bitor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _bitor(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(2).delValue(((Function) o).getOwner());
@@ -413,15 +407,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _log(arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _exp(arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _log(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _log(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -437,15 +431,15 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _exp(arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _log(arg.get(1).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _exp(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _exp(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -465,10 +459,10 @@ public class Functions {
                     if (!((Function) o).setParameter(0, _pi())) {
                         ret = 0;
                     }
-//                    if (isEmpty(o, 0)) {
+//                    if (!arg.get(0).isDefined()) {
 //                        try {
 //                    ((Function)o).setParameter(1, mind.getTerms().add(_pi()));
-//                    } else if (!isEmpty(o, 0) && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
+//                    } else if (arg.get(0).isDefined() && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
 //                    } else {
 //                        try {
 //                    ((Function)o).setParameter(1, null);
@@ -484,17 +478,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _sin(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _asin(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _sin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -510,17 +504,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _asin(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _sin(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _asin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _asin(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -536,17 +530,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _cos(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _acos(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _cos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _cos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -562,17 +556,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _acos(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _cos(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _acos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _acos(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -588,17 +582,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _tan(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _atan(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _tan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _tan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -614,17 +608,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _atan(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _tan(arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _atan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _atan(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -640,12 +634,12 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _int(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _int(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _int(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -661,12 +655,12 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _round(arg.get(0).getValue(), arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _round(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _round(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -682,12 +676,12 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _round(arg.get(0).getValue(), null))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _round(arg.get(0).getValue(), null).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _round(arg.get(0).getValue(), null).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -703,17 +697,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _sqrt(arg.get(0).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(0, _pow(arg.get(1).getValue(), mind.getTerms().add(2)))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && _sqrt(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _sqrt(arg.get(0).getValue()).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -729,17 +723,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _pow(arg.get(0).getValue(), arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _root(arg.get(2).getValue(), mind.getTerms().add(1)))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _pow(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _pow(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -755,17 +749,17 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && isEmpty(o, 2)) {
+                    if (arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(2, _root(arg.get(0).getValue(), arg.get(1).getValue()))) {
 
                             ret = 0;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 2)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(2).isDefined()) {
                         if (!((Function) o).setParameter(0, _pow(arg.get(2).getValue(), mind.getTerms().add(1)))) {
 
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && !isEmpty(o, 2) && _root(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(2).isDefined() && _root(arg.get(0).getValue(), arg.get(1).getValue()).compareTo(arg.get(2).getValue()) == 0) {
                         ret = 2;
                     } else {
 //                        arg.get(1).delValue(((Function) o).getOwner());
@@ -1095,10 +1089,10 @@ public class Functions {
                     if (!((Function) o).setParameter(0, _now())) {
                         ret = 0;
                     }
-//                    if (isEmpty(o, 0)) {
+//                    if (!arg.get(0).isDefined()) {
 //                        try {
 //                    ((Function)o).setParameter(1, mind.getTerms().add(_pi()));
-//                    } else if (!isEmpty(o, 0) && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
+//                    } else if (arg.get(0).isDefined() && Tools.sCmp(_pi(), arg.get(0).getValue()) == 0) {
 //                    } else {
 //                        try {
 //                    ((Function)o).setParameter(1, null);
@@ -1117,11 +1111,11 @@ public class Functions {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
 
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, mind.getTerms().add(arg.get(0).getValue().getType().name().toLowerCase()))) {
                             ret = 0;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1) && arg.get(0).getValue().getType().name().toLowerCase().equals(arg.get(1).getValue().toString().toLowerCase())) {
+                    } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && arg.get(0).getValue().getType().name().toLowerCase().equals(arg.get(1).getValue().toString().toLowerCase())) {
                         ret = 2;
                     } else {
                         ret = 0;

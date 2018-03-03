@@ -40,12 +40,11 @@ public class Mind {
     private final LibraryStore library = new LibraryStore(this);
 
     private final Map<TVariable, TValue> tValues = new HashMap<>();
-    private final Map<Function, TValue> fValues = new HashMap<>();
-    private Map<Domain, Set<Domain>> sources = new HashMap<>();
-    private Map<Domain, Set<Domain>> destinations = new HashMap<>();
-
-    private List<Long> substituted = new ArrayList<>();
-    private List<Long> calculated = new ArrayList<>();
+    private final Map<Domain, Set<Domain>> sources = new HashMap<>();
+    private final Map<Domain, Set<Domain>> destinations = new HashMap<>();
+	private final Set<Function> defined = new HashSet<>();
+    private final List<TVariable> substituted = new ArrayList<>();
+    private final List<Function> calculated = new ArrayList<>();
 
     private final Calculator calculator = new Calculator(this);
     private final Analiser analiser = new Analiser(this);
@@ -58,11 +57,12 @@ public class Mind {
 
     private ScriptEngine scryptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-    private Set<Long> usedDomains = new HashSet<>();
-    private Set<Long> queuedDomains = new HashSet<>();
-    private Set<Long> usedTrees = new HashSet<>();
-    private Set<Long> closedDimains = new HashSet<>();
-    private Set<Long> closedTrees = new HashSet<>();
+    private final Set<Long> usedDomains = new HashSet<>();
+    private final Set<Long> queuedDomains = new HashSet<>();
+    private final Set<Long> usedTrees = new HashSet<>();
+    private final Set<Long> closedDimains = new HashSet<>();
+    private final Set<Long> closedTrees = new HashSet<>();
+    private final Set<Long> excludedTrees = new HashSet<>();
 
     private Set<Long> activeRights = new HashSet<>();
 
@@ -138,10 +138,6 @@ public class Mind {
 
     public Map<TVariable, TValue> getTValues() {
         return tValues;
-    }
-
-    public Map<Function, TValue> getFValues() {
-        return fValues;
     }
 
     public int getCurrentLevel() {
@@ -522,9 +518,13 @@ public class Mind {
         return closedTrees;
     }
 
+
+	public Set<Function> getDefined() {
+		return defined;
+	}
+	
     public void dropLinks() {
         tValues.clear();
-        fValues.clear();
         sources.clear();
         destinations.clear();
     }
@@ -550,12 +550,16 @@ public class Mind {
         return activeRights;
     }
 
-    public List<Long> getSubstituted() {
+    public List<TVariable> getSubstituted() {
         return substituted;
     }
 
-    public List<Long> getCalculated() {
+    public List<Function> getCalculated() {
         return calculated;
+    }
+
+    public Set<Long> getExcludedTrees() {
+        return excludedTrees;
     }
 
     public Set<Right> getActualRights() {
@@ -566,16 +570,16 @@ public class Mind {
             }
         } else {
             if (tVars.size() > 0) {
-                for (long id : substituted) {
-                    if (tVars.get(id) != null) {
-                        for (Domain d : tVars.get(id).getUsage()) {
+                for (TVariable t : substituted) {
+       
+                        for (Domain d : t.getUsage()) {
                             set.addAll(d.getPredicate().getRights());
                         }
-                    }
+                    
                 }
             }
-            for (long id : calculated) {
-                set.addAll(domains.get(id).getPredicate().getRights());
+            for (Function f : calculated) {
+                set.addAll(f.getOwner().getPredicate().getRights());
             }
         }
         return set;

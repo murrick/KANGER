@@ -469,21 +469,11 @@ public class Screen {
 
     private static void showPredRecurse(Mind mind, List<TVariable> tvars, int tIndex, List<Function> fus, int fIndex, Domain d, boolean showCauses) {
         if (tIndex >= tvars.size()) {
-            if (fIndex >= fus.size()) {
-                if (!d.isDest()) {
-                    System.out.printf("\t%s\n", d.toString());
-                    if (showCauses) {
-                        showCauses(mind, d, 0);
-                    }
+            if (!d.isDest()) {
+                System.out.printf("\t%s\n", d.toString());
+                if (showCauses) {
+                    showCauses(mind, d, 0);
                 }
-            } else {
-                Function f = fus.get(fIndex);
-                f.rewind();
-                do {
-//                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
-                    showPredRecurse(mind, tvars, tIndex, fus, fIndex + 1, d, showCauses);
-//                }
-                } while (f.next());
             }
         } else {
             TVariable t = tvars.get(tIndex);

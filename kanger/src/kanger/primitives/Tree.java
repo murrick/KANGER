@@ -1,6 +1,8 @@
 package kanger.primitives;
 
 import kanger.Mind;
+import kanger.enums.Tools;
+import kanger.exception.RuntimeErrorException;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -142,6 +144,17 @@ public class Tree {
             mind.getClosedTrees().add(id);
         } else {
             mind.getClosedTrees().remove(id);
+        }
+    }
+    public boolean isExcluded() {
+        return mind.getExcludedTrees().contains(id);
+    }
+
+    public void setExcluded(boolean excluded) {
+        if (excluded) {
+            mind.getExcludedTrees().add(id);
+        } else {
+            mind.getExcludedTrees().remove(id);
         }
     }
 

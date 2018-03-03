@@ -47,7 +47,7 @@ public class Calculator {
          * и заполнение массива
          */
 //        int i;
-        fu.setCalculated(false);
+//        fu.setCalculated(false);
         fu.setBusy(true);
 
 //        for (int i = 0; i <= fu.getRange(); ++i) {
@@ -87,7 +87,7 @@ public class Calculator {
 //        flag = execute(fu);
         if (execute(fu) == 1) {
             ++flag;
-            fu.setCalculated(true);
+//            fu.setCalculated(true);
             mind.getLog().add(LogMode.ANALIZER, "Calculated function:");
             mind.getLog().add(LogMode.ANALIZER, String.format("\t%s", fu.toString() + (fu.getResult() == null ? "" : " = " + fu.getResult())));
             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
@@ -149,14 +149,14 @@ public class Calculator {
         if (op != null) {
             //if (op.getRange() + 1 > fu.getArguments().size()) {
 //            if(fu.getOwner().isUsed()) {
-                fu.getArguments().add(new Argument(fu.getResult()));
+                fu.setResult(fu.getResult());
 //            } else {
 //                fu.getArguments().add(new Argument());
 //            }
 
             //}
             k = (Integer) op.getProc().run(fu);
-            fu.getArguments().remove(op.getRange());
+//            fu.getArguments().remove(op.getRange());
         }
         return k;
     }

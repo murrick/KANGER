@@ -68,8 +68,8 @@ public class Argument {
                 result = false;
             }
         } else if (o instanceof Function) {
-            TSubst s = ((Function) o).setResult(t);
-            s.setSolves(d, d);
+            ((Function) o).setResult(t);
+            result = true;
         }
         return result;
     }
@@ -80,7 +80,7 @@ public class Argument {
         } else if (o instanceof TVariable) {
             ((TVariable) o).delValue(d);
         } else if (o instanceof Function) {
-            ((Function) o).clearResult(d);
+            ((Function) o).clearResult();
         }
     }
 
@@ -170,4 +170,20 @@ public class Argument {
             return "null";
         }
     }
+
+	
+	
+	public boolean isDefined() {
+		if(isTSet()) {
+			return getT().isSubstituted();
+		} else if (isFSet()) {
+			if(getF().isCalculable()) {
+				return getF().isCalculated();
+			} else {
+				return getF().getResult() != null;
+			}
+		} else {
+			return !isEmpty();
+		}
+	}
 }

@@ -28,10 +28,9 @@ public class Analiser {
         this.mind = mind;
     }
 
-    private boolean recurseTree(Tree t, Tree src, List<TVariable> vars, int tIndex, List<Function> fus, int fIndex, boolean logging) {
+    private boolean recurseTree(Tree t, Tree src, List<TVariable> vars, int tIndex, boolean logging) throws RuntimeErrorException {
         boolean result = false;
         if (tIndex >= vars.size()) {
-            if (fIndex >= fus.size()) {
 
                 List<Domain> sequence = new ArrayList<>();
                 sequence.addAll(t.getSequence());
@@ -195,28 +194,28 @@ public class Analiser {
                         }
                     }
                 }
-            } else {
-                fus.get(fIndex).rewind();
-                do {
-                    if (recurseTree(t, src, vars, tIndex, fus, fIndex + 1, logging)) {
-                        result = true;
-                    }
-                } while (fus.get(fIndex).next());
-            }
         } else {
-            vars.get(tIndex).rewind();
+            if(vars.get(tIndex).rewind()){
             do {
-                if (recurseTree(t, src, vars, tIndex + 1, fus, fIndex, logging)) {
+                mind.getSubstituted().add(vars.get(tIndex));
+                if (recurseTree(t, src, vars, tIndex + 1, logging)) {
                     result = true;
                 }
             } while (vars.get(tIndex).next());
+            } else {
+                if (recurseTree(t, src, vars, tIndex + 1, logging)) {
+                    result = true;
+                }
+            }
         }
 
         return result;
     }
 
-    public boolean analiseTree(Tree t, Tree src, boolean logging) {
+    public boolean analiseTree(Tree t, Tree src, boolean logging) throws RuntimeErrorException {
         mind.getClosedDimains().clear();
+		mind.getSubstituted().clear();
+		mind.getCalculated().clear();
         List<TVariable> vars = t.getTVariables(true);
         List<Function> fus = t.getFunctions();
         if (src != null) {
@@ -231,7 +230,7 @@ public class Analiser {
                 }
             }
         }
-        return recurseTree(t, src, vars, 0, fus, 0, logging);
+        return recurseTree(t, src, vars, 0, logging);
     }
 
     private List<TVariable> getTVariables(List<Domain> domains) {
@@ -246,7 +245,7 @@ public class Analiser {
         return list;
     }
 
-    public boolean analiser(boolean logging) {
+    public boolean analiser(boolean logging) throws RuntimeErrorException {
         boolean result = false;
         int counter = 0;
 

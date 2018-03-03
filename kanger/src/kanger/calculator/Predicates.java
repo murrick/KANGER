@@ -20,14 +20,6 @@ import java.util.regex.PatternSyntaxException;
 public class Predicates {
     private final Map<String, SysOp> sysOps = new HashMap<String, SysOp>() {
 
-        private boolean isEmpty(Object d, int index) {
-            return ((Domain) d).getArguments().get(index).isEmpty()
-                    || (((Domain) d).getArguments().get(index).isFSet()
-                    && ((Domain) d).getArguments().get(index).getF().getResult() == null)
-                    || (((Domain) d).getArguments().get(index).isTSet()
-                    && !((Domain) d).getArguments().get(index).getT().isSubstituted());
-        }
-
         /// Системные предикаты
         {
 
@@ -37,15 +29,15 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (!isEmpty(o, 0) && isEmpty(o, 1)) {
+                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
                         if (arg.get(1).setValue((Domain) o, arg.get(0).getValue())) {
                             i = 1;
                         }
-                    } else if (isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
                         if (arg.get(0).setValue((Domain) o, arg.get(1).getValue())) {
                             i = 1;
                         }
-                    } else if (!isEmpty(o, 0) && !isEmpty(o, 1)) {
+                } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
                         if (arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
                             i = 1;
                         } else if ((arg.get(0).getValue().isCVar() && arg.get(1).getValue().isCVar()) || (!arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar())) {
@@ -65,7 +57,7 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1)) {
+                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
                         int rc = arg.get(0).getValue().compareTo(arg.get(1).getValue());
                         if (rc == -1 || rc == 1) {
                             i = 1;
@@ -83,7 +75,7 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
+                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
                         int rc = arg.get(0).getValue().compareTo(arg.get(1).getValue());
                         if (rc != -2) {
                             i = rc > 0 ? 1 : 0;
@@ -99,7 +91,7 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
+                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
                         int rc = arg.get(0).getValue().compareTo(arg.get(1).getValue());
                         if (rc != -2) {
                             i = rc >= 0 ? 1 : 0;
@@ -115,7 +107,7 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
+                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
                         int rc = arg.get(0).getValue().compareTo(arg.get(1).getValue());
                         if (rc != -2) {
                             i = rc < 0 ? 1 : 0;
@@ -131,7 +123,7 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (!isEmpty(o, 0) && !isEmpty(o, 1) && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
+                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty() && !arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar()) {
                         int rc = arg.get(0).getValue().compareTo(arg.get(1).getValue());
                         if (rc != -2) {
                             i = rc <= 0 ? 1 : 0;
@@ -148,7 +140,7 @@ public class Predicates {
                 public Object run(Object o) {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
-                    if (arg.get(0).getValue() != null && arg.get(1).getValue() != null) {
+                    if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
                         if (arg.get(0).getValue().isCVar() || arg.get(1).getValue().isCVar()) {
                             i = -1;
                         } else {
@@ -166,7 +158,6 @@ public class Predicates {
         }
 
     };
-
 
     public Map<String, SysOp> getSysOps() {
         return sysOps;

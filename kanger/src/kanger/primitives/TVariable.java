@@ -97,7 +97,7 @@ public class TVariable {
         }
         if (!isInside(value)) {
             if (mind.getTValues().get(this).contains(value) == -1) {
-                mind.getSubstituted().add(id);
+                mind.getSubstituted().add(this);
             }
             return mind.getTValues().get(this).setValue(value);
         } else {
@@ -108,7 +108,7 @@ public class TVariable {
     public void delValue(Domain d) {
         if (mind.getTValues().containsKey(this)) {
             mind.getTValues().get(this).delValue(d);
-            mind.getSubstituted().add(id);
+            mind.getSubstituted().add(this);
         }
     }
 
@@ -291,6 +291,7 @@ public class TVariable {
         if (mind.getTValues().containsKey(this)) {
             if (mind.getTValues().get(this).size() > 0) {
                 mind.getTValues().get(this).setCurrent(0);
+//				mind.getSubstituted().add(this);
                 return true;
             } else {
                 return false;
@@ -304,6 +305,7 @@ public class TVariable {
         if (mind.getTValues().containsKey(this)) {
             if (mind.getTValues().get(this).getCurrent() + 1 < mind.getTValues().get(this).size()) {
                 mind.getTValues().get(this).setCurrent(mind.getTValues().get(this).getCurrent() + 1);
+//				mind.getSubstituted().add(this);
                 return true;
             } else {
                 return false;
@@ -335,6 +337,6 @@ public class TVariable {
     }
 
     public boolean isSubstituted() {
-        return mind.getSubstituted().contains(id);
+        return mind.getSubstituted().contains(this);
     }
 }

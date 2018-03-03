@@ -23,7 +23,6 @@ public class Function {
     private Term name = null;
     private int range = 0;
     private final List<Argument> arguments = new ArrayList<>();     // Параметры
-    private boolean calculated = false;
     private boolean busy = false;                       // Предотвращение бесконечной рекурсии
 
     private Domain owner = null;
@@ -55,6 +54,7 @@ public class Function {
             arguments.add(a);
         }
     }
+	
 
 //    public FunctionDescriptor getF() {
 //        return f;
@@ -100,11 +100,10 @@ public class Function {
     }
 
     public Term getResult() {
-        if (mind.getFValues().containsKey(this)) {
-            return mind.getFValues().get(this).getValue();
-        } else {
-            return null;
+        while (range + 1 > arguments.size()) {
+            arguments.add(new Argument());
         }
+        return arguments.get(range).getValue();
     }
 
 //    public void setResult(Domain d, Argument r) {
@@ -117,14 +116,17 @@ public class Function {
 ////        arguments.get(range).setF(r.getF());
 //    }
 
-    public TSubst setResult(Term r) {
-        if (!mind.getFValues().containsKey(this)) {
-            mind.getFValues().put(this, new TValue());
+    public void setResult(Term r) {
+        while (range + 1 > arguments.size()) {
+            arguments.add(new Argument());
         }
-        if (mind.getFValues().get(this).contains(r) == -1) {
-            mind.getCalculated().add(owner.getId());
+        if((r == null && arguments.get(range).getValue() != null)
+            || (r != null && arguments.get(range).getValue() == null)
+            || (r != null && arguments.get(range).getValue() != null
+                && r.getId() != arguments.get(range).getValue().getId())) {
+            mind.getCalculated().add(this);
         }
-        return mind.getFValues().get(this).setValue(r);
+        arguments.get(range).setValue(owner, r);
     }
 
     public boolean setParameter(int i, Term r) {
@@ -136,7 +138,7 @@ public class Function {
             if ((arguments.get(i).isEmpty() && r != null)
                     || !arguments.get(i).isEmpty() && r == null
                     || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
-                mind.getCalculated().add(owner.getId());
+                mind.getCalculated().add(this);
             }
             return arguments.get(i).setValue(owner, r);
 //        }
@@ -152,14 +154,7 @@ public class Function {
 //        return true;
 //    }
 
-
-    public boolean isCalculated() {
-        return calculated;
-    }
-
-    public void setCalculated(boolean calculated) {
-        this.calculated = calculated;
-    }
+    
 
     private String formatParam(Argument t) {
         Operation op = Parser.getOp(name.toString());
@@ -228,7 +223,7 @@ public class Function {
             }
         }
         Argument r = range < arguments.size() ? arguments.get(range) : null;
-        return s /*+ (r != null && r.getValue() != null ? (" = " + r.getValue()) : "")*/;
+        return s;// + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0 && r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
     }
 
     //    public void setResult(Term c) {
@@ -277,59 +272,29 @@ public class Function {
         }
     }
 
-
-    public void clearResult(Domain d) {
-        if (mind.getFValues().containsKey(this)) {
-            mind.getFValues().get(this).delValue(d);
-            mind.getCalculated().add(owner.getId());
-        }
+    public void clearResult() {
+        arguments.get(range).setValue(this,null);
     }
 
     public List<TVariable> getTVariables() {
         return Tools.getTVariables(arguments, true);
     }
 
-
-    public boolean contains(Term value) {
-        if (mind.getFValues().containsKey(this)) {
-            return mind.getFValues().get(this).contains(value) >= 0;
-        } else {
-            return false;
-        }
+	public boolean isCalculated() {
+        return mind.getSubstituted().contains(this);
     }
 
-    public boolean isEmpty() {
-        if (mind.getFValues().containsKey(this)) {
-            return mind.getFValues().get(this).size() == 0;
-        } else {
-            return true;
-        }
-    }
+	public boolean isSubstituted() {
+		for(TVariable t: getTVariables()) {
+			if(t.isSubstituted()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public boolean rewind() {
-        if (mind.getFValues().containsKey(this)) {
-            if (mind.getFValues().get(this).size() > 0) {
-                mind.getFValues().get(this).setCurrent(0);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public boolean next() {
-        if (mind.getFValues().containsKey(this)) {
-            if (mind.getFValues().get(this).getCurrent() + 1 < mind.getFValues().get(this).size()) {
-                mind.getFValues().get(this).setCurrent(mind.getFValues().get(this).getCurrent() + 1);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
+	public boolean isCalculable() {
+		return Tools.getTVariables(arguments, true).size() > 0;
+	}
+	
 }

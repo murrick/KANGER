@@ -11,6 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import kanger.exception.*;
+
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
  * <p>
@@ -313,5 +315,17 @@ public class Domain {
 
     public boolean isSystem() {
         return Parser.getOp(predicate.getName()) != null;
+    }
+
+    public int execSystem() {
+        if (isSystem()) {
+            try {
+                return mind.getCalculator().execute(this);
+
+            } catch (RuntimeErrorException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
     }
 }
