@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 // !@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z);
-
 /**
  * Created by murray on 26.05.15.
  */
@@ -28,90 +27,94 @@ public class Analiser {
         this.mind = mind;
     }
 
-    private boolean recurseTree(Tree t, Tree src, List<TVariable> vars, int tIndex, boolean logging) throws RuntimeErrorException {
+    public boolean checkSequence(Tree t, boolean logging) throws RuntimeErrorException {
         boolean result = false;
-        if (tIndex >= vars.size()) {
 
-                List<Domain> sequence = new ArrayList<>();
-                sequence.addAll(t.getSequence());
-                if (src != null) {
-                    sequence.addAll(src.getSequence());
-                }
+        List<Domain> sequence = t.getSequence();
 
+        for (int k = 0; k < sequence.size(); ++k) {
+            Domain a = sequence.get(k);
 
-//            mind.getClosedDimains().clear();
+            if (a.recalculate()) {
+//                a.setQueued(true);
+            }
 
-                for (int k = 0; k < sequence.size(); ++k) {
-                    Domain a = sequence.get(k);
+            if (mind.getCalculator().exists(a.getPredicate())) {
+                try {
+                    int res = mind.getCalculator().execute(a);
 
-                    if (mind.getCalculator().exists(a.getPredicate())) {
-                        try {
-                            int res = mind.getCalculator().execute(a);
-
-                            if ((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
-
-                                result = true;
-
-                                mind.getSolutions().add(a);
-
-                                if (logging) {
-                                    mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
-                                    for (Domain x : sequence) {
-                                        mind.getLog().add(LogMode.ANALIZER, "\t" + x.toString());
-                                    }
-                                    mind.getLog().add(LogMode.ANALIZER, "Сoincidence : ");
-                                    mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
-                                }
-
-                                List<TVariable> list = a.getRight().getTVariables(true);
-                                if (!list.isEmpty()) {
-                                    if (logging) {
-                                        mind.getLog().add(LogMode.ANALIZER, "Values : ");
-                                    }
-                                    for (TVariable tv : list) {
-                                        mind.getValues().add(tv, a);
-                                        if (logging) {
-                                            mind.getLog().add(LogMode.ANALIZER, "\t" + tv.getName() + "=" + tv.getValue());
-                                        }
-                                    }
-                                }
-
-                                if (logging) {
-                                    mind.getLog().add(LogMode.ANALIZER, "===========================================");
-                                }
-
-                                break;
-                            }
-                        } catch (RuntimeErrorException e) {
-                            e.printStackTrace();
-                        }
+                    if ((res == 1 && !a.isAntc()) /*|| (res == 0 && a.isAntc())*/) {
+                        result = true;
+                    } else if (res == 0 && !a.isAntc()) {
+                        result = false;
                     }
 
-                    for (int j = k + 1; j < sequence.size(); ++j) {
-                        Domain b = sequence.get(j);
-                        if (a.getPredicate().getId() == b.getPredicate().getId()
-                                && a.isAntc() != b.isAntc()
-                                && (!a.isDest() || a.getRight().isQuery() || a.isUsed())
-                                && (!b.isDest() || b.getRight().isQuery() || b.isUsed())) {
-                            boolean equals = true;
-                            for (int i = 0; i < a.getPredicate().getRange(); ++i) {
-                                Argument xa = a.getArguments().get(i);
-                                Argument xb = b.getArguments().get(i);
-                                if (!xa.isEmpty() && !xb.isEmpty()
-//                                    && !(xa.isTSet() && xb.isTSet() && xa.getT().getId() == xb.getT().getId())
-//                                    && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
-//                                    && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
-                                        && xa.getValue().getId() == xb.getValue().getId()) {
-                                } else {
-                                    equals = false;
+                    if (res != -1) {
+                        mind.getSolutions().add(a);
+
+                        if (logging) {
+                            mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
+                            for (Domain x : sequence) {
+                                mind.getLog().add(LogMode.ANALIZER, "\t" + x.toString());
+                            }
+                            mind.getLog().add(LogMode.ANALIZER, "Сoincidence : ");
+                            mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
+                        }
+
+                        List<TVariable> list = a.getRight().getTVariables(true);
+                        if (!list.isEmpty()) {
+                            if (logging) {
+                                mind.getLog().add(LogMode.ANALIZER, "Values : ");
+                            }
+                            for (TVariable tv : list) {
+                                mind.getValues().add(tv, a);
+                                if (logging) {
+                                    mind.getLog().add(LogMode.ANALIZER, "\t" + tv.getVarName() + "=" + tv.getValue());
                                 }
                             }
-                            if (equals) {
-                                result = true;
+                        }
 
-                                a.setClosed(true);
-                                b.setClosed(true);
-                                t.setUsed(true);
+                        if (logging) {
+                            mind.getLog().add(LogMode.ANALIZER, "===========================================");
+                        }
+
+                        break;
+                    }
+                } catch (RuntimeErrorException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for (int j = k + 1; j < sequence.size(); ++j) {
+                Domain b = sequence.get(j);
+
+                if (b.recalculate()) {
+//                    b.setQueued(true);
+                }
+
+                if (a.getPredicate().getId() == b.getPredicate().getId()
+                        && a.isAntc() != b.isAntc()
+                        && (!a.isDest() || a.getRight().isQuery() || a.isUsed())
+                        && (!b.isDest() || b.getRight().isQuery() || b.isUsed())) {
+                    boolean equals = true;
+                    for (int i = 0; i < a.getPredicate().getRange(); ++i) {
+                        Argument xa = a.getArguments().get(i);
+                        Argument xb = b.getArguments().get(i);
+                        if (!xa.isEmpty() && !xb.isEmpty()
+                                //                                    && !(xa.isTSet() && xb.isTSet() && xa.getT().getId() == xb.getT().getId())
+                                //                                    && (!xa.isDestFor(b) || a.getRight().isQuery() || b.getRight().isQuery())
+                                //                                    && (!xb.isDestFor(a) || b.getRight().isQuery() || a.getRight().isQuery())
+                                && xa.getValue().getId() == xb.getValue().getId()) {
+                        } else {
+                            equals = false;
+                        }
+                    }
+                    if (equals) {
+                        result = true;
+
+                        a.setClosed(true);
+                        b.setClosed(true);
+                        t.setUsed(true);
 
 //                            if (a.getRight().isQuery()) {
 //                                mind.getSolutions().add(b.toString());
@@ -121,16 +124,15 @@ public class Analiser {
 //                                mind.getSolutions().add(a.toString());
 //                                mind.getSolutions().add(b.toString());
 //                            }
-
-                                if (logging) {
-                                    mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
-                                    for (Domain x : sequence) {
-                                        mind.getLog().add(LogMode.ANALIZER, "\t" + x.toString());
-                                    }
-                                    mind.getLog().add(LogMode.ANALIZER, "Сoincidence : ");
-                                    mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
-                                    mind.getLog().add(LogMode.ANALIZER, "\t" + b.toString());
-                                }
+                        if (logging) {
+                            mind.getLog().add(LogMode.ANALIZER, "Sequence resolved : ");
+                            for (Domain x : sequence) {
+                                mind.getLog().add(LogMode.ANALIZER, "\t" + x.toString());
+                            }
+                            mind.getLog().add(LogMode.ANALIZER, "Сoincidence : ");
+                            mind.getLog().add(LogMode.ANALIZER, "\t" + a.toString());
+                            mind.getLog().add(LogMode.ANALIZER, "\t" + b.toString());
+                        }
 
 //                            List<TVariable> list;
 //                            if (a.getRight().isQuery()) {
@@ -152,59 +154,46 @@ public class Analiser {
 //                                    }
 //                                }
 //                            }
+                        if (logging) {
+                            mind.getLog().add(LogMode.ANALIZER, "===========================================");
+                        }
 
-                                if (logging) {
-                                    mind.getLog().add(LogMode.ANALIZER, "===========================================");
-                                }
-
-                            }
+                    }
 //                    } else {
 //                        if()
 //                        result = false;
 //                        break;
-                        }
-                    }
                 }
+            }
+        }
 
-                if (result) {
-                    for (Domain d : sequence) {
-                        if (!d.isClosed() && !d.isDest() && !d.isSystem()) {
-                            result = false;
-                            if (logging) {
-                                mind.getLog().add(LogMode.ANALIZER, "NOT in condition: " + d.toString());
-                                mind.getLog().add(LogMode.ANALIZER, "===========================================");
-                            }
-
-                        }
+        if (result) {
+            for (Domain d : sequence) {
+//                d.recalculate();
+                if (!d.isClosed() && !d.isDest() && !d.isSystem()) {
+                    result = false;
+                    if (logging) {
+                        mind.getLog().add(LogMode.ANALIZER, "NOT in condition: " + d.toString());
+                        mind.getLog().add(LogMode.ANALIZER, "===========================================");
                     }
-                    if (result) {
-                        t.setClosed(true);
-                        for (Domain d : sequence) {
-                            if (d.isClosed() || d.isDest() || d.isSystem()) {
+
+                }
+            }
+            if (result) {
+                t.setClosed(true);
+                for (Domain d : sequence) {
+
+                    if (d.isClosed() || d.isDest() || d.isSystem()) {
 //                            if (d.getRight().isQuery()) {
-                                int sz = mind.getSolutions().size();
-                                mind.getSolutions().add(d);
+                        int sz = mind.getSolutions().size();
+                        mind.getSolutions().add(d);
 
-                                if (sz != mind.getSolutions().size()) {
-                                    for (TVariable tv : d.getTVariables(true)) {
-                                        mind.getValues().add(tv, d);
-                                    }
-                                }
+                        if (sz != mind.getSolutions().size()) {
+                            for (TVariable tv : d.getTVariables(true)) {
+                                mind.getValues().add(tv, d);
                             }
                         }
                     }
-                }
-        } else {
-            if(vars.get(tIndex).rewind()){
-            do {
-                mind.getSubstituted().add(vars.get(tIndex));
-                if (recurseTree(t, src, vars, tIndex + 1, logging)) {
-                    result = true;
-                }
-            } while (vars.get(tIndex).next());
-            } else {
-                if (recurseTree(t, src, vars, tIndex + 1, logging)) {
-                    result = true;
                 }
             }
         }
@@ -212,37 +201,36 @@ public class Analiser {
         return result;
     }
 
-    public boolean analiseTree(Tree t, Tree src, boolean logging) throws RuntimeErrorException {
-        mind.getClosedDimains().clear();
-		mind.getSubstituted().clear();
-		mind.getCalculated().clear();
-        List<TVariable> vars = t.getTVariables(true);
-        List<Function> fus = t.getFunctions();
-        if (src != null) {
-            for (TVariable tv : src.getTVariables(true)) {
-                if (!vars.contains(tv)) {
-                    vars.add(tv);
+    private boolean recurseTree(Tree t, List<TVariable> vars, int tIndex, boolean logging) throws RuntimeErrorException {
+        boolean result = false;
+        if (tIndex >= vars.size()) {
+
+            result = checkSequence(t, logging);
+
+        } else if (vars.get(tIndex).rewind()) {
+            do {
+                if (logging) {
+                    mind.getLog().add(LogMode.ANALIZER, "ANALISE Value selected: " + vars.get(tIndex).getVarName() + "=" + vars.get(tIndex).getValue());
                 }
-            }
-            for (Function fu : src.getFunctions()) {
-                if (!fus.contains(fu)) {
-                    fus.add(fu);
+                mind.getSubstituted().add(vars.get(tIndex));
+                if (recurseTree(t, vars, tIndex + 1, logging)) {
+                    result = true;
                 }
-            }
+            } while (vars.get(tIndex).next());
+        } else if (recurseTree(t, vars, tIndex + 1, logging)) {
+            result = true;
         }
-        return recurseTree(t, src, vars, 0, logging);
+
+        return result;
     }
 
-    private List<TVariable> getTVariables(List<Domain> domains) {
-        List<TVariable> list = new ArrayList<>();
-        for (Domain d : domains) {
-            for (TVariable t : d.getTVariables(true)) {
-                if (!list.contains(t)) {
-                    list.add(t);
-                }
-            }
-        }
-        return list;
+    public boolean analiseTree(Tree t, boolean logging) throws RuntimeErrorException {
+        mind.getClosedDimains().clear();
+        mind.getSubstituted().clear();
+        mind.getCalculated().clear();
+        mind.getQueuedDomains().clear();
+        List<TVariable> vars = t.getTVariables(true);
+        return recurseTree(t, vars, 0, logging);
     }
 
     public boolean analiser(boolean logging) throws RuntimeErrorException {
@@ -258,7 +246,6 @@ public class Analiser {
 //                return true;
 //        }
 //        return false;
-
         Set<Tree> query = new HashSet<>();
         for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
             if (r.isQuery()) {
@@ -267,12 +254,16 @@ public class Analiser {
         }
 
         for (Tree t = mind.getTrees().getRoot(); t != null; t = t.getNext()) {
-            if (analiseTree(t, null, logging)) {
+            if (analiseTree(t, logging)) {
                 result = true;
             }
             for (Tree x : query) {
-                if (analiseTree(t, x, logging)) {
-                    result = true;
+                if (t.getId() != x.getId()) {
+                    t.getSequence().addAll(x.getSequence());
+                    if (analiseTree(t, logging)) {
+                        result = true;
+                    }
+                    t.getSequence().removeAll(x.getSequence());
                 }
             }
         }
@@ -522,7 +513,6 @@ public class Analiser {
 //                                mind.getDomains().release();
                                 mind.getLinker().link(r, true);
 
-
                                 if (analiser(true)) {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
                                     logResult();
@@ -561,8 +551,21 @@ public class Analiser {
 //                        mind.release();
 //                        analiser();
                         //analiser();
+                        
+                        
+//                                mind.release();
+//                                mind.clearQueryStatus();
+//                                mind.getLinker().link(true);
+                        
+                        
+                        
                         Right r = (Right) mind.compileLine(line);
                         if (r != null) {
+                            
+                            
+//                            Screen.showBase(mind, false, null);
+//                            Screen.showRights(mind, true);
+                            
                             r.setQuery(true);
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                             mind.getLog().add(LogMode.ANALIZER, r);

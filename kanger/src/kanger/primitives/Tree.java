@@ -123,13 +123,17 @@ public class Tree {
         return list;
     }
 
-    public List<Function> getFunctions() {
-        List<Function> list = new ArrayList<>();
+    public void recalculate() throws RuntimeErrorException {
         for(Domain d : sequence) {
-            for(Function t : d.getFunctions()) {
-                if(!list.contains(t)) {
-                    list.add(t);
-                }
+            d.recalculate();
+        }
+    }
+
+    public List<Domain> getSystem() {
+        List<Domain> list = new ArrayList<>();
+        for(Domain d : sequence) {
+            if(d.isSystem()) {
+                list.add(d);
             }
         }
         return list;

@@ -119,31 +119,31 @@ public class Argument {
     }
 
 
-    @Override
-    public boolean equals(Object x) {
-        if (x == null || !(x instanceof Argument)) {
-            return false;
-        } else {
-            Argument a = (Argument) x;
-            if ((o instanceof Term)
-                    && ((o == null && a.o == null)
-                    || (o != null && a.o != null && ((!((Term) o).isCVar() && a.o.equals(o))
-                    || (((Term) o).isCVar() && ((Term) a.o).isCVar()))))) {
-                return true;
-
-            } else if ((o instanceof Function)
-                    && ((o == null && a.o == null) || (o != null && a.o != null && ((Function) a.o).equals(o)))) {
-                return true;
-
-            } else if (o instanceof TVariable
-                    && ((o == null && a.o == null) || (o != null && a.o != null))) {
-                return true;
-
-
-            }
-            return false;
-        }
-    }
+//    @Override
+//    public boolean equals(Object x) {
+//        if (x == null || !(x instanceof Argument)) {
+//            return false;
+//        } else {
+//            Argument a = (Argument) x;
+//            if ((o instanceof Term)
+//                    && ((o == null && a.o == null)
+//                    || (o != null && a.o != null && ((!((Term) o).isCVar() && a.o.equals(o))
+//                    || (((Term) o).isCVar() && ((Term) a.o).isCVar()))))) {
+//                return true;
+//
+//            } else if ((o instanceof Function)
+//                    && ((o == null && a.o == null) || (o != null && a.o != null && ((Function) a.o).equals(o)))) {
+//                return true;
+//
+//            } else if (o instanceof TVariable
+//                    && ((o == null && a.o == null) || (o != null && a.o != null))) {
+//                return true;
+//
+//
+//            }
+//            return false;
+//        }
+//    }
 
     public boolean isDestFor(Domain d) {
 //        return isTSet() && getT().isDestFor(d);
@@ -186,4 +186,8 @@ public class Argument {
 			return !isEmpty();
 		}
 	}
+
+	public boolean isCVar() {
+        return !isEmpty() && getValue().isCVar();
+    }
 }

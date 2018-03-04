@@ -253,14 +253,14 @@ public abstract class Tools {
         return list;
     }
 
-    public static List<Function> getFunctions(List<Argument> arg) {
-        List<Function> list = new ArrayList<>();
-        for (Argument a : arg) {
-            if (a.isFSet() && !list.contains(a.getF())) {
-                list.add(a.getF());
-            }
-        }
-        return list;
-    }
+//    public static List<Function> getFunctions(List<Argument> arg) {
+//        List<Function> list = new ArrayList<>();
+//        for (Argument a : arg) {
+//            if (a.isFSet() && !list.contains(a.getF())) {
+//                list.add(a.getF());
+//            }
+//        }
+//        return list;
+//    }
 
 }

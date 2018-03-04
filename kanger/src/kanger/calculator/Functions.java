@@ -35,11 +35,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
+                    if (arg.get(0).isDefined() && !arg.get(0).isCVar() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _add(arg.get(0).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
-                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(1).isCVar()) {
                         if (!((Function) o).setParameter(0, _sub(arg.get(1).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
@@ -59,11 +59,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
+                    if (arg.get(0).isDefined()  && !arg.get(0).isCVar() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _sub(arg.get(0).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
-                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(1).isCVar()) {
                         if (!((Function) o).setParameter(0, _add(arg.get(1).getValue(), mind.getTerms().add(1)))) {
                             ret = 0;
                         }
@@ -83,11 +83,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
+                    if (arg.get(0).isDefined()  && !arg.get(0).isCVar() && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _bitnot(arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(0).isCVar() ) {
                         if (!((Function) o).setParameter(0, _bitnot(arg.get(1).getValue()))) {
                             ret = 0;
                         }
@@ -107,11 +107,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
+                    if (arg.get(0).isDefined() && !arg.get(0).isCVar()  && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, _neg(arg.get(0).getValue()))) {
                             ret = 0;
                         }
-                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(0).isCVar() ) {
                         if (!((Function) o).setParameter(0, _neg(arg.get(1).getValue()))) {
                             ret = 0;
                         }
@@ -131,11 +131,11 @@ public class Functions {
                 public Object run(Object o) {
                     int ret = 1;
                     List<Argument> arg = ((Function) o).getArguments();
-                    if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
+                    if (arg.get(0).isDefined() && !arg.get(0).isCVar()  && !arg.get(1).isDefined()) {
                         if (!((Function) o).setParameter(1, arg.get(0).getValue())) {
                             ret = 0;
                         }
-                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
+                    } else if (!arg.get(0).isDefined() && arg.get(1).isDefined() && !arg.get(0).isCVar() ) {
                         if (!((Function) o).setParameter(0, arg.get(1).getValue())) {
                             ret = 0;
                         }
@@ -151,6 +151,7 @@ public class Functions {
         }
 
         {
+            //TODO: Далее по тексту - добавить  && !arg.get(0).isCVar()
             put("_add(2)", new SysOp(LibMode.FUNCTION, "_add", 2, new IRunnable() {
                 public Object run(Object o) {
                     int ret = 1;

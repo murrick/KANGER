@@ -125,7 +125,6 @@ public class TVariable {
 //            throw new TValueOutOfOrver(value.toString());
 //        }
 //    }
-
     //    public int getOwner() {
 //        if (mind.getTValues().containsKey(this)) {
 //            return mind.getTValues().get(this).getLevel();
@@ -236,17 +235,20 @@ public class TVariable {
 //        this.p = p;
 //    }
 //
-    @Override
-    public String toString() {
-        String v = ((mind.getDebugLevel() &  Enums.DEBUG_OPTION_VALUES) != 0) ? (isEmpty() ? "" : ":" + getValue().toString()) : "";
+    public String getVarName() {
         switch (mind.getDebugLevel() & 0x00FF) {
             case Enums.DEBUG_LEVEL_INFO:
-                return name + v;
+                return name;
             case Enums.DEBUG_LEVEL_DEBUG:
-                return String.format("%c%d%s", Enums.TVC, id, v);
+                return String.format("%c%d", Enums.TVC, id);
             default:
                 return name;
         }
+    }
+
+    @Override
+    public String toString() {
+        return getVarName() + (((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0) ? (isEmpty() ? "" : ":" + getValue().toString()) : "");
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
@@ -338,5 +340,11 @@ public class TVariable {
 
     public boolean isSubstituted() {
         return mind.getSubstituted().contains(this);
+    }
+
+    public void rollback() {
+        if (mind.getTValues().containsKey(this)) {
+            mind.getTValues().get(this).rollback();
+        }
     }
 }

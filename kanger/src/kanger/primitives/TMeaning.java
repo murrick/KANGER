@@ -26,8 +26,9 @@ public class TMeaning {
         this.value = value;
     }
 
+    @Override
     public String toString() {
-        return variable.getName() + "=" + value.toString();
+        return variable.getVarName() + "=" + value.toString();
     }
 
     public Solution getSolution() {

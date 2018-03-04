@@ -467,9 +467,10 @@ public class Screen {
         }
     }
 
-    private static void showPredRecurse(Mind mind, List<TVariable> tvars, int tIndex, List<Function> fus, int fIndex, Domain d, boolean showCauses) {
+    private static void showPredRecurse(Mind mind, List<TVariable> tvars, int tIndex, Domain d, boolean showCauses) throws RuntimeErrorException {
         if (tIndex >= tvars.size()) {
             if (!d.isDest()) {
+                d.recalculate();
                 System.out.printf("\t%s\n", d.toString());
                 if (showCauses) {
                     showCauses(mind, d, 0);
@@ -477,16 +478,19 @@ public class Screen {
             }
         } else {
             TVariable t = tvars.get(tIndex);
-            t.rewind();
-            do {
+            if(t.rewind()) {
+                do {
 //                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
-                showPredRecurse(mind, tvars, tIndex + 1, fus, fIndex, d, showCauses);
+                    mind.getSubstituted().add(t);
+                    showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);
 //                }
-            } while (t.next());
+                } while (t.next());
+            } else {
+                showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);            }
         }
     }
 
-    public static void showPred(Mind mind, Predicate p, boolean showCauses) {
+    public static void showPred(Mind mind, Predicate p, boolean showCauses) throws RuntimeErrorException {
         System.out.printf("Predicate %s(%d) :\n", p.getName(), p.getRange());
         Set<Domain> set = p.getSolves();
         if (set.isEmpty()) {
@@ -494,7 +498,8 @@ public class Screen {
         } else {
             for (Domain s : set) {
 //                if (!s.isDest()) {
-                showPredRecurse(mind, s.getTVariables(true), 0, s.getFunctions(), 0, s, showCauses);
+                mind.getSubstituted().clear();
+                showPredRecurse(mind, s.getTVariables(true), 0, s, showCauses);
 //                }
             }
         }
@@ -540,7 +545,7 @@ public class Screen {
 //    }
 //
 //
-    public static void showBase(Mind mind, boolean showCauses, String param) {
+    public static void showBase(Mind mind, boolean showCauses, String param) throws RuntimeErrorException {
         for (Predicate p = mind.getPredicates().getRoot(); p != null; p = p.getNext()) {
             if (!p.getSolves().isEmpty() && !mind.getCalculator().exists(p) && (param == null || param.equals(p.getName()))) {
                 showPred(mind, p, showCauses);
@@ -591,14 +596,16 @@ public class Screen {
             }
         }
         for (List<String> v : list) {
-            int len = v.get(0).length();
-            String s = " ";
-            while (s.length() < len) {
-                s += " ";
-            }
-            while (v.size() < depth) {
-                v.add(s);
-            }
+//            if(!v.isEmpty()) {
+                int len = v.get(0).length();
+                String s = " ";
+                while (s.length() < len) {
+                    s += " ";
+                }
+                while (v.size() < depth) {
+                    v.add(s);
+                }
+//            }
         }
         mind.setDebugLevel(save);
         return list;

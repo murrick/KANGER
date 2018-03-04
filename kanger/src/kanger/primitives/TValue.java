@@ -173,4 +173,13 @@ public class TValue {
             }
         }
     }
+
+    public void rollback() {
+        if(values.size() > 0) {
+            values.remove(values.size() -1);
+            if (current >= values.size()) {
+                current = values.size() - 1;
+            }
+        }
+    }
 }

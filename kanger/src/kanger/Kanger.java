@@ -116,7 +116,7 @@ public class Kanger {
 
             mind.compile(
                     "!num(0); "
-                    + "!@x num(x) && x < 10 -> num(++x);");
+                    + "!@x num(x) && x < 3 -> num(++x);");
 
         } catch (ParseErrorException ex) {
             Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);

@@ -223,7 +223,9 @@ public class Function {
             }
         }
         Argument r = range < arguments.size() ? arguments.get(range) : null;
-        return s;// + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0 && r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
+        return s + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0
+        && (((isCalculable() && isCalculated()) || !isCalculable()))
+        && r.getValue() != null ? (" = " + r.getValue()) : "");
     }
 
     //    public void setResult(Term c) {
@@ -248,32 +250,32 @@ public class Function {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !(o instanceof Function)) {
-            return false;
-        } else {
-            Function fo = (Function) o;
-            if (!fo.name.equals(name)) {
-                return false;
-            }
-            if (range != fo.getRange()) {
-                return false;
-            }
-            if (fo.arguments.size() != arguments.size()) {
-                return false;
-            }
-            for (int i = 0; i < arguments.size(); ++i) {
-                if (!fo.arguments.get(i).equals(arguments.get(i))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (o == null || !(o instanceof Function)) {
+//            return false;
+//        } else {
+//            Function fo = (Function) o;
+//            if (!fo.name.equals(name)) {
+//                return false;
+//            }
+//            if (range != fo.getRange()) {
+//                return false;
+//            }
+//            if (fo.arguments.size() != arguments.size()) {
+//                return false;
+//            }
+//            for (int i = 0; i < arguments.size(); ++i) {
+//                if (!fo.arguments.get(i).equals(arguments.get(i))) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
+//    }
 
     public void clearResult() {
-        arguments.get(range).setValue(this,null);
+        setResult(null);
     }
 
     public List<TVariable> getTVariables() {
@@ -281,7 +283,7 @@ public class Function {
     }
 
 	public boolean isCalculated() {
-        return mind.getSubstituted().contains(this);
+        return mind.getCalculated().contains(this);
     }
 
 	public boolean isSubstituted() {

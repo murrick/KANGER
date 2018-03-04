@@ -149,7 +149,7 @@ public class Calculator {
         if (op != null) {
             //if (op.getRange() + 1 > fu.getArguments().size()) {
 //            if(fu.getOwner().isUsed()) {
-                fu.setResult(fu.getResult());
+//                fu.setResult(fu.getResult());
 //            } else {
 //                fu.getArguments().add(new Argument());
 //            }

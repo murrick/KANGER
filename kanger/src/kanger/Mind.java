@@ -42,7 +42,7 @@ public class Mind {
     private final Map<TVariable, TValue> tValues = new HashMap<>();
     private final Map<Domain, Set<Domain>> sources = new HashMap<>();
     private final Map<Domain, Set<Domain>> destinations = new HashMap<>();
-	private final Set<Function> defined = new HashSet<>();
+    private final Set<Function> defined = new HashSet<>();
     private final List<TVariable> substituted = new ArrayList<>();
     private final List<Function> calculated = new ArrayList<>();
 
@@ -68,7 +68,6 @@ public class Mind {
 
 //    private Set<Long> acceptorDomains = new HashSet<>();
 //    private Set<Long> markAcceptor = new HashSet<>();
-
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
@@ -243,7 +242,7 @@ public class Mind {
             compileLine(line);
         }
         linker.link(true);
-        if(analiser.analiser(true)) {
+        if (analiser.analiser(true)) {
             getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
         } else {
             mark();
@@ -518,15 +517,19 @@ public class Mind {
         return closedTrees;
     }
 
+    public Set<Function> getDefined() {
+        return defined;
+    }
 
-	public Set<Function> getDefined() {
-		return defined;
-	}
-	
     public void dropLinks() {
         tValues.clear();
         sources.clear();
         destinations.clear();
+
+        defined.clear();
+        substituted.clear();
+        calculated.clear();
+
     }
 //    public Set<Long> getAcceptorDomains() {
 //        return acceptorDomains;
@@ -571,11 +574,11 @@ public class Mind {
         } else {
             if (tVars.size() > 0) {
                 for (TVariable t : substituted) {
-       
-                        for (Domain d : t.getUsage()) {
-                            set.addAll(d.getPredicate().getRights());
-                        }
-                    
+
+                    for (Domain d : t.getUsage()) {
+                        set.addAll(d.getPredicate().getRights());
+                    }
+
                 }
             }
             for (Function f : calculated) {

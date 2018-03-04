@@ -4,7 +4,6 @@ import kanger.Mind;
 import kanger.Screen;
 import kanger.primitives.LogEntry;
 import kanger.primitives.Right;
-import kanger.primitives.Tree;
 import kanger.enums.LogMode;
 
 import java.util.ArrayList;
@@ -59,6 +58,10 @@ public class LogStore {
         LogEntry log = null;
         log = new LogEntry(m, s);
         root.add(log);
+        
+//        System.out.println(log.getRecord());
+        
+        
         return log;
     }
 

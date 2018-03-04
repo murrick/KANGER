@@ -238,23 +238,24 @@ public class Domain {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof Domain)) {
-            return false;
-        } else {
-            Domain d = (Domain) o;
-            if (!predicate.equals(d.predicate)) {
-                return false;
-            }
-            if (arguments.size() != d.arguments.size()) {
-                return false;
-            }
-            for (int i = 0; i < arguments.size(); ++i) {
-                if (!arguments.get(i).equals(d.arguments.get(i))) {
-                    return false;
-                }
-            }
-            return true;
-        }
+        return o != null && o instanceof Domain && ((Domain) o).getId() == id;
+//        if (o == null || !(o instanceof Domain)) {
+//            return false;
+//        } else {
+//            Domain d = (Domain) o;
+//            if (!predicate.equals(d.predicate)) {
+//                return false;
+//            }
+//            if (arguments.size() != d.arguments.size()) {
+//                return false;
+//            }
+//            for (int i = 0; i < arguments.size(); ++i) {
+//                if (!arguments.get(i).equals(d.arguments.get(i))) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
     }
 
     public boolean contains(TVariable t) {
@@ -296,9 +297,9 @@ public class Domain {
         return Tools.getTVariables(arguments, full);
     }
 
-    public List<Function> getFunctions() {
-        return Tools.getFunctions(arguments);
-    }
+//    public List<Function> getFunctions() {
+//        return Tools.getFunctions(arguments);
+//    }
 
     public boolean isClosed() {
         return mind.getClosedDimains().contains(id);
@@ -327,5 +328,18 @@ public class Domain {
             }
         }
         return -1;
+    }
+
+    public boolean recalculate() throws RuntimeErrorException {
+        boolean occurrs = false;
+        for (Argument a : arguments) {
+            if (a.isFSet() && a.getF().isSubstituted()) {
+                a.getF().clearResult();
+                if (mind.getCalculator().calculate(a.getF()) > 0) {
+                    occurrs = true;
+                }
+            }
+        }
+        return occurrs;
     }
 }
