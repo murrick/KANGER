@@ -5,7 +5,6 @@ import kanger.compiler.SysOp;
 import kanger.enums.DataType;
 import kanger.enums.LibMode;
 import kanger.enums.Tools;
-import kanger.exception.TValueOutOfOrver;
 import kanger.interfaces.IRunnable;
 import kanger.primitives.*;
 

@@ -31,13 +31,21 @@ public class Analiser {
         boolean result = false;
 
         List<Domain> sequence = t.getSequence();
+        
+        for(Domain d : sequence) {
+            d.recalculate();
+        }
 
         for (int k = 0; k < sequence.size(); ++k) {
             Domain a = sequence.get(k);
-
-            if (a.recalculate()) {
-//                a.setQueued(true);
+            
+            if(a.isDest() || !a.getRight().isQuery()) {
+                continue;
             }
+
+//            if (a.recalculate()) {
+//                a.setQueued(true);
+//            }
 
             if (mind.getCalculator().exists(a.getPredicate())) {
                 try {
@@ -88,9 +96,9 @@ public class Analiser {
             for (int j = k + 1; j < sequence.size(); ++j) {
                 Domain b = sequence.get(j);
 
-                if (b.recalculate()) {
+//                if (b.recalculate()) {
 //                    b.setQueued(true);
-                }
+//                }
 
                 if (a.getPredicate().getId() == b.getPredicate().getId()
                         && a.isAntc() != b.isAntc()

@@ -591,7 +591,9 @@ public class Mind {
     public Set<Tree> getActualTrees() {
         Set<Tree> set = new HashSet<>();
         for (Right r : getActualRights()) {
-            set.addAll(r.getTree());
+            if (!r.isQuery()) {
+                set.addAll(r.getTree());
+            }
         }
         return set;
     }

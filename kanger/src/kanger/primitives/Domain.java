@@ -297,9 +297,15 @@ public class Domain {
         return Tools.getTVariables(arguments, full);
     }
 
-//    public List<Function> getFunctions() {
-//        return Tools.getFunctions(arguments);
-//    }
+    public List<Function> getFunctions() {
+        List<Function> list = new ArrayList<>();
+        for(Argument a : arguments) {
+            if(a.isFSet()) {
+                list.add(a.getF());
+            }
+        }
+        return list;
+    }
 
     public boolean isClosed() {
         return mind.getClosedDimains().contains(id);

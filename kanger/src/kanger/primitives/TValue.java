@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class TValue {
 
-    private List<TSubst> values = new ArrayList<>();
+    private final List<TSubst> values = new ArrayList<>();
     private int current = 0;
     private long id = -1;
 
@@ -140,6 +140,7 @@ public class TValue {
         return getValue().toString();
     }
 
+    @Override
     public boolean equals(Object t) {
         return !(t == null || !(t instanceof TValue)) && ((TValue) t).id == id;
     }
@@ -182,4 +183,10 @@ public class TValue {
             }
         }
     }
+
+    public List<TSubst> getValues() {
+        return values;
+    }
+    
+    
 }

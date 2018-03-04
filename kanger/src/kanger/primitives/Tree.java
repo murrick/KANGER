@@ -113,9 +113,9 @@ public class Tree {
 
     public List<TVariable> getTVariables(boolean full) {
         List<TVariable> list = new ArrayList<>();
-        for(Domain d : sequence) {
-            for(TVariable t : d.getTVariables(full)) {
-                if(!list.contains(t)) {
+        for (Domain d : sequence) {
+            for (TVariable t : d.getTVariables(full)) {
+                if (!list.contains(t)) {
                     list.add(t);
                 }
             }
@@ -124,15 +124,15 @@ public class Tree {
     }
 
     public void recalculate() throws RuntimeErrorException {
-        for(Domain d : sequence) {
+        for (Domain d : sequence) {
             d.recalculate();
         }
     }
 
     public List<Domain> getSystem() {
         List<Domain> list = new ArrayList<>();
-        for(Domain d : sequence) {
-            if(d.isSystem()) {
+        for (Domain d : sequence) {
+            if (d.isSystem()) {
                 list.add(d);
             }
         }
@@ -150,6 +150,7 @@ public class Tree {
             mind.getClosedTrees().remove(id);
         }
     }
+
     public boolean isExcluded() {
         return mind.getExcludedTrees().contains(id);
     }
@@ -162,4 +163,11 @@ public class Tree {
         }
     }
 
+    public List<Function> getFunctions() {
+        List<Function> list = new ArrayList<>();
+        for (Domain d : sequence) {
+            list.addAll(d.getFunctions());
+        }
+        return list;
+    }
 }
