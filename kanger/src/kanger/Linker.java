@@ -159,23 +159,23 @@ public class Linker {
 
                     int saved = mind.getSubstituted().size();
 
-                    boolean allowed = true;
-//                    t1.recalculate();
-                    for (Domain d : t1.getSystem()) {
-                        int res = d.execSystem();
-                        if (res == 0 /*|| d.isAntc()*/) {
-                            allowed = false;
-                        }
-                    }
-
-//                    t2.recalculate();
-                    for (Domain d : t2.getSystem()) {
-                        int res = d.execSystem();
-                        if (res == 0 /*|| d.isAntc()*/) {
-                            allowed = false;
-                        }
-                    }
-                    if (allowed) {
+//                    boolean allowed = true;
+////                    t1.recalculate();
+//                    for (Domain d : t1.getSystem()) {
+//                        int res = d.execSystem();
+//                        if (res == 0 /*|| d.isAntc()*/) {
+//                            allowed = false;
+//                        }
+//                    }
+//
+////                    t2.recalculate();
+//                    for (Domain d : t2.getSystem()) {
+//                        int res = d.execSystem();
+//                        if (res == 0 /*|| d.isAntc()*/) {
+//                            allowed = false;
+//                        }
+//                    }
+//                    if (allowed) {
                         for (Domain d1 : t1.getSequence()) {
 
 //                        d1.calcFunctions();
@@ -195,11 +195,12 @@ public class Linker {
 
 //                        d1.calcFunctions();
                         }
-                    }
+//                    }
 
-                    allowed = true;
+                    boolean allowed = true;
+//allowed = true;
 //
-//                    t1.recalculate();
+                    t1.recalculate();
                     for (Domain d : t1.getSystem()) {
                         int res = d.execSystem();
                         if (res == 0 /*|| d.isAntc()*/) {
@@ -207,7 +208,7 @@ public class Linker {
                         }
                     }
 
-//                    t2.recalculate();
+                    t2.recalculate();
                     for (Domain d : t2.getSystem()) {
                         int res = d.execSystem();
                         if (res == 0 /*|| d.isAntc()*/) {

@@ -201,8 +201,8 @@ public class Mind {
         rights.release();
         trees.release();
 
-        dropLinks();
-        clearQueryStatus();
+//        dropLinks();
+//        clearQueryStatus();
     }
 
     public void clearQueryStatus() {

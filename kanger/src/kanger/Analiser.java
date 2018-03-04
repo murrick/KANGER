@@ -290,6 +290,8 @@ public class Analiser {
     private List<Right> killInsertion(Right target, boolean withRelatedRights) {
         int flag = 0;
         mind.release();
+        mind.clearQueryStatus();
+        mind.dropLinks();
         List<Right> rr = new ArrayList<>();
 
         if (mind.getHypotesisStore().size() > 0) {
@@ -363,6 +365,8 @@ public class Analiser {
         mind.getHypotesisStore().reset();
 
         mind.release();
+        mind.clearQueryStatus();
+        mind.dropLinks();
         mind.mark();
 
         //mind.clear();
@@ -390,7 +394,7 @@ public class Analiser {
 //                    mind.getSolutions().reset();
 //                    mind.getValues().reset();
 //                    mind.getSubstitutions().reset();
-                    mind.getLog().reset();
+//                    mind.getLog().reset();
                     mind.getLog().add(LogMode.ANALIZER, "============= ACCEPTING ===================");
 
 //                    mind.release();
@@ -536,6 +540,7 @@ public class Analiser {
                             if (res == null) {
                                 mind.release();
                                 mind.clearQueryStatus();
+                                mind.dropLinks();
                                 mind.getLinker().link(false);
 //                                mind.releaseAcceptors();
                             }
@@ -551,21 +556,15 @@ public class Analiser {
 //                        mind.release();
 //                        analiser();
                         //analiser();
-                        
-                        
 //                                mind.release();
 //                                mind.clearQueryStatus();
 //                                mind.getLinker().link(true);
-                        
-                        
-                        
                         Right r = (Right) mind.compileLine(line);
                         if (r != null) {
-                            
-                            
+
 //                            Screen.showBase(mind, false, null);
 //                            Screen.showRights(mind, true);
-                            
+
                             r.setQuery(true);
                             mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
                             mind.getLog().add(LogMode.ANALIZER, r);
