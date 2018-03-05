@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by murray on 25.05.15.
@@ -15,8 +16,9 @@ import java.util.List;
 public class PredicateFactory {
 
     private Predicate root = null;
-    private Predicate saved = null;
-    private long lastID = 0, saveLastID;
+    private long lastID = 0;
+
+    private Stack<Object[]> stack = new Stack<>();
 
     private Mind mind = null;
 
@@ -63,27 +65,32 @@ public class PredicateFactory {
 
     public void reset() {
         root = null;
-        saved = null;
         lastID = 0;
-        saveLastID = 0;
+        stack.clear();
     }
 
     public void mark() {
-        saved = root;
-        saveLastID = lastID;
+        stack.push(new Object[]{root, lastID});
+    }
+
+    public void commit() {
+        stack.pop();
     }
 
     public void release() {
-        if(root != null && saved != null && root.getId() != saved.getId()) {
-            for (Predicate p = root; p != null; p = p.getNext()) {
-                if (p.getNext() != null && p.getNext().getId() == saved.getId()) {
-                    p.setNext(null);
-                    break;
+        if(!stack.empty()) {
+            Object[] pop = stack.pop();
+            Predicate saved = (Predicate) pop[0];
+            lastID = (long) pop[1];
+            if (root != null && saved != null && root.getId() != saved.getId()) {
+                for (Predicate p = root; p != null; p = p.getNext()) {
+                    if (p.getNext() != null && p.getNext().getId() == saved.getId()) {
+                        p.setNext(null);
+                        break;
+                    }
                 }
             }
         }
-        root = saved;
-        lastID = saveLastID;
     }
 
     public int size() {

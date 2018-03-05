@@ -11,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by murray on 25.05.15.
@@ -18,9 +19,9 @@ import java.util.List;
 public class RightFactory {
 
     private Right root = null;
-    private Right saved = null;
-    private Right current = null;
-    private int lastID = 0, saveLastID;
+    private long lastID = 0;
+
+    private Stack<Object[]> stack = new Stack<>();
 
     private Mind mind = null;
 
@@ -33,7 +34,6 @@ public class RightFactory {
         p.setId(++lastID);
         p.setNext(root);
         root = p;
-        current = p;
         return p;
     }
 
@@ -54,28 +54,10 @@ public class RightFactory {
         root = o;
     }
 
-    public Right getCurrent() {
-        return current;
-    }
-
-    public Right setCurrent(Right c) {
-        current = c;
-        return current;
-//        for(Right r = root; r != null; r = r.getNext()) {
-//            if(r.getId() == (Long)objects[0]) {
-//                current = r;
-//                return r;
-//            }
-//        }
-//        return null;
-    }
-
     public void reset() {
         root = null;
-        saved = null;
-        current = null;
         lastID = 0;
-        saveLastID = 0;
+        stack.clear();
     }
 
 //    public void init() {
@@ -90,21 +72,27 @@ public class RightFactory {
 //    }
 
     public void mark() {
-        saveLastID = lastID;
-        saved = root;
+        stack.push(new Object[]{root, lastID});
+    }
+
+    public void commit() {
+        stack.pop();
     }
 
     public void release() {
-        if(root != null && saved != null && root.getId() != saved.getId()) {
-            for (Right t = root; t != null; t = t.getNext()) {
-                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
-                    t.setNext(null);
-                    break;
+        if (!stack.empty()) {
+            Object[] pop = stack.pop();
+            Right saved = (Right) pop[0];
+            lastID = (long) pop[1];
+            if (root != null && saved != null && root.getId() != saved.getId()) {
+                for (Right t = root; t != null; t = t.getNext()) {
+                    if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                        t.setNext(null);
+                        break;
+                    }
                 }
             }
         }
-        root = saved;
-        lastID = saveLastID;
     }
 
     public int size() {
@@ -116,7 +104,7 @@ public class RightFactory {
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
-        dos.writeInt(lastID);
+        dos.writeLong(lastID);
         dos.writeInt(size());
         for (Right r = root; r != null; r = r.getNext()) {
             r.writeCompiledData(dos);
@@ -124,7 +112,7 @@ public class RightFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
-        lastID = dis.readInt();
+        lastID = dis.readLong();
         int count = dis.readInt();
         root = null;
         Right a = null, b;
@@ -144,7 +132,7 @@ public class RightFactory {
         Tree t = mind.getTrees().add();
         r.getTree().add(t);
         List<Argument> arg = new ArrayList<>();
-        for(Argument a : d.getArguments()) {
+        for (Argument a : d.getArguments()) {
             arg.add(new Argument(a.getValue()));
         }
         t.getSequence().add(mind.getDomains().add(d.getPredicate(), d.isAntc(), arg, r));

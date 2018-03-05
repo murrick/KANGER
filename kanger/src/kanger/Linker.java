@@ -26,9 +26,9 @@ public class Linker {
         this.mind = mind;
     }
 
-    private boolean linkDomains(Domain d1, Domain d2, int level, boolean logging, boolean occurrs) throws RuntimeErrorException {
+    private boolean linkDomains(Domain master, Domain slave, int level, boolean logging, boolean occurrs) throws RuntimeErrorException {
 
-        if (level >= d1.getPredicate().getRange()) {
+        if (level >= master.getPredicate().getRange()) {
 
 //            if (d1.recalculate()) {
 //                occurrs = true;
@@ -37,64 +37,66 @@ public class Linker {
 //                occurrs = true;
 //            }
             if (logging && occurrs) {
-                logComparsion(d1);
-                logComparsion(d2);
+                logComparsion(master);
+//                logComparsion(slave);
                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
             }
-            
+
 
             return true;
 
         } else {
             //ПОДСТАНОВКИ
-            //for (int i = 0; i <= level; ++i) {
+            for (int i = 0; i <= level; ++i) {
 //            int level = level;
 
-            if (d1.get(level).isFSet() && !d2.get(level).isEmpty() && !d1.get(level).getF().isCalculable() && !d1.get(level).getF().isCalculated()) {
-                d1.get(level).getF().setResult(d2.get(level).getValue());
+                if (master.get(level).isFSet() && !slave.get(level).isEmpty() && !master.get(level).getF().isCalculable() && !master.get(level).getF().isCalculated()) {
+                    master.get(level).getF().setResult(slave.get(level).getValue());
 //				d1.setUsed(true);
-                occurrs = true;
-            }
-            if (d2.get(level).isFSet() && !d1.get(level).isEmpty() && !d2.get(level).getF().isCalculable() && !d2.get(level).getF().isCalculated()) {
-                d2.get(level).getF().setResult(d1.get(level).getValue());
-//				d2.setUsed(true);
-                occurrs = true;
-            }
+                    occurrs = true;
+                }
+//                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
+//                    slave.get(level).getF().setResult(master.get(level).getValue());
+////				d2.setUsed(true);
+//                    occurrs = true;
+//                }
 
-            if (d1.get(level).isTSet() && !d2.get(level).isEmpty() && !d2.isDest() && !d1.get(level).getT().contains(d2.get(level).getValue())) {
-                try {
-                    //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
+                if (master.get(level).isTSet() && !slave.get(level).isEmpty() && !slave.isDest() && !master.get(level).getT().contains(slave.get(level).getValue())) {
+                    try {
+                        //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
 //                        if (!d2.isAcceptor() && !d2.getRight().isQuery()) {
 //                            d1.setAcceptor(true);
 //                        }
-                    TSubst s = d1.get(level).getT().setValue(d2.get(level).getValue());
-                    s.setSolves(d1, d2);
-                    d1.setUsed(true);
+                        TValue s = master.get(level).getT().setValue(slave.get(level).getValue());
+                        s.setDstSolve(master);
+                        s.setSrcSolve(slave);
+                        master.setUsed(true);
 //                        d1.setDestFor(d2);
-                    occurrs = true;
+                        occurrs = true;
 
 //                    d1.calcFunctions();
-                    //}
-                } catch (TValueOutOfOrver ex) {
+                        //}
+                    } catch (TValueOutOfOrver ex) {
+                    }
                 }
-            }
-            if (d2.get(level).isTSet() && !d1.get(level).isEmpty() && !d1.isDest() && !d2.get(level).getT().contains(d1.get(level).getValue())) {
-                try {
-                    //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
-//                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
-//                            d2.setAcceptor(true);
-//                        }
-                    TSubst s = d2.get(level).getT().setValue(d1.get(level).getValue());
-                    s.setSolves(d2, d1);
-                    d2.setUsed(true);
-//                        d2.setDestFor(d1);
-                    occurrs = true;
-
-//                    d2.calcFunctions();
-                    //}
-                } catch (TValueOutOfOrver ex) {
-                }
-            }
+//                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
+//                    try {
+//                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
+////                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
+////                            d2.setAcceptor(true);
+////                        }
+//                        TSubst s = slave.get(level).getT().setValue(master.get(level).getValue());
+//                        s.setSrcSolves(master);
+//                        s.setDstSolves(slave);
+//                        slave.setUsed(true);
+////                        d2.setDestFor(d1);
+//                        occurrs = true;
+//
+////                    d2.calcFunctions();
+//                        //}
+//                    } catch (TValueOutOfOrver ex) {
+//                    }
+//                }
 
 ////                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
 ////                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
@@ -116,8 +118,8 @@ public class Linker {
 ////                        return false;
 ////                    }
 //            }
-//            }
-            return linkDomains(d1, d2, level + 1, logging, occurrs);
+            }
+            return linkDomains(master, slave, level + 1, logging, occurrs);
         }
 
     }
@@ -152,37 +154,63 @@ public class Linker {
 //            }
 //        }
 //    }
+
+
     public void recurseLink(List<TVariable> tvars, int tIndex, Right query, Set<Tree> set, boolean logging) throws RuntimeErrorException {
         if (tIndex >= tvars.size()) {
 
-            for (Tree t1 : query == null ? set : query.getTree()) {
+            for (Tree master : set) { //query == null ? set : query.getTree()) {
 
-                for (Tree t2 : set) {
+                if (master.isExcluded()) {
+                    continue;
+                }
+
+                boolean allowed = true;
+//                    t1.recalculate();
+//                for (Domain d : master.getSystem()) {
+//                    int res = d.execSystem();
+//                    if ((res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
+//                        allowed = false;
+//                    }
+//                }
+//
+//                if (!allowed) {
+//                    master.setExcluded(true);
+//                    continue;
+//                }
+//
+
+                for(TVariable t : tvars) {
+                    t.mark();
+                }
+
+                for (Tree slave : set) {
+
+                    if (slave.isExcluded()) {
+                        continue;
+                    }
 
                     int saved = mind.getSubstituted().size();
 
-//                    boolean allowed = true;
-////                    t1.recalculate();
-//                    for (Domain d : t1.getSystem()) {
+//                    allowed = true;
+////
+//////                    t2.recalculate();
+//                    for (Domain d : slave.getSystem()) {
 //                        int res = d.execSystem();
-//                        if (res == 0 /*|| d.isAntc()*/) {
+//                        if ((res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
 //                            allowed = false;
 //                        }
 //                    }
 //
-////                    t2.recalculate();
-//                    for (Domain d : t2.getSystem()) {
-//                        int res = d.execSystem();
-//                        if (res == 0 /*|| d.isAntc()*/) {
-//                            allowed = false;
-//                        }
+//                    if(!allowed) {
+//                        break;
 //                    }
 //                    if (allowed) {
-                    for (Domain d1 : t1.getSequence()) {
+                    for (Domain d1 : master.getSequence()) {
 
 //                        d1.calcFunctions();
 //                        d1.execSystem();
-                        for (Domain d2 : t2.getSequence()) {
+                        for (Domain d2 : slave.getSequence()) {
 
 //                            d2.execSystem();
                             //TODO: Очень сомнительно
@@ -197,35 +225,56 @@ public class Linker {
 
 //                        d1.calcFunctions();
                     }
+
+//                        master.recalculate();
+
 //                    }
 
-                    boolean allowed = true;
+//                    boolean allowed = true;
 //allowed = true;
 //
-                    t1.recalculate();
-                    for (Domain d : t1.getSystem()) {
-                        int res = d.execSystem();
-                        if (res == 0 /*|| d.isAntc()*/) {
-                            allowed = false;
-                        }
-                    }
+//                    for (Domain d : master.getSystem()) {
+//                        int res = d.execSystem();
+//                        if (res == 0) {
+//                            allowed = false;
+//                        }
+//                    }
+//
+//                    slave.recalculate();
+//                    for (Domain d : slave.getSystem()) {
+//                        int res = d.execSystem();
+//                        if (res == 0) {
+//                            allowed = false;
+//                        }
+//                    }
+//
+//                    if (!allowed) {
+//                        while (mind.getSubstituted().size() > saved) {
+//                            TVariable tv = mind.getSubstituted().get(mind.getSubstituted().size() - 1);
+//                            mind.getSubstituted().remove(mind.getSubstituted().size() - 1);
+//                            tv.rollback();
+//                        }
+//                    }
 
-                    t2.recalculate();
-                    for (Domain d : t2.getSystem()) {
-                        int res = d.execSystem();
-                        if (res == 0 /*|| d.isAntc()*/) {
-                            allowed = false;
-                        }
-                    }
+                }
 
-                    if (!allowed) {
-                        while (mind.getSubstituted().size() > saved) {
-                            TVariable tv = mind.getSubstituted().get(mind.getSubstituted().size() - 1);
-                            mind.getSubstituted().remove(mind.getSubstituted().size() - 1);
-                            tv.rollback();
-                        }
+                for (Domain d : master.getSystem()) {
+                    int res = d.execSystem();
+                    if ((res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
+                        allowed = false;
                     }
+                }
 
+                if (!allowed) {
+                    for(TVariable t : tvars) {
+                        t.release();
+                    }
+                    master.setExcluded(true);
+                } else {
+                    for(TVariable t : tvars) {
+                        t.commit();
+                    }
+                    master.recalculate();
                 }
 
             }
@@ -266,6 +315,11 @@ public class Linker {
             mind.clearQueryStatus();
         }
 
+
+//        Screen.showRights(mind, true);
+//        mind.getSubstituted().clear();
+//        mind.getCalculated().clear();
+        mind.getExcludedTrees().clear();
         for (Tree t : set) {
             for (Function f : t.getFunctions()) {
                 if (f.isCalculated()) {
@@ -274,14 +328,9 @@ public class Linker {
             }
         }
 
-//        Screen.showRights(mind, true);
-        mind.getSubstituted().clear();
-        mind.getCalculated().clear();
-
-        mind.getExcludedTrees().clear();
         do {
-//            mind.getSubstituted().clear();
-//            mind.getCalculated().clear();
+            mind.getSubstituted().clear();
+            mind.getCalculated().clear();
 
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
@@ -297,7 +346,6 @@ public class Linker {
 //                    d.calcFunctions();
 //                }
 //            }
-            mind.getCalculated().clear();
 //            for(Tree t : set) {
 //                for(Domain d : t.getSequence()) {
 //                    if(d.execSystem() == 0) {
@@ -306,7 +354,6 @@ public class Linker {
 //                }
 //            }
 
-            mind.getSubstituted().clear();
 
             Set<TVariable> tset = new HashSet<>();
             for (Tree t : set) {
@@ -317,11 +364,11 @@ public class Linker {
 //                }
             }
 
-//            if (r != null) {
-//                for (Tree t : r.getTree()) {
-//                    tset.addAll(t.getTVariables(true));
-//                }
-//            }
+            if (r != null) {
+                for (Tree t : r.getTree()) {
+                    tset.addAll(t.getTVariables(true));
+                }
+            }
             recurseLink(new ArrayList<>(tset), 0, r, set, logging);
 //            for (Tree t: set) {
 //                for (Domain d : t.getSequence()) {
@@ -338,14 +385,14 @@ public class Linker {
 //            }
 
 
-        for (Tree t : set) {
-            for (Function f : t.getFunctions()) {
-                if (f.isCalculated()) {
-                    f.clearResult();
-                    mind.getCalculator().calculate(f);
-                }
-            }
-        }
+//            for (Tree t : set) {
+//                for (Function f : t.getFunctions()) {
+//                    if (f.isCalculated()) {
+//                        f.clearResult();
+//                        mind.getCalculator().calculate(f);
+//                    }
+//                }
+//            }
 
             set = mind.getActualTrees();
         } while (mind.getSubstituted().size() > 0 /*|| mind.getCalculated().size() > 0*/);

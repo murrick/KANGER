@@ -6,6 +6,7 @@ import kanger.primitives.Tree;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  * Created by murray on 25.05.15.
@@ -13,8 +14,9 @@ import java.io.IOException;
 public class TreeFactory {
 
     private Tree root = null;
-    private Tree saved = null;
-    private long lastID = 0, saveLastID;
+    private long lastID = 0;
+
+    private Stack<Object[]> stack = new Stack<>();
 
     private Mind mind = null;
 
@@ -50,27 +52,32 @@ public class TreeFactory {
 
     public void reset() {
         root = null;
-        saved = null;
         lastID = 0;
-        saveLastID = 0;
+        stack.clear();
     }
 
     public void mark() {
-        saved = root;
-        saveLastID = lastID;
+        stack.push(new Object[]{root, lastID});
+    }
+
+    public void commit() {
+        stack.pop();
     }
 
     public void release() {
-        if(root != null && saved != null && root.getId() != saved.getId()) {
-            for (Tree t = root; t != null; t = t.getNext()) {
-                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
-                    t.setNext(null);
-                    break;
+        if (!stack.empty()) {
+            Object[] pop = stack.pop();
+            Tree saved = (Tree) pop[0];
+            lastID = (long) pop[1];
+            if (root != null && saved != null && root.getId() != saved.getId()) {
+                for (Tree t = root; t != null; t = t.getNext()) {
+                    if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                        t.setNext(null);
+                        break;
+                    }
                 }
             }
         }
-        root = saved;
-        lastID = saveLastID;
     }
 
     public int size() {

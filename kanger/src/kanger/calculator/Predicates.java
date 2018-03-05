@@ -2,11 +2,9 @@ package kanger.calculator;
 
 import kanger.compiler.SysOp;
 import kanger.enums.LibMode;
-import kanger.exception.TValueOutOfOrver;
 import kanger.interfaces.IRunnable;
 import kanger.primitives.Argument;
 import kanger.primitives.Domain;
-import kanger.primitives.TSubst;
 
 import java.util.HashMap;
 import java.util.List;

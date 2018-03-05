@@ -323,7 +323,8 @@ public class Analiser {
 //                }
 //            }
 //        }
-        mind.mark();
+
+//        mind.mark();
         return rr;
 
 //        List<Right> todo = new ArrayList<>();
@@ -374,8 +375,8 @@ public class Analiser {
 
         mind.release();
         mind.clearQueryStatus();
-        mind.dropLinks();
-        mind.mark();
+//        mind.dropLinks();
+//        mind.mark();
 
         //mind.clear();
         //mind.release();
@@ -460,7 +461,7 @@ public class Analiser {
                             }
 
                             mind.setChanged(true);
-                            mind.mark();
+                            mind.commit();
                         }
                     }
 //                    }
@@ -518,6 +519,8 @@ public class Analiser {
 
                                 mind.getSolutions().reset();
                                 mind.getValues().reset();
+                                mind.mark();
+
 //                                mind.markAcceptors();
 
 //                                mind.getRights().release();
@@ -548,7 +551,6 @@ public class Analiser {
                             if (res == null) {
                                 mind.release();
                                 mind.clearQueryStatus();
-                                mind.dropLinks();
                                 mind.getLinker().link(false);
 //                                mind.releaseAcceptors();
                             }

@@ -62,8 +62,9 @@ public class Argument {
             o = t;
         } else if (o instanceof TVariable) {
             try {
-                TSubst s = ((TVariable) o).setValue(t);
-                s.setSolves(d, d);
+                TValue s = ((TVariable) o).setValue(t);
+                s.setSrcSolve(d);
+                s.setDstSolve(d);
             } catch (TValueOutOfOrver tValueOutOfOrver) {
                 result = false;
             }
@@ -145,21 +146,21 @@ public class Argument {
 //        }
 //    }
 
-    public boolean isDestFor(Domain d) {
-//        return isTSet() && getT().isDestFor(d);
-        if (isTSet())
-            return getT().isDestFor(d);
-        else if (isFSet()) {
-            for (TVariable t : getF().getTVariables()) {
-                if (t.isDestFor(d)) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            return false;
-        }
-    }
+//    public boolean isDestFor(Domain d) {
+////        return isTSet() && getT().isDestFor(d);
+//        if (isTSet())
+//            return getT().isDestFor(d);
+//        else if (isFSet()) {
+//            for (TVariable t : getF().getTVariables()) {
+//                if (t.isDestFor(d)) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        } else {
+//            return false;
+//        }
+//    }
 
     @Override
     public String toString() {

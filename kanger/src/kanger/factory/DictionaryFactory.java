@@ -7,6 +7,7 @@ import kanger.primitives.Term;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  * Created by murray on 25.05.15.
@@ -14,9 +15,10 @@ import java.io.IOException;
 public class DictionaryFactory {
 
     private Term root = null;
-    private Term saved = null;
-    private long lastID = 0, saveLastID;
-    private int cCvar = 0, saveCcvar;           // Счетчик C-переменных
+    private long lastID = 0;
+    private int cCvar = 0;           // Счетчик C-переменных
+
+    private Stack<Object[]> stack = new Stack<>();
 
     private Mind mind = null;
 
@@ -74,31 +76,34 @@ public class DictionaryFactory {
 
     public void reset() {
         root = null;
-        saved = null;
         lastID = 0;
-        saveLastID = 0;
         cCvar = 0;
-        saveCcvar = 0;
+        stack.clear();
     }
 
     public void mark() {
-        saved = root;
-        saveCcvar = cCvar;
-        saveLastID = lastID;
+        stack.push(new Object[]{root, lastID, cCvar});
+    }
+
+    public void commit() {
+        stack.pop();
     }
 
     public void release() {
-        if(root != null && saved != null && root.getId() != saved.getId()) {
-            for (Term t = root; t != null; t = t.getNext()) {
-                if(t.getNext() != null && t.getNext().getId() == saved.getId()) {
-                    t.setNext(null);
-                    break;
+        if(!stack.empty()) {
+            Object[] pop = stack.pop();
+            Term saved = (Term) pop[0];
+            lastID = (long) pop[1];
+            cCvar = (int) pop[2];
+            if (root != null && saved != null && root.getId() != saved.getId()) {
+                for (Term t = root; t != null; t = t.getNext()) {
+                    if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                        t.setNext(null);
+                        break;
+                    }
                 }
             }
         }
-        root = saved;
-        cCvar = saveCcvar;
-        lastID = saveLastID;
     }
 
     public int size() {
@@ -120,11 +125,11 @@ public class DictionaryFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException, ClassNotFoundException {
+        stack.clear();
         lastID = dis.readLong();
         cCvar = dis.readInt();
         int count = dis.readInt();
         root = null;
-        saved = null;
         Term a = null, b;
         while (count-- > 0) {
             b = new Term(dis, mind);

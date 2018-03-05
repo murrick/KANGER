@@ -1,5 +1,10 @@
 package kanger.primitives;
 
+import kanger.Mind;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -7,107 +12,64 @@ import java.util.*;
  */
 public class TValue {
 
-    private final List<TSubst> values = new ArrayList<>();
-    private int current = 0;
-    private long id = -1;
+    private long id = -1;                   // Идентификатор значения переменной
+    private Term value = null;
+    private Domain srcSolve = null;
+    private Domain dstSolve = null;
 
-    public void setCurrent(int current) {
-        this.current = current;
+    private Right right = null;             // Ссылка на правило
+    private TValue next = null;          // Следующая переменная
+
+    private Mind mind = null;
+
+
+    public TValue(Mind mind) {
+        this.mind = mind;
     }
 
-    public int getCurrent() {
-        return current;
+    public TValue(Term t, Mind mind) {
+        this.mind = mind;
+        this.value = t;
+    }
+
+    public TValue(DataInputStream dis, Mind mind) throws IOException {
+        id = dis.readLong();
+        value = mind.getTerms().get(dis.readLong());
+        srcSolve = mind.getDomains().get(dis.readLong());
+        dstSolve = mind.getDomains().get(dis.readLong());
+        this.mind = mind;
     }
 
     public Term getValue() {
-        return values.isEmpty() ? null : values.get(current).getValue();
+        return value;
     }
 
-//    public TSubst get(int i) {
-//        if (values.isEmpty() || i >= values.size() || i < 0) {
-//            return null;
-//        }
-//        return values.get(i);
-//    }
-//
-//    public TSubst addValue(Term v) {
-//        int i = contains(v);
-//        if (i == -1) {
-//            TSubst s = new TSubst();
-//            s.setValue(v);
-//            values.add(s);
-//            return s;
-//        } else {
-//            return values.get(i);
-//        }
-//    }
-//
-    public TSubst setValue(Term v) {
-        int i = contains(v);
-        if (i == -1) {
-            TSubst s = new TSubst();
-            s.setValue(v);
-            values.add(s);
-            current = values.size() - 1;
-        } else {
-            current = i;
-        }
-        return values.get(current);
+    public void setValue(Term value) {
+        this.value = value;
     }
 
     public Domain getSrcSolve() {
-        if (!values.isEmpty()) {
-            return values.get(current).getSrcSolve();
-        } else {
-            return null;
-        }
+        return srcSolve;
     }
 
-//    public Domain getSrcValue() {
-//        if (!values.isEmpty()) {
-//            return values.get(current).getSrcValue();
-//        } else {
-//            return null;
-//        }
-//    }
+    public void setSrcSolve(Domain srcSolve) {
+        this.srcSolve = srcSolve;
+    }
 
     public Domain getDstSolve() {
-        if (!values.isEmpty()) {
-            return values.get(current).getDstSolve();
-        } else {
-            return null;
-        }
+        return dstSolve;
     }
 
-//    public Domain getDstValue() {
-//        if (!values.isEmpty()) {
-//            return values.get(current).getDstValue();
-//        } else {
-//            return null;
-//        }
-//    }
-
-    public void setSuccess(boolean success) {
-        if (!values.isEmpty()) {
-            values.get(current).setSuccess(success);
-        }
+    public void setDstSolve(Domain dstSolve) {
+        this.dstSolve = dstSolve;
     }
 
-    public boolean isSuccess() {
-        if (!values.isEmpty()) {
-            return values.get(current).isSuccess();
-        } else {
-            return false;
-        }
+    public Right getRight() {
+        return right;
     }
 
-    public int contains(Term v) {
-        for (int i = 0; i < values.size(); ++i) {
-            if (values.get(i).getValue() != null && values.get(i).getValue().equals(v)) {
-                return i;
-            }
-        }
-        return -1;
+    public void setRight(Right right) {
+        this.right = right;
     }
 
     public long getId() {
@@ -118,75 +80,19 @@ public class TValue {
         this.id = id;
     }
 
-    public int size() {
-        return values.size();
+    public TValue getNext() {
+        return next;
     }
 
-    public boolean isDestFor(Domain d) {
-        if (!values.isEmpty()) {
-            for(TSubst t : values) {
-                if(t.getSrcSolve().getId() == d.getId()) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            return false;
-        }
+    public void setNext(TValue next) {
+        this.next = next;
     }
 
-    @Override
-    public String toString() {
-        return getValue().toString();
+    public void writeCompiledData(DataOutputStream dos) throws IOException {
+        dos.writeLong(id);
+        dos.writeLong(value == null ? -1 : value.getId());
+        dos.writeLong(srcSolve == null ? -1 : srcSolve.getId());
+        dos.writeLong(dstSolve == null ? -1 : dstSolve.getId());
     }
 
-    @Override
-    public boolean equals(Object t) {
-        return !(t == null || !(t instanceof TValue)) && ((TValue) t).id == id;
-    }
-
-    public void setDstSolve(Domain d) {
-        if (!values.isEmpty()) {
-            values.get(current).setSolves(d, null);
-        }
-    }
-
-    public void setSrcSolve(Domain d) {
-        if (!values.isEmpty()) {
-            values.get(current).setSolves(null, d);
-        }
-    }
-
-    public void delValue(Domain d) {
-        if (!values.isEmpty()) {
-            for(TSubst s : values) {
-                if(s.getDstSolve().getId() == d.getId()) {
-                    values.remove(s);
-                    break;
-                }
-            }
-
-            if (current > values.size()) {
-                current = values.size() - 1;
-            }
-            if (current < 0) {
-                current = 0;
-            }
-        }
-    }
-
-    public void rollback() {
-        if(values.size() > 0) {
-            values.remove(values.size() -1);
-            if (current >= values.size()) {
-                current = values.size() - 1;
-            }
-        }
-    }
-
-    public List<TSubst> getValues() {
-        return values;
-    }
-    
-    
 }

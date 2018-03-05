@@ -8,6 +8,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
+
 import kanger.primitives.Right;
 
 /**
@@ -16,9 +18,9 @@ import kanger.primitives.Right;
 public class TVariableFactory {
 
     private TVariable root = null;
-    private TVariable saved = null;
-    private int lastID = 0, saveLastID;
-    /* Счетчик T-переменных */
+    private long lastID = 0;
+
+    private Stack<Object[]> stack = new Stack<>();
 
     private Mind mind = null;
 
@@ -65,8 +67,8 @@ public class TVariableFactory {
 
     public void reset() {
         root = null;
-        saved = null;
         lastID = 0;
+        stack.clear();
     }
 
     public void init() {
@@ -74,11 +76,18 @@ public class TVariableFactory {
     }
 
     public void mark() {
-        saved = root;
-        saveLastID = lastID;
+        stack.push(new Object[]{root, lastID});
+    }
+
+    public void commit() {
+        stack.pop();
     }
 
     public void release() {
+        if(!stack.empty()) {
+            Object[] pop = stack.pop();
+            TVariable saved = (TVariable) pop[0];
+            lastID = (long) pop[1];
         if (root != null && saved != null && root.getId() != saved.getId()) {
             for (TVariable t = root; t != null; t = t.getNext()) {
                 if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
@@ -87,8 +96,7 @@ public class TVariableFactory {
                 }
             }
         }
-        root = saved;
-        lastID = saveLastID;
+        }
     }
 
     public int size() {
@@ -100,7 +108,7 @@ public class TVariableFactory {
     }
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
-        dos.writeInt(lastID);
+        dos.writeLong(lastID);
         int sz = size();
         dos.writeInt(sz);
         for (TVariable t = root; t != null; t = t.getNext()) {
@@ -109,7 +117,7 @@ public class TVariableFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
-        lastID = dis.readInt();
+        lastID = dis.readLong();
         int count = dis.readInt();
         TVariable a = null, b;
         root = null;
