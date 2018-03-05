@@ -28,7 +28,7 @@ public class TMeaning {
 
     @Override
     public String toString() {
-        return variable.getVarName() + "=" + value.toString();
+        return variable.getVarName() + (value != null ? "=" + value.toString() : "");
     }
 
     public Solution getSolution() {
@@ -41,6 +41,6 @@ public class TMeaning {
 
     @Override
     public boolean equals(Object o) {
-        return (o instanceof TMeaning) && ((TMeaning) o).getVariable().getId() == variable.getId() && ((TMeaning) o).getValue().getId() == value.getId();
+        return o != null && value != null && (o instanceof TMeaning) && ((TMeaning) o).getVariable().getId() == variable.getId() && ((TMeaning) o).getValue().getId() == value.getId();
     }
 }

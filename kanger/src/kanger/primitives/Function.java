@@ -225,7 +225,7 @@ public class Function {
         Argument r = range < arguments.size() ? arguments.get(range) : null;
         return s + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0
         && (((isCalculable() && isCalculated()) || !isCalculable()))
-        && r.getValue() != null ? (" = " + r.getValue()) : "");
+        && r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
     }
 
     //    public void setResult(Term c) {
