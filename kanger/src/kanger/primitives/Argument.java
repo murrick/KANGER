@@ -178,11 +178,11 @@ public class Argument {
 		if(isTSet()) {
 			return getT().isSubstituted();
 		} else if (isFSet()) {
-			if(getF().isCalculable()) {
-				return getF().isCalculated();
-			} else {
+//			if(getF().isCalculable()) {
+//				return getF().isCalculated();
+//			} else {
 				return getF().getResult() != null;
-			}
+//			}
 		} else {
 			return !isEmpty();
 		}

@@ -147,14 +147,10 @@ public class Calculator {
         String n = fu.getName() + "(" + fu.getRange() + ")";
         SysOp op = functions.getSysOps().get(n) != null ? functions.getSysOps().get(n) : mind.getLibrary().find(n);
         if (op != null) {
-            //if (op.getRange() + 1 > fu.getArguments().size()) {
-//            if(fu.getOwner().isUsed()) {
-//                fu.setResult(fu.getResult());
-//            } else {
-//                fu.getArguments().add(new Argument());
-//            }
 
-            //}
+            if (op.getRange() + 1 > fu.getArguments().size()) {
+                fu.getArguments().add(new Argument());
+            }
             k = (Integer) op.getProc().run(fu);
 //            fu.getArguments().remove(op.getRange());
         }
@@ -184,10 +180,10 @@ public class Calculator {
     }
 
     public SysOp find(Object o) {
-        if(o instanceof Predicate) {
-            String n = ((Predicate)o).getName() + "(" + ((Predicate)o).getRange() + ")";
+        if (o instanceof Predicate) {
+            String n = ((Predicate) o).getName() + "(" + ((Predicate) o).getRange() + ")";
             return predicates.getSysOps().get(n) != null ? predicates.getSysOps().get(n) : mind.getLibrary().find(n);
-        } else if(o instanceof Function) {
+        } else if (o instanceof Function) {
             String n = ((Function) o).getName() + "(" + ((Function) o).getRange() + ")";
             return functions.getSysOps().get(n) != null ? functions.getSysOps().get(n) : mind.getLibrary().find(n);
         } else {

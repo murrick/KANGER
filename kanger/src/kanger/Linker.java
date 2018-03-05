@@ -55,11 +55,11 @@ public class Linker {
 //				d1.setUsed(true);
                     occurrs = true;
                 }
-                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
-                    slave.get(level).getF().setResult(master.get(level).getValue());
-//				d2.setUsed(true);
-                    occurrs = true;
-                }
+//                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
+//                    slave.get(level).getF().setResult(master.get(level).getValue());
+////				d2.setUsed(true);
+//                    occurrs = true;
+//                }
 
                 if (master.get(level).isTSet() && !slave.get(level).isEmpty() && !slave.isDest() && !master.get(level).getT().contains(slave.get(level).getValue())) {
                     try {
@@ -79,24 +79,24 @@ public class Linker {
                     } catch (TValueOutOfOrver ex) {
                     }
                 }
-                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
-                    try {
-                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
-//                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
-//                            d2.setAcceptor(true);
-//                        }
-                        TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
-                        s.setSrcSolve(master);
-                        s.setDstSolve(slave);
-                        slave.setUsed(true);
-//                        d2.setDestFor(d1);
-                        occurrs = true;
-
-//                    d2.calcFunctions();
-                        //}
-                    } catch (TValueOutOfOrver ex) {
-                    }
-                }
+//                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
+//                    try {
+//                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
+////                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
+////                            d2.setAcceptor(true);
+////                        }
+//                        TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
+//                        s.setSrcSolve(master);
+//                        s.setDstSolve(slave);
+//                        slave.setUsed(true);
+////                        d2.setDestFor(d1);
+//                        occurrs = true;
+//
+////                    d2.calcFunctions();
+//                        //}
+//                    } catch (TValueOutOfOrver ex) {
+//                    }
+//                }
 
 ////                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
 ////                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
@@ -165,7 +165,7 @@ public class Linker {
                     continue;
                 }
 
-//                    t1.recalculate();
+//                    master.recalculate();
 //                for (Domain d : master.getSystem()) {
 //                    int res = d.execSystem();
 //                    if ((res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
@@ -398,6 +398,7 @@ public class Linker {
 //                }
 //            }
 
+            set = mind.getActualTrees();
             set = mind.getActualTrees();
 
         } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);

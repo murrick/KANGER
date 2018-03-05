@@ -130,7 +130,7 @@ public class Domain {
     public List<Domain> getCauses() {
         List<Domain> list = new ArrayList<>();
         for (TVariable t : getTVariables(true)) {
-            if (t.getDstSolve().getId() == id && t.getSrcSolve().getId() != id) {
+            if (t.getDstSolve() != null && t.getSrcSolve() != null && t.getDstSolve().getId() == id && t.getSrcSolve().getId() != id) {
                 list.add(t.getSrcSolve());
             }
         }
@@ -339,8 +339,8 @@ public class Domain {
     public boolean recalculate() throws RuntimeErrorException {
         boolean occurrs = false;
         for (Argument a : arguments) {
-            if (a.isFSet() && a.getF().isSubstituted()) {
-                a.getF().clearResult();
+            if (a.isFSet() /*&& a.getF().isSubstituted()*/) {
+//                a.getF().clearResult();
                 if (mind.getCalculator().calculate(a.getF()) > 0) {
                     occurrs = true;
                 }

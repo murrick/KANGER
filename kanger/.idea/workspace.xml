@@ -3,9 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="4d378ebb-e889-4573-8a06-af13aa70b62e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Function.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Function.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Solution.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Solution.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/TMeaning.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/TMeaning.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/Kanger.java" afterPath="$PROJECT_DIR$/src/kanger/Kanger.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/Linker.java" afterPath="$PROJECT_DIR$/src/kanger/Linker.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/Mind.java" afterPath="$PROJECT_DIR$/src/kanger/Mind.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" afterPath="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,75 +23,49 @@
       <file leaf-file-name="Linker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+            <state relative-caret-position="163">
+              <caret line="279" column="0" lean-forward="false" selection-start-line="279" selection-start-column="0" selection-end-line="279" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Function.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Function.java">
+      <file leaf-file-name="Screen.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/Screen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="227" column="45" lean-forward="false" selection-start-line="227" selection-start-column="45" selection-end-line="227" selection-end-column="45" />
+            <state relative-caret-position="298">
+              <caret line="510" column="19" lean-forward="true" selection-start-line="510" selection-start-column="19" selection-end-line="510" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Solution.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Solution.java">
+      <file leaf-file-name="Tree.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
+            <state relative-caret-position="193">
+              <caret line="127" column="19" lean-forward="false" selection-start-line="127" selection-start-column="19" selection-end-line="127" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TMeaning.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TMeaning.java">
+      <file leaf-file-name="Domain.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Domain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="31" column="5" lean-forward="true" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
-              <folding>
-                <element signature="e#600#601#0" expanded="true" />
-                <element signature="e#692#693#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="163">
+              <caret line="132" column="67" lean-forward="false" selection-start-line="132" selection-start-column="67" selection-end-line="132" selection-end-column="67" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TVariable.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TVariable.java">
+      <file leaf-file-name="Functions.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Functions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4095">
-              <caret line="299" column="0" lean-forward="false" selection-start-line="299" selection-start-column="0" selection-end-line="299" selection-end-column="0" />
-              <folding>
-                <element signature="e#3718#3719#0" expanded="true" />
-                <element signature="e#3745#3746#0" expanded="true" />
-                <element signature="e#6553#6554#0" expanded="true" />
-                <element signature="e#6645#6646#0" expanded="true" />
-                <element signature="e#8630#8631#0" expanded="true" />
-                <element signature="e#8689#8690#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TValueFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/factory/TValueFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1710">
-              <caret line="128" column="0" lean-forward="false" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-              <folding>
-                <element signature="e#1217#1218#0" expanded="true" />
-                <element signature="e#1252#1253#0" expanded="true" />
-                <element signature="e#2312#2313#0" expanded="true" />
-                <element signature="e#2336#2337#0" expanded="true" />
-                <element signature="e#2596#2597#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="88">
+              <caret line="227" column="32" lean-forward="true" selection-start-line="227" selection-start-column="32" selection-end-line="227" selection-end-column="32" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -96,11 +73,12 @@
       <file leaf-file-name="Mind.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1335">
-              <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+            <state relative-caret-position="295">
+              <caret line="609" column="0" lean-forward="false" selection-start-line="609" selection-start-column="0" selection-end-line="609" selection-end-column="0" />
               <folding>
                 <element signature="e#4366#4367#0" expanded="true" />
                 <element signature="e#4394#4395#0" expanded="true" />
+                <element signature="e#4733#4734#0" expanded="true" />
                 <element signature="e#4763#4764#0" expanded="true" />
                 <element signature="e#5401#5402#0" expanded="true" />
                 <element signature="e#5430#5431#0" expanded="true" />
@@ -108,8 +86,18 @@
                 <element signature="e#15655#15656#0" expanded="true" />
                 <element signature="e#15776#15777#0" expanded="true" />
                 <element signature="e#15812#15813#0" expanded="true" />
-                <marker date="1520251505253" expanded="true" signature="16729:16765" ph="{...}" />
+                <marker date="1520260829154" expanded="true" signature="16733:16769" ph="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Argument.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Argument.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -117,28 +105,28 @@
       <file leaf-file-name="Analiser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3375">
-              <caret line="237" column="37" lean-forward="false" selection-start-line="237" selection-start-column="37" selection-end-line="237" selection-end-column="37" />
+            <state relative-caret-position="373">
+              <caret line="572" column="0" lean-forward="false" selection-start-line="572" selection-start-column="0" selection-end-line="572" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TreeFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/factory/TreeFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1170">
-              <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Kanger.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Kanger.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/kanger/Kanger.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1755">
-              <caret line="121" column="42" lean-forward="false" selection-start-line="121" selection-start-column="42" selection-end-line="121" selection-end-column="42" />
+            <state relative-caret-position="400">
+              <caret line="138" column="0" lean-forward="true" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Calculator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Calculator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="328">
+              <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -226,12 +214,9 @@
         <option value="$PROJECT_DIR$/src/kanger/calculator/Predicates.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/TSubst.java" />
         <option value="$PROJECT_DIR$/src/kanger/enums/Tools.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Tree.java" />
         <option value="$PROJECT_DIR$/src/kanger/Screen.java" />
-        <option value="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/TValue.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
         <option value="$PROJECT_DIR$/src/kanger/stores/HypotesesStore.java" />
         <option value="$PROJECT_DIR$/src/kanger/stores/LogStore.java" />
         <option value="$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java" />
@@ -239,7 +224,6 @@
         <option value="$PROJECT_DIR$/src/kanger/calculator/Functions.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/TVariable.java" />
         <option value="$PROJECT_DIR$/src/kanger/Analiser.java" />
-        <option value="$PROJECT_DIR$/src/kanger/Mind.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/TValueFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/TVariableFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/DictionaryFactory.java" />
@@ -247,11 +231,15 @@
         <option value="$PROJECT_DIR$/src/kanger/factory/PredicateFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/RightFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/TreeFactory.java" />
-        <option value="$PROJECT_DIR$/src/kanger/Kanger.java" />
-        <option value="$PROJECT_DIR$/src/kanger/Linker.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Function.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Solution.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/TMeaning.java" />
+        <option value="$PROJECT_DIR$/src/kanger/Kanger.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Function.java" />
+        <option value="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
+        <option value="$PROJECT_DIR$/src/kanger/Linker.java" />
+        <option value="$PROJECT_DIR$/src/kanger/Mind.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
       </list>
     </option>
   </component>
@@ -580,7 +568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1520255766612</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Периодические бои за функции. Все глючит - 2">
+      <created>1520257352773</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1520257352773</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -608,7 +603,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19477054" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19477054" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -645,7 +640,8 @@
     <MESSAGE value="ЭЭЭЭ... ЫЫЫЫ..." />
     <MESSAGE value="Периодические бои за функции" />
     <MESSAGE value="Периодические бои за функции. Все глючит" />
-    <option name="LAST_COMMIT_MESSAGE" value="Периодические бои за функции. Все глючит" />
+    <MESSAGE value="Периодические бои за функции. Все глючит - 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Периодические бои за функции. Все глючит - 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -670,8 +666,26 @@
           <properties />
           <option name="timeStamp" value="93" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/kanger/calculator/Functions.java</url>
+          <line>158</line>
+          <properties />
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/kanger/calculator/Functions.java</url>
+          <line>214</line>
+          <properties />
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/kanger/Analiser.java</url>
+          <line>572</line>
+          <properties />
+          <option name="timeStamp" value="106" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="97" />
+      <option name="time" value="107" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -721,6 +735,21 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>arg.get(0).isDefined()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arg.get(2).isDefined()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arg.get(1).isDefined()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>parameters.get(i)</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -747,21 +776,6 @@
       </expression>
       <expression>
         <expression-string>d2.get(i).getValue()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((Function) d).getArguments().get(1)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((Function) d).getArguments().get(1).isEmpty()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>isEmpty(o, 1)</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -832,8 +846,8 @@
         <state relative-caret-position="1315">
           <caret line="149" column="0" lean-forward="false" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
           <folding>
-            <element signature="e#5115#5116#0" expanded="false" />
-            <element signature="e#5171#5172#0" expanded="false" />
+            <element signature="e#5123#5124#0" expanded="false" />
+            <element signature="e#5179#5180#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -845,6 +859,7 @@
           <folding>
             <element signature="e#4366#4367#0" expanded="true" />
             <element signature="e#4394#4395#0" expanded="true" />
+            <element signature="e#4733#4734#0" expanded="true" />
             <element signature="e#4763#4764#0" expanded="true" />
             <element signature="e#5401#5402#0" expanded="true" />
             <element signature="e#5430#5431#0" expanded="true" />
@@ -852,7 +867,7 @@
             <element signature="e#15655#15656#0" expanded="true" />
             <element signature="e#15776#15777#0" expanded="true" />
             <element signature="e#15812#15813#0" expanded="true" />
-            <marker date="1520251505253" expanded="true" signature="16729:16765" ph="{...}" />
+            <marker date="1520260829154" expanded="true" signature="16733:16769" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -888,6 +903,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="533" column="19" lean-forward="false" selection-start-line="533" selection-start-column="19" selection-end-line="533" selection-end-column="19" />
+          <folding>
+            <element signature="e#21334#21335#0" expanded="false" />
+            <element signature="e#21366#21367#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -957,31 +976,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Calculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2205">
-          <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
-          <folding>
-            <element signature="e#8154#8155#0" expanded="false" />
-            <element signature="e#8195#8196#0" expanded="false" />
-            <element signature="e#8240#8241#0" expanded="false" />
-            <element signature="e#8292#8293#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Predicates.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="23" column="9" lean-forward="false" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Tree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1000,28 +998,6 @@
         <state relative-caret-position="345">
           <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Domain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1590">
-          <caret line="152" column="0" lean-forward="false" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
-          <folding>
-            <element signature="e#8612#8613#0" expanded="false" />
-            <element signature="e#8671#8672#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Argument.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="66" column="33" lean-forward="true" selection-start-line="66" selection-start-column="33" selection-end-line="66" selection-end-column="33" />
-          <folding>
-            <element signature="e#5115#5116#0" expanded="false" />
-            <element signature="e#5171#5172#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1109,22 +1085,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Functions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Screen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="495" column="28" lean-forward="true" selection-start-line="495" selection-start-column="28" selection-end-line="495" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/factory/DictionaryFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
@@ -1176,46 +1136,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3375">
-          <caret line="237" column="37" lean-forward="false" selection-start-line="237" selection-start-column="37" selection-end-line="237" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/factory/TreeFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1170">
           <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Kanger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1755">
-          <caret line="121" column="42" lean-forward="false" selection-start-line="121" selection-start-column="42" selection-end-line="121" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-          <folding>
-            <element signature="e#4366#4367#0" expanded="true" />
-            <element signature="e#4394#4395#0" expanded="true" />
-            <element signature="e#4763#4764#0" expanded="true" />
-            <element signature="e#5401#5402#0" expanded="true" />
-            <element signature="e#5430#5431#0" expanded="true" />
-            <element signature="e#15621#15622#0" expanded="true" />
-            <element signature="e#15655#15656#0" expanded="true" />
-            <element signature="e#15776#15777#0" expanded="true" />
-            <element signature="e#15812#15813#0" expanded="true" />
-            <marker date="1520251505253" expanded="true" signature="16729:16765" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1248,22 +1173,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Linker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Function.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="227" column="45" lean-forward="false" selection-start-line="227" selection-start-column="45" selection-end-line="227" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Solution.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
@@ -1274,12 +1183,115 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TMeaning.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="31" column="5" lean-forward="true" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
+        <state relative-caret-position="250">
+          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding>
             <element signature="e#600#601#0" expanded="true" />
             <element signature="e#692#693#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Function.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="102" column="46" lean-forward="true" selection-start-line="102" selection-start-column="46" selection-end-line="102" selection-end-column="46" />
+          <folding>
+            <element signature="e#2396#2397#0" expanded="true" />
+            <element signature="e#2428#2429#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Tree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="127" column="19" lean-forward="false" selection-start-line="127" selection-start-column="19" selection-end-line="127" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Calculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Argument.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="609" column="0" lean-forward="false" selection-start-line="609" selection-start-column="0" selection-end-line="609" selection-end-column="0" />
+          <folding>
+            <element signature="e#4366#4367#0" expanded="true" />
+            <element signature="e#4394#4395#0" expanded="true" />
+            <element signature="e#4733#4734#0" expanded="true" />
+            <element signature="e#4763#4764#0" expanded="true" />
+            <element signature="e#5401#5402#0" expanded="true" />
+            <element signature="e#5430#5431#0" expanded="true" />
+            <element signature="e#15621#15622#0" expanded="true" />
+            <element signature="e#15655#15656#0" expanded="true" />
+            <element signature="e#15776#15777#0" expanded="true" />
+            <element signature="e#15812#15813#0" expanded="true" />
+            <marker date="1520260829154" expanded="true" signature="16733:16769" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="572" column="0" lean-forward="false" selection-start-line="572" selection-start-column="0" selection-end-line="572" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Functions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="227" column="32" lean-forward="true" selection-start-line="227" selection-start-column="32" selection-end-line="227" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Linker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="279" column="0" lean-forward="false" selection-start-line="279" selection-start-column="0" selection-end-line="279" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Domain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="132" column="67" lean-forward="false" selection-start-line="132" selection-start-column="67" selection-end-line="132" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Screen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="510" column="19" lean-forward="true" selection-start-line="510" selection-start-column="19" selection-end-line="510" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Kanger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="138" column="0" lean-forward="true" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
