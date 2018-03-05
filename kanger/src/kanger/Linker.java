@@ -38,7 +38,7 @@ public class Linker {
 //            }
             if (logging && occurrs) {
                 logComparsion(master);
-//                logComparsion(slave);
+                logComparsion(slave);
                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
             }
 
@@ -55,11 +55,12 @@ public class Linker {
 //				d1.setUsed(true);
                     occurrs = true;
                 }
-//                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
-//                    slave.get(level).getF().setResult(master.get(level).getValue());
-////				d2.setUsed(true);
-//                    occurrs = true;
-//                }
+                
+                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
+                    slave.get(level).getF().setResult(master.get(level).getValue());
+//				d2.setUsed(true);
+                    occurrs = true;
+                }
 
                 if (master.get(level).isTSet() && !slave.get(level).isEmpty() && !slave.isDest() && !master.get(level).getT().contains(slave.get(level).getValue())) {
                     try {
@@ -79,24 +80,25 @@ public class Linker {
                     } catch (TValueOutOfOrver ex) {
                     }
                 }
-//                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
-//                    try {
-//                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
-////                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
-////                            d2.setAcceptor(true);
-////                        }
-//                        TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
-//                        s.setSrcSolve(master);
-//                        s.setDstSolve(slave);
-//                        slave.setUsed(true);
-////                        d2.setDestFor(d1);
-//                        occurrs = true;
-//
-////                    d2.calcFunctions();
-//                        //}
-//                    } catch (TValueOutOfOrver ex) {
-//                    }
-//                }
+                
+                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
+                    try {
+                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
+//                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
+//                            d2.setAcceptor(true);
+//                        }
+                        TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
+                        s.setSrcSolve(master);
+                        s.setDstSolve(slave);
+                        slave.setUsed(true);
+//                        d2.setDestFor(d1);
+                        occurrs = true;
+
+//                    d2.calcFunctions();
+                        //}
+                    } catch (TValueOutOfOrver ex) {
+                    }
+                }
 
 ////                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
 ////                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
@@ -287,9 +289,9 @@ public class Linker {
             TVariable t = tvars.get(tIndex);
             if (t.rewind()) {
                 do {
-                    if (logging) {
-                        mind.getLog().add(LogMode.ANALIZER, "LINK Value selected: " + t.getVarName() + "=" + t.getValue());
-                    }
+//                    if (logging) {
+//                        mind.getLog().add(LogMode.ANALIZER, "LINK Value selected: " + t.getVarName() + "=" + t.getValue());
+//                    }
                     recurseLink(tvars, tIndex + 1, query, set, logging);
                 } while (t.next());
             } else {
@@ -352,6 +354,9 @@ public class Linker {
         do {
             mind.getSubstituted().clear();
             mind.getCalculated().clear();
+            
+                        set = mind.getActualTrees();
+
 
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
@@ -398,7 +403,6 @@ public class Linker {
 //                }
 //            }
 
-            set = mind.getActualTrees();
             set = mind.getActualTrees();
 
         } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);

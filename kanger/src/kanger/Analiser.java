@@ -39,9 +39,9 @@ public class Analiser {
         for (int k = 0; k < sequence.size(); ++k) {
             Domain a = sequence.get(k);
             
-            if(a.isDest() || !a.getRight().isQuery()) {
-                continue;
-            }
+//            if(a.isDest() || !a.getRight().isQuery()) {
+//                continue;
+//            }
 
 //            if (a.recalculate()) {
 //                a.setQueued(true);
@@ -217,9 +217,9 @@ public class Analiser {
 
         } else if (vars.get(tIndex).rewind()) {
             do {
-                if (logging) {
-                    mind.getLog().add(LogMode.ANALIZER, "ANALISE Value selected: " + vars.get(tIndex).getVarName() + "=" + vars.get(tIndex).getValue());
-                }
+//                if (logging) {
+//                    mind.getLog().add(LogMode.ANALIZER, "ANALISE Value selected: " + vars.get(tIndex).getVarName() + "=" + vars.get(tIndex).getValue());
+//                }
                 mind.getSubstituted().add(vars.get(tIndex));
                 if (recurseTree(t, vars, tIndex + 1, logging)) {
                     result = true;

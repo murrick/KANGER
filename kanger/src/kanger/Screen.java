@@ -358,31 +358,31 @@ public class Screen {
     public static void showHelp() {
         System.out.printf(
                 "Available KEYWORDS:\n\n"
-                        + "   HELP    - Get this message\n"
-                        + "\n"
-                        + "   ?       - Check for Rights Collisions\n"
-                        + "   BASE    - View DataBase contents\n"
-                        + "   RIGHTS  - View compiled-structured Rights list\n"
-                        + "   FUNCS   - View defined Functions list\n"
-                        + "   KILL    - Remove right\n"
-                        + "   LIST    - View Hypotheses list after last work\n"
-                        + "   INSERT  - Insert Hypotheses as right\n"
-                        + "   AGAIN   - Repeat last question\n"
-                        + "   XPLAIN  - Show explanation log\n"
-                        + "   SOLVES  - Show solves list\n"
-                        + "   VALUES  - Show values list\n"
-                        //                        + "   TEXT    - Show source text\n"
-                        + "   CLEAR   - Clear workspace\n"
-                        //                        + "   ERASE   - Clear all working memory\n"
-                        + "\n"
-                        //                        + "   PUT     - Save Source file\n"
-                        + "   GET     - Load Source file from disk\n"
-                        + "   ZIP     - Save compiled code\n"
-                        + "   UNZIP   - Load compiled code from file\n"
-                        + "\n"
-                        + "   QUIT    - Quit KANGER\n"
-                        + "\n"
-                        + "You can use just FIRST letter of keywords.\n"
+                + "   HELP    - Get this message\n"
+                + "\n"
+                + "   ?       - Check for Rights Collisions\n"
+                + "   BASE    - View DataBase contents\n"
+                + "   RIGHTS  - View compiled-structured Rights list\n"
+                + "   FUNCS   - View defined Functions list\n"
+                + "   KILL    - Remove right\n"
+                + "   LIST    - View Hypotheses list after last work\n"
+                + "   INSERT  - Insert Hypotheses as right\n"
+                + "   AGAIN   - Repeat last question\n"
+                + "   XPLAIN  - Show explanation log\n"
+                + "   SOLVES  - Show solves list\n"
+                + "   VALUES  - Show values list\n"
+                //                        + "   TEXT    - Show source text\n"
+                + "   CLEAR   - Clear workspace\n"
+                //                        + "   ERASE   - Clear all working memory\n"
+                + "\n"
+                //                        + "   PUT     - Save Source file\n"
+                + "   GET     - Load Source file from disk\n"
+                + "   ZIP     - Save compiled code\n"
+                + "   UNZIP   - Load compiled code from file\n"
+                + "\n"
+                + "   QUIT    - Quit KANGER\n"
+                + "\n"
+                + "You can use just FIRST letter of keywords.\n"
         );
     }
 
@@ -478,15 +478,16 @@ public class Screen {
             }
         } else {
             TVariable t = tvars.get(tIndex);
-            if(t.rewind()) {
+            if (t.rewind()) {
                 do {
-//                if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
-                    mind.getSubstituted().add(t);
-                    showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);
-//                }
+                    if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
+                        mind.getSubstituted().add(t);
+                        showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);
+                    }
                 } while (t.next());
             } else {
-                showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);            }
+                showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);
+            }
         }
     }
 
@@ -497,10 +498,10 @@ public class Screen {
             System.out.printf("\tHas not solves\n");
         } else {
             for (Domain s : set) {
-//                if (!s.isDest()) {
-                mind.getSubstituted().clear();
-                showPredRecurse(mind, s.getTVariables(true), 0, s, showCauses);
-//                }
+                if (!s.isDest()) {
+                    mind.getSubstituted().clear();
+                    showPredRecurse(mind, s.getTVariables(true), 0, s, showCauses);
+                }
             }
         }
     }
@@ -576,9 +577,7 @@ public class Screen {
         int depth = 0;
         for (Tree t : r.getTree()) {
             List<String> v = new ArrayList<>();
-            if (t.isClosed() || t.isClosed()) {
-                v.add((t.isClosed() ? "C" : "") + (t.isUsed() ? "U" : ""));
-            }
+            v.add((t.isClosed() ? "C" : "") + (t.isUsed() ? "U" : ""));
             list.add(v);
             int len = 0;
             for (Domain d : t.getSequence()) {
@@ -597,14 +596,14 @@ public class Screen {
         }
         for (List<String> v : list) {
 //            if(!v.isEmpty()) {
-                int len = v.get(0).length();
-                String s = " ";
-                while (s.length() < len) {
-                    s += " ";
-                }
-                while (v.size() < depth) {
-                    v.add(s);
-                }
+            int len = v.get(0).length();
+            String s = " ";
+            while (s.length() < len) {
+                s += " ";
+            }
+            while (v.size() < depth) {
+                v.add(s);
+            }
 //            }
         }
         mind.setDebugLevel(save);

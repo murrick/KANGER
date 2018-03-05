@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="4d378ebb-e889-4573-8a06-af13aa70b62e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/Kanger.java" afterPath="$PROJECT_DIR$/src/kanger/Kanger.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/Linker.java" afterPath="$PROJECT_DIR$/src/kanger/Linker.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/Mind.java" afterPath="$PROJECT_DIR$/src/kanger/Mind.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" afterPath="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -575,7 +569,14 @@
       <option name="project" value="LOCAL" />
       <updated>1520257352773</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Периодические бои за функции. Все глючит - 3. Уравнение с 2-мя неизвестными решил">
+      <created>1520261419296</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1520261419296</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -589,6 +590,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="32" y="0" width="1922" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -641,7 +643,8 @@
     <MESSAGE value="Периодические бои за функции" />
     <MESSAGE value="Периодические бои за функции. Все глючит" />
     <MESSAGE value="Периодические бои за функции. Все глючит - 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Периодические бои за функции. Все глючит - 2" />
+    <MESSAGE value="Периодические бои за функции. Все глючит - 3. Уравнение с 2-мя неизвестными решил" />
+    <option name="LAST_COMMIT_MESSAGE" value="Периодические бои за функции. Все глючит - 3. Уравнение с 2-мя неизвестными решил" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

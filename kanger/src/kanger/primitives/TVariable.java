@@ -164,7 +164,7 @@ public class TVariable {
 //
     public Domain getDstSolve() {
         if (mind.getTValues().containsKey(this) && !mind.getTValues().get(this).isEmpty()) {
-            return mind.getTValues().get(this).get().getSrcSolve();
+            return mind.getTValues().get(this).get().getDstSolve();
         } else {
             return null;
         }

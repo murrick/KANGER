@@ -284,7 +284,7 @@ public class Domain {
 
     public boolean isDest() {
         for (TVariable t : getTVariables(false)) {
-            if (!t.isEmpty() && t.getDstSolve().getId() == id) {
+            if (!t.isEmpty() && /*contains(t)) {*/ t.getDstSolve().getId() == id) {
                 return true;
             }
         }

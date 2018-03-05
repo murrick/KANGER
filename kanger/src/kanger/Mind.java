@@ -237,7 +237,7 @@ public class Mind {
         solves.clear();
         values.clear();
         hypoteses.clear();
-        log.clear();
+//        log.clear();
 
     }
 
@@ -250,7 +250,7 @@ public class Mind {
         trees.clear();
 
         hypoteses.clear();
-        log.clear();
+//        log.clear();
         solves.clear();
         values.clear();
 
@@ -606,8 +606,9 @@ public class Mind {
 
     public Set<Tree> getActualTrees() {
         Set<Tree> set = new HashSet<>();
-        for (Right r : getActualRights()) {
+//        for (Right r : getActualRights()) {
 //            if (!r.isQuery()) {
+for(Right r = getRights().getRoot(); r != null; r=r.getNext()) {
                 set.addAll(r.getTree());
 //            }
         }
