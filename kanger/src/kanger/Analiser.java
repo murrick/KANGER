@@ -297,9 +297,10 @@ public class Analiser {
     //    ///////////////////////////////
     private List<Right> killInsertion(Right target, boolean withRelatedRights) {
         int flag = 0;
-        mind.release();
+        mind.reset();
         mind.clearQueryStatus();
-        mind.dropLinks();
+        mind.clearLinks();
+
         List<Right> rr = new ArrayList<>();
 
         if (mind.getHypotesisStore().size() > 0) {
@@ -368,14 +369,14 @@ public class Analiser {
         mind.getSolutions().enable(!testMode);
         mind.getLog().enable(!testMode);
 
-        mind.getLog().reset();
-        mind.getSolutions().reset();
-        mind.getValues().reset();
-        mind.getHypotesisStore().reset();
+        mind.getLog().clear();
+        mind.getSolutions().clear();
+        mind.getValues().clear();
+        mind.getHypotesisStore().clear();
 
-        mind.release();
+        mind.reset();
         mind.clearQueryStatus();
-//        mind.dropLinks();
+//        mind.clearLinks();
 //        mind.mark();
 
         //mind.clear();
@@ -501,7 +502,7 @@ public class Analiser {
 //                        mind.release();
 //                        mind.mark();
 //                        isHypotheses = true;
-                        mind.getLog().reset();
+                        mind.getLog().clear();
                         if (!DEBUG_DISABLE_FALSE_CHECK) {
 
                             mind.getLog().add(LogMode.ANALIZER, "============= FALSE CHECKING ==============");
@@ -517,9 +518,9 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, r);
                                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
-                                mind.getSolutions().reset();
-                                mind.getValues().reset();
-                                mind.mark();
+                                mind.getSolutions().clear();
+                                mind.getValues().clear();
+                                mind.getHypotesisStore().clear();
 
 //                                mind.markAcceptors();
 
@@ -549,7 +550,7 @@ public class Analiser {
                             }
 
                             if (res == null) {
-                                mind.release();
+                                mind.reset();
                                 mind.clearQueryStatus();
                                 mind.getLinker().link(false);
 //                                mind.releaseAcceptors();
@@ -580,8 +581,10 @@ public class Analiser {
                             mind.getLog().add(LogMode.ANALIZER, r);
                             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
-                            mind.getSolutions().reset();
-                            mind.getValues().reset();
+                            mind.getSolutions().clear();
+                            mind.getValues().clear();
+                            mind.getHypotesisStore().clear();
+
 //                            mind.getRights().release();
 //                            mind.getTrees().release();
 //                            mind.getDomains().release();

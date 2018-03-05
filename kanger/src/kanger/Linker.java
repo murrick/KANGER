@@ -55,11 +55,11 @@ public class Linker {
 //				d1.setUsed(true);
                     occurrs = true;
                 }
-//                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
-//                    slave.get(level).getF().setResult(master.get(level).getValue());
-////				d2.setUsed(true);
-//                    occurrs = true;
-//                }
+                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
+                    slave.get(level).getF().setResult(master.get(level).getValue());
+//				d2.setUsed(true);
+                    occurrs = true;
+                }
 
                 if (master.get(level).isTSet() && !slave.get(level).isEmpty() && !slave.isDest() && !master.get(level).getT().contains(slave.get(level).getValue())) {
                     try {
@@ -79,24 +79,24 @@ public class Linker {
                     } catch (TValueOutOfOrver ex) {
                     }
                 }
-//                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
-//                    try {
-//                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
-////                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
-////                            d2.setAcceptor(true);
-////                        }
-//                        TSubst s = slave.get(level).getT().setValue(master.get(level).getValue());
-//                        s.setSrcSolves(master);
-//                        s.setDstSolves(slave);
-//                        slave.setUsed(true);
-////                        d2.setDestFor(d1);
-//                        occurrs = true;
-//
-////                    d2.calcFunctions();
-//                        //}
-//                    } catch (TValueOutOfOrver ex) {
-//                    }
-//                }
+                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
+                    try {
+                        //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
+//                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
+//                            d2.setAcceptor(true);
+//                        }
+                        TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
+                        s.setSrcSolve(master);
+                        s.setDstSolve(slave);
+                        slave.setUsed(true);
+//                        d2.setDestFor(d1);
+                        occurrs = true;
+
+//                    d2.calcFunctions();
+                        //}
+                    } catch (TValueOutOfOrver ex) {
+                    }
+                }
 
 ////                } else if (d1.get(i).isTSet() && d2.get(i).isTSet() && d1.get(i).isEmpty() && d2.get(i).isEmpty()) {
 ////                    //TODO: Спорный момент - генерация временной переменной при сравнении двух пустых t-переменных
@@ -165,7 +165,6 @@ public class Linker {
                     continue;
                 }
 
-                boolean allowed = true;
 //                    t1.recalculate();
 //                for (Domain d : master.getSystem()) {
 //                    int res = d.execSystem();
@@ -180,17 +179,18 @@ public class Linker {
 //                }
 //
 
-                for(TVariable t : tvars) {
-                    t.mark();
-                }
+//                for (TVariable t : tvars) {
+//                    t.mark();
+//                }
 
+//                boolean occurrs = false;
                 for (Tree slave : set) {
 
-                    if (slave.isExcluded()) {
+                    if (slave.isExcluded() /*|| (slave.getTVariables(true).isEmpty() && master.getTVariables(true).isEmpty())*/) {
                         continue;
                     }
 
-                    int saved = mind.getSubstituted().size();
+//                    int saved = mind.getSubstituted().size();
 
 //                    allowed = true;
 ////
@@ -217,6 +217,7 @@ public class Linker {
                             if (d1.getId() != d2.getId()) {
                                 if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
                                     linkDomains(d1, d2, 0, logging, false);
+//                                    occurrs = true;
                                 }
                             }
 
@@ -258,6 +259,8 @@ public class Linker {
 
                 }
 
+//                if(occurrs) {
+                boolean allowed = true;
                 for (Domain d : master.getSystem()) {
                     int res = d.execSystem();
                     if ((res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
@@ -266,16 +269,17 @@ public class Linker {
                 }
 
                 if (!allowed) {
-                    for(TVariable t : tvars) {
-                        t.release();
-                    }
+//                    for (TVariable t : tvars) {
+//                        t.release();
+//                    }
                     master.setExcluded(true);
                 } else {
-                    for(TVariable t : tvars) {
-                        t.commit();
-                    }
+//                    for (TVariable t : tvars) {
+//                        t.commit();
+//                    }
                     master.recalculate();
                 }
+//                }
 
             }
 
@@ -295,7 +299,7 @@ public class Linker {
     }
 
     public void link(boolean logging) throws RuntimeErrorException {
-        mind.dropLinks();
+        mind.clearLinks();
         link(null, logging);
     }
 
@@ -309,24 +313,41 @@ public class Linker {
         Set<Tree> set;
         if (r == null) {
             set = mind.getActualTrees();
+//            mind.reset();
             //функции!
         } else {
             set = r.getActualTrees();
-            mind.clearQueryStatus();
+//            mind.clearQueryStatus();
         }
 
 
 //        Screen.showRights(mind, true);
 //        mind.getSubstituted().clear();
 //        mind.getCalculated().clear();
+
+        mind.clearQueryStatus();
         mind.getExcludedTrees().clear();
-        for (Tree t : set) {
-            for (Function f : t.getFunctions()) {
-                if (f.isCalculated()) {
-                    f.clearResult();
-                }
-            }
-        }
+
+//        for (Tree t : set) {
+//            for (Function f : t.getFunctions()) {
+//                if (f.isCalculated()) {
+//                    f.clearResult();
+//                }
+//            }
+//
+////            for (TVariable tv : t.getTVariables(true)) {
+////                tv.clear();
+////            }
+//        }
+
+//        if (r != null) {
+//            for (Tree t : r.getTree()) {
+//                for (TVariable tv : t.getTVariables(true)) {
+//                    tv.clear();
+//                }
+//            }
+//        }
+
 
         do {
             mind.getSubstituted().clear();
@@ -335,25 +356,6 @@ public class Linker {
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
             }
-
-//            for (Tree t: set) {
-//                for (Domain d : t.getSequence()) {
-//                    d.execSystem();
-//                }
-//            }
-//            for (Tree t: set) {
-//                for (Domain d : t.getSequence()) {
-//                    d.calcFunctions();
-//                }
-//            }
-//            for(Tree t : set) {
-//                for(Domain d : t.getSequence()) {
-//                    if(d.execSystem() == 0) {
-//                        t.setExcluded(true);
-//                    }
-//                }
-//            }
-
 
             Set<TVariable> tset = new HashSet<>();
             for (Tree t : set) {
@@ -364,11 +366,13 @@ public class Linker {
 //                }
             }
 
-            if (r != null) {
-                for (Tree t : r.getTree()) {
-                    tset.addAll(t.getTVariables(true));
-                }
-            }
+//            if (r != null) {
+//                for (Tree t : r.getTree()) {
+//                    tset.addAll(t.getTVariables(true));
+//                }
+//            }
+
+
             recurseLink(new ArrayList<>(tset), 0, r, set, logging);
 //            for (Tree t: set) {
 //                for (Domain d : t.getSequence()) {
@@ -395,7 +399,8 @@ public class Linker {
 //            }
 
             set = mind.getActualTrees();
-        } while (mind.getSubstituted().size() > 0 /*|| mind.getCalculated().size() > 0*/);
+
+        } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 
     }
 

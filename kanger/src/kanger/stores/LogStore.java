@@ -102,7 +102,7 @@ public class LogStore {
         }
     }
 
-    public void reset() {
+    public void clear() {
         if (enableLogging) {
             root = null;
         }

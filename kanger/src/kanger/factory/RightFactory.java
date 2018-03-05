@@ -27,6 +27,7 @@ public class RightFactory {
 
     public RightFactory(Mind mind) {
         this.mind = mind;
+        reset();
     }
 
     public Right add() {
@@ -55,9 +56,17 @@ public class RightFactory {
     }
 
     public void reset() {
+        while(stack.size() > 1) {
+            stack.pop();
+        }
+        release();
+    }
+
+    public void clear() {
         root = null;
         lastID = 0;
         stack.clear();
+        mark();
     }
 
 //    public void init() {
@@ -76,7 +85,8 @@ public class RightFactory {
     }
 
     public void commit() {
-        stack.pop();
+        stack.clear();
+        mark();
     }
 
     public void release() {
@@ -92,6 +102,10 @@ public class RightFactory {
                     }
                 }
             }
+            root = saved;
+        }
+        if(stack.isEmpty()) {
+            mark();
         }
     }
 
@@ -112,9 +126,9 @@ public class RightFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
+        clear();
         lastID = dis.readLong();
         int count = dis.readInt();
-        root = null;
         Right a = null, b;
         while (count-- > 0) {
             b = new Right(dis, mind);

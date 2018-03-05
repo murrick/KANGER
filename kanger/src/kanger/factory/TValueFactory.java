@@ -25,6 +25,7 @@ public class TValueFactory {
 
     public TValueFactory(Mind mind) {
         this.mind = mind;
+        reset();
     }
 
     public TValue add(Term o) {
@@ -85,7 +86,7 @@ public class TValueFactory {
 
     public TValue find(Term v) {
         for (TValue t = root; t != null; t = t.getNext()) {
-            if (t.getId() == v.getId()) {
+            if (t.getValue().getId() == v.getId()) {
                 return t;
             }
         }
@@ -110,9 +111,17 @@ public class TValueFactory {
     }
 
     public void reset() {
+        while(stack.size() > 1) {
+            stack.pop();
+        }
+        release();
+    }
+
+    public void clear() {
         root = null;
         lastID = 0;
         stack.clear();
+        mark();
     }
 
     public void mark() {
@@ -121,7 +130,8 @@ public class TValueFactory {
 
 
     public void commit() {
-        stack.pop();
+        stack.clear();
+        mark();
     }
 
     public void release() {
@@ -137,6 +147,10 @@ public class TValueFactory {
                     }
                 }
             }
+            root = saved;
+        }
+        if(stack.isEmpty()) {
+            mark();
         }
     }
 
@@ -158,9 +172,7 @@ public class TValueFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException, ClassNotFoundException {
-        root = null;
-        stack.clear();
-
+        clear();
         lastID = dis.readLong();
         int count = dis.readInt();
         TValue a = null, b;

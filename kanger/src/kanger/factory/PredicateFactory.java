@@ -24,6 +24,7 @@ public class PredicateFactory {
 
     public PredicateFactory(Mind mind) {
         this.mind = mind;
+        reset();
     }
 
     public Predicate add(String line, int range) {
@@ -64,9 +65,17 @@ public class PredicateFactory {
     }
 
     public void reset() {
+        while(stack.size() > 1) {
+            stack.pop();
+        }
+        release();
+    }
+
+    public void clear() {
         root = null;
         lastID = 0;
         stack.clear();
+        mark();
     }
 
     public void mark() {
@@ -74,7 +83,8 @@ public class PredicateFactory {
     }
 
     public void commit() {
-        stack.pop();
+        stack.clear();
+        mark();
     }
 
     public void release() {
@@ -90,6 +100,10 @@ public class PredicateFactory {
                     }
                 }
             }
+            root = saved;
+        }
+        if(stack.isEmpty()) {
+            mark();
         }
     }
 
@@ -126,9 +140,9 @@ public class PredicateFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
+        clear();
         lastID = dis.readLong();
         int count = dis.readInt();
-        root = null;
         Predicate a = null, b;
         while (count-- > 0) {
             b = new Predicate(dis, mind);

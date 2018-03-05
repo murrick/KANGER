@@ -301,6 +301,12 @@ public class TVariable {
         }
     }
 
+    public void clear() {
+        if (mind.getTValues().containsKey(this)) {
+            mind.getTValues().remove(this);
+        }
+    }
+
     public boolean isSubstituted() {
         return mind.getSubstituted().contains(this);
     }

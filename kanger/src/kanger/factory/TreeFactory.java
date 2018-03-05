@@ -22,6 +22,7 @@ public class TreeFactory {
 
     public TreeFactory(Mind mind) {
         this.mind = mind;
+        reset();
     }
 
     public Tree add() {
@@ -51,9 +52,17 @@ public class TreeFactory {
     }
 
     public void reset() {
+        while(stack.size() > 1) {
+            stack.pop();
+        }
+        release();
+    }
+
+    public void clear() {
         root = null;
         lastID = 0;
         stack.clear();
+        mark();
     }
 
     public void mark() {
@@ -61,7 +70,8 @@ public class TreeFactory {
     }
 
     public void commit() {
-        stack.pop();
+        stack.clear();
+        mark();
     }
 
     public void release() {
@@ -77,6 +87,10 @@ public class TreeFactory {
                     }
                 }
             }
+            root = saved;
+        }
+        if(stack.isEmpty()) {
+            mark();
         }
     }
 
@@ -97,9 +111,9 @@ public class TreeFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
+        clear();
         lastID = dis.readLong();
         int count = dis.readInt();
-        root = null;
         Tree a = null, b;
         while (count-- > 0) {
             b = new Tree(dis, mind);

@@ -57,7 +57,7 @@ public class SolutionsStore {
         return root;
     }
 
-    public void reset() {
+    public void clear() {
         if (enableStore) {
             root = null;
         }

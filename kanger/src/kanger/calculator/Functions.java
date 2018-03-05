@@ -45,6 +45,7 @@ public class Functions {
                     } else if (arg.get(0).isDefined() && arg.get(1).isDefined() && _add(arg.get(0).getValue(), mind.getTerms().add(1)).compareTo(arg.get(1).getValue()) == 0) {
                         ret = 2;
                     } else {
+
 //                        arg.get(1).delValue(((Function) o).getOwner());
                         ret = 0;
                     }

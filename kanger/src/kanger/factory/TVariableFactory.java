@@ -26,6 +26,7 @@ public class TVariableFactory {
 
     public TVariableFactory(Mind mind) {
         this.mind = mind;
+        reset();
     }
 
     public TVariable add() {
@@ -66,13 +67,17 @@ public class TVariableFactory {
     }
 
     public void reset() {
+        while(stack.size() > 1) {
+            stack.pop();
+        }
+        release();
+    }
+
+    public void clear() {
         root = null;
         lastID = 0;
         stack.clear();
-    }
-
-    public void init() {
-        mind.getTValues().clear();
+        mark();
     }
 
     public void mark() {
@@ -80,22 +85,30 @@ public class TVariableFactory {
     }
 
     public void commit() {
-        stack.pop();
+        stack.clear();
+        mark();
     }
 
     public void release() {
-        if(!stack.empty()) {
+        if (!stack.empty()) {
             Object[] pop = stack.pop();
             TVariable saved = (TVariable) pop[0];
             lastID = (long) pop[1];
-        if (root != null && saved != null && root.getId() != saved.getId()) {
-            for (TVariable t = root; t != null; t = t.getNext()) {
-                if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
-                    t.setNext(null);
-                    break;
+            if (root != null && saved != null && root.getId() != saved.getId()) {
+                for (TVariable t = root; t != null; t = t.getNext()) {
+                    if (mind.getTValues().containsKey(t)) {
+                        mind.getTValues().remove(t);
+                    }
+                    if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
+                        t.setNext(null);
+                        break;
+                    }
                 }
             }
+            root = saved;
         }
+        if(stack.isEmpty()) {
+            mark();
         }
     }
 
@@ -117,10 +130,10 @@ public class TVariableFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException {
+        clear();
         lastID = dis.readLong();
         int count = dis.readInt();
         TVariable a = null, b;
-        root = null;
         while (count-- > 0) {
             b = new TVariable(dis, mind);
             if (a == null) {

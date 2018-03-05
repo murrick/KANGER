@@ -24,6 +24,7 @@ public class DictionaryFactory {
 
     public DictionaryFactory(Mind mind) {
         this.mind = mind;
+        reset();
     }
 
     public Term add(Object o) {
@@ -75,10 +76,10 @@ public class DictionaryFactory {
     }
 
     public void reset() {
-        root = null;
-        lastID = 0;
-        cCvar = 0;
-        stack.clear();
+        while(stack.size() > 1) {
+            stack.pop();
+        }
+        release();
     }
 
     public void mark() {
@@ -86,7 +87,8 @@ public class DictionaryFactory {
     }
 
     public void commit() {
-        stack.pop();
+        stack.clear();
+        mark();
     }
 
     public void release() {
@@ -103,6 +105,10 @@ public class DictionaryFactory {
                     }
                 }
             }
+            root = saved;
+        }
+        if(stack.empty()) {
+            mark();
         }
     }
 
@@ -125,11 +131,10 @@ public class DictionaryFactory {
     }
 
     public void readCompiledData(DataInputStream dis) throws IOException, ClassNotFoundException {
-        stack.clear();
+        clear();
         lastID = dis.readLong();
         cCvar = dis.readInt();
         int count = dis.readInt();
-        root = null;
         Term a = null, b;
         while (count-- > 0) {
             b = new Term(dis, mind);
@@ -142,4 +147,11 @@ public class DictionaryFactory {
         }
     }
 
+    public void clear() {
+        root = null;
+        lastID = 0;
+        cCvar = 0;
+        stack.clear();
+        mark();
+    }
 }

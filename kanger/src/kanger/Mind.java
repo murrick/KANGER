@@ -37,14 +37,14 @@ public class Mind {
     private final LogStore log = new LogStore(this);                                      // Протокол вывода
     private final SolutionsStore solves = new SolutionsStore(this);                             // Список пешений
     private final ValuesStore values = new ValuesStore(this);                             // Список величин
+
     private final LibraryStore library = new LibraryStore(this);
 
     private final Map<TVariable, TValueFactory> tValues = new HashMap<>();
     private final Map<Domain, Set<Domain>> sources = new HashMap<>();
     private final Map<Domain, Set<Domain>> destinations = new HashMap<>();
-    private final Set<Function> defined = new HashSet<>();
-    private final Set<TVariable> substituted = new HashSet<>();
-    private final Set<Function> calculated = new HashSet<>();
+    private final List<TVariable> substituted = new ArrayList<>();
+    private final List<Function> calculated = new ArrayList<>();
 
     private final Calculator calculator = new Calculator(this);
     private final Analiser analiser = new Analiser(this);
@@ -148,16 +148,8 @@ public class Mind {
     }
 
     public void clearSavedResults() {
-        solves.reset();
-        values.reset();
-    }
-
-    public void resetPerm() {
-        terms.reset();
-        predicates.reset();
-        tVars.reset();
-        domains.reset();
-        rights.reset();
+        solves.clear();
+        values.clear();
     }
 
     public boolean isChanged() {
@@ -210,8 +202,17 @@ public class Mind {
         rights.release();
         trees.release();
 
-//        dropLinks();
+//        clearLinks();
 //        clearQueryStatus();
+    }
+
+    public void clearLinks() {
+        tValues.clear();
+        sources.clear();
+        destinations.clear();
+        substituted.clear();
+        calculated.clear();
+
     }
 
     public void clearQueryStatus() {
@@ -225,26 +226,42 @@ public class Mind {
 //        destinations.clear();
     }
 
-    public void clear() throws ParseErrorException {
+    public void reset() {
         terms.reset();
         predicates.reset();
         domains.reset();
         tVars.reset();
         rights.reset();
+        trees.reset();
 
-        solves.reset();
-        values.reset();
-
-        hypoteses.reset();
-        log.reset();
+        solves.clear();
+        values.clear();
+        hypoteses.clear();
+        log.clear();
 
     }
+
+    public void clear() {
+        terms.clear();
+        predicates.clear();
+        domains.clear();
+        tVars.clear();
+        rights.clear();
+        trees.clear();
+
+        hypoteses.clear();
+        log.clear();
+        solves.clear();
+        values.clear();
+
+    }
+
 
     public void compile(String src) throws ParseErrorException, RuntimeErrorException {
 
         int pos = 0;
         Object[] t = null;
-        release();
+        reset();
         while ((t = Tools.extractLine(src, pos)) != null) {
             pos = (int) t[1];
             String line = (String) t[0];
@@ -254,7 +271,7 @@ public class Mind {
         if (analiser.analiser(true)) {
             getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
         } else {
-            mark();
+            commit();
         }
     }
 
@@ -392,7 +409,7 @@ public class Mind {
     }
 
     public void removeInsertionRight(Right r) {
-        release();
+        reset();
 
         removeTVarRecords(r);
         removeCVarRecords(r);
@@ -526,20 +543,10 @@ public class Mind {
         return closedTrees;
     }
 
-    public Set<Function> getDefined() {
-        return defined;
-    }
+//    public Set<Function> getDefined() {
+//        return defined;
+//    }
 
-    public void dropLinks() {
-        tValues.clear();
-        sources.clear();
-        destinations.clear();
-
-        defined.clear();
-        substituted.clear();
-        calculated.clear();
-
-    }
 //    public Set<Long> getAcceptorDomains() {
 //        return acceptorDomains;
 //    }
@@ -562,11 +569,11 @@ public class Mind {
         return activeRights;
     }
 
-    public Set<TVariable> getSubstituted() {
+    public List<TVariable> getSubstituted() {
         return substituted;
     }
 
-    public Set<Function> getCalculated() {
+    public List<Function> getCalculated() {
         return calculated;
     }
 

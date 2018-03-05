@@ -59,7 +59,7 @@ public class ValuesStore {
         return root;
     }
 
-    public void reset() {
+    public void clear() {
         if(enableStore) {
             root = null;
         }
