@@ -26,7 +26,7 @@ public class Linker {
         this.mind = mind;
     }
 
-    private boolean linkDomains(Domain master, Domain slave, int level, boolean logging, boolean occurrs) throws RuntimeErrorException {
+    private boolean linkDomains(Domain master, Domain slave, int level, boolean logging, boolean occurrs) {
 
         if (level >= master.getPredicate().getRange()) {
 
@@ -62,7 +62,10 @@ public class Linker {
                     occurrs = true;
                 }
 
-                if (master.get(level).isTSet() && !slave.get(level).isEmpty() && !slave.isDest() && !master.get(level).getT().contains(slave.get(level).getValue())) {
+                if (master.get(level).isTSet() && !slave.get(level).isEmpty() && (!slave.isDest() || slave.getRight().isQuery())
+//                        && !currentTargets.contains(master)
+//                && (master.get(level).isEmpty() || master.get(level).getValue().getId() != slave.get(level).getValue().getId())
+                    && !master.get(level).getT().contains(slave.get(level).getValue())) {
                     try {
                         //ВАЖНО! Для обработкаи запроса не помечаем уже имеющиеся предикаты
 //                        if (!d2.isAcceptor() && !d2.getRight().isQuery()) {
@@ -81,7 +84,10 @@ public class Linker {
                     }
                 }
                 
-                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && !master.isDest() && !slave.get(level).getT().contains(master.get(level).getValue())) {
+                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && (!master.isDest() || master.getRight().isQuery())
+//                    && !currentTargets.contains(slave)
+//                        && (slave.get(level).isEmpty() || slave.get(level).getValue().getId() != master.get(level).getValue().getId())
+                    && !slave.get(level).getT().contains(master.get(level).getValue())) {
                     try {
                         //ВАЖНО! Для обработки запроса не помечаем уже имеющиеся предикаты
 //                        if (!d1.isAcceptor() && !d1.getRight().isQuery()) {
@@ -161,6 +167,7 @@ public class Linker {
     public void recurseLink(List<TVariable> tvars, int tIndex, Right query, Set<Tree> set, boolean logging) throws RuntimeErrorException {
         if (tIndex >= tvars.size()) {
 
+
             for (Tree master : set) { //query == null ? set : query.getTree()) {
 
                 if (master.isExcluded()) {
@@ -208,6 +215,8 @@ public class Linker {
 //                        break;
 //                    }
 //                    if (allowed) {
+
+
                     for (Domain d1 : master.getSequence()) {
 
 //                        d1.calcFunctions();
@@ -218,6 +227,12 @@ public class Linker {
                             //TODO: Очень сомнительно
                             if (d1.getId() != d2.getId()) {
                                 if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
+
+//                                    if(d1.getRight().isQuery() || d2.getRight().isQuery()) {
+//                                        System.out.println("!");
+//                                    }
+
+
                                     linkDomains(d1, d2, 0, logging, false);
 //                                    occurrs = true;
                                 }
@@ -312,6 +327,11 @@ public class Linker {
 //            mind.getTValues().clear();
 //        }
 
+        mind.clearQueryStatus();
+        mind.getExcludedTrees().clear();
+        mind.getSubstituted().clear();
+        mind.getCalculated().clear();
+
         Set<Tree> set;
         if (r == null) {
             set = mind.getActualTrees();
@@ -327,8 +347,8 @@ public class Linker {
 //        mind.getSubstituted().clear();
 //        mind.getCalculated().clear();
 
-        mind.clearQueryStatus();
-        mind.getExcludedTrees().clear();
+
+        set = mind.getActualTrees();
 
 //        for (Tree t : set) {
 //            for (Function f : t.getFunctions()) {
@@ -355,9 +375,6 @@ public class Linker {
             mind.getSubstituted().clear();
             mind.getCalculated().clear();
             
-                        set = mind.getActualTrees();
-
-
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
             }
@@ -403,7 +420,7 @@ public class Linker {
 //                }
 //            }
 
-            set = mind.getActualTrees();
+//            set = mind.getActualTrees();
 
         } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 

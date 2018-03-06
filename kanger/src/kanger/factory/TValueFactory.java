@@ -30,15 +30,14 @@ public class TValueFactory {
 
     public TValue add(Term o) {
         TValue t = find(o);
-        if (t != null) {
-            return t;
-        } else {
+        if (t == null) {
             t = new TValue(o, mind);
             t.setNext(root);
             root = t;
             t.setId(lastID++);
-            return t;
         }
+        current = t.getId();
+        return t;
     }
 
     public TValue get() {

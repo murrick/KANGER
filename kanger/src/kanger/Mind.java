@@ -43,8 +43,8 @@ public class Mind {
     private final Map<TVariable, TValueFactory> tValues = new HashMap<>();
     private final Map<Domain, Set<Domain>> sources = new HashMap<>();
     private final Map<Domain, Set<Domain>> destinations = new HashMap<>();
-    private final List<TVariable> substituted = new ArrayList<>();
-    private final List<Function> calculated = new ArrayList<>();
+    private final Set<TVariable> substituted = new HashSet<>();
+    private final Set<Function> calculated = new HashSet<>();
 
     private final Calculator calculator = new Calculator(this);
     private final Analiser analiser = new Analiser(this);
@@ -569,11 +569,11 @@ public class Mind {
         return activeRights;
     }
 
-    public List<TVariable> getSubstituted() {
+    public Set<TVariable> getSubstituted() {
         return substituted;
     }
 
-    public List<Function> getCalculated() {
+    public Set<Function> getCalculated() {
         return calculated;
     }
 

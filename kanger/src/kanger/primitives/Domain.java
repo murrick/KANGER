@@ -94,11 +94,23 @@ public class Domain {
     }
 
     public void setUsed(boolean used) {
-        if (used) {
-            mind.getUsedDomains().add(id);
-        } else {
-            mind.getUsedDomains().remove(id);
+
+        for(TVariable t : getTVariables(true)) {
+            for(Domain d : t.getUsage()) {
+                if (used) {
+                    mind.getUsedDomains().add(d.getId());
+                } else {
+                    mind.getUsedDomains().remove(d.getId());
+                }
+
+            }
         }
+
+//        if (used) {
+//            mind.getUsedDomains().add(id);
+//        } else {
+//            mind.getUsedDomains().remove(id);
+//        }
     }
 
 

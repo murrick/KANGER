@@ -178,7 +178,7 @@ public class Analiser {
         if (result) {
             for (Domain d : sequence) {
 //                d.recalculate();
-                if (!d.isClosed() && !d.isDest() && !d.isSystem()) {
+                if (!d.isClosed() && !d.isDest() && !d.isSystem() && !d.isUsed()) {
                     result = false;
                     if (logging) {
                         mind.getLog().add(LogMode.ANALIZER, "NOT in condition: " + d.toString());
@@ -628,16 +628,17 @@ public class Analiser {
 //                                mind.release();
                                 // Удаляем гипотезы,которые приведут к сходимости в случае анализа правил.
                                 // Гипотезв приводящие к сходимости на уровне базы данных отсеиваются в фазе добавления
-                                if (!testMode) {
-                                    for (int i = 0; i < mind.getHypotesisStore().size(); ++i) {
-                                        String h = String.format("%c%s", Enums.SUC, mind.getHypotesisStore().get(i));
-                                        Boolean result = query(h, true);
-                                        if (result != null) {
-                                            mind.getHypotesisStore().get(i).delete();
-                                        }
-                                    }
-                                    mind.getHypotesisStore().pack();
-                                }
+                                //TODO: Рекурсивный вызов
+//                                if (!testMode) {
+//                                    for (int i = 0; i < mind.getHypotesisStore().size(); ++i) {
+//                                        String h = String.format("%c%s", Enums.SUC, mind.getHypotesisStore().get(i));
+//                                        Boolean result = query(h, true);
+//                                        if (result != null) {
+//                                            mind.getHypotesisStore().get(i).delete();
+//                                        }
+//                                    }
+//                                    mind.getHypotesisStore().pack();
+//                                }
 
                                 if (mind.getHypotesisStore().getRoot() != null && mind.getHypotesisStore().size() > 0) {
                                     mind.getLog().add(LogMode.ANALIZER, String.format("Result: WHO KNOWS? %d Hypotheses", mind.getHypotesisStore().size()));
