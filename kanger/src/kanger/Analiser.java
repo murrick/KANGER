@@ -203,6 +203,12 @@ public class Analiser {
                         }
                     }
                 }
+            } else if(t.isUsed()) {
+                for (Domain d : t.getSequence()) {
+                    if (!d.isUsed()) {
+                        mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
+                    }
+                }
             }
         }
 
@@ -280,19 +286,19 @@ public class Analiser {
     }
 
     //    ///////////////////////////////
-    void storeHypo() {
-        for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
-            for (Tree t : r1.getTree()) {
-                if (!t.isClosed() && t.isUsed()) {
-                    for (Domain d : t.getSequence()) {
-                        if (!d.isUsed()) {
-                            mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    void storeHypo() {
+//        for (Right r1 = mind.getRights().getRoot(); r1 != null; r1 = r1.getNext()) {
+//            for (Tree t : r1.getTree()) {
+//                if (!t.isClosed() && t.isUsed()) {
+//                    for (Domain d : t.getSequence()) {
+//                        if (!d.isUsed()) {
+//                            mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     //    ///////////////////////////////
     private List<Right> killInsertion(Right target, boolean withRelatedRights) {
@@ -533,20 +539,21 @@ public class Analiser {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: FALSE");
                                     logResult();
                                     res = false;
-                                } else if (!isInsertion) {
-                                    storeHypo();
-//                                isHypotheses = false;
-
-                                    //mind.release();
-//                            mind.getSolutions().reset();
-//                            mind.getValues().reset();
-//                            mind.getSubstitutions().reset();
-//                            mind.getSolutions().reset();
-//                            mind.getValues().reset();
-//                            mind.getSubstitutions().reset();
-//                            analiser();
-                                    //mind.clear();
                                 }
+//                                else if (!isInsertion) {
+//                                    storeHypo();
+////                                isHypotheses = false;
+//
+//                                    //mind.release();
+////                            mind.getSolutions().reset();
+////                            mind.getValues().reset();
+////                            mind.getSubstitutions().reset();
+////                            mind.getSolutions().reset();
+////                            mind.getValues().reset();
+////                            mind.getSubstitutions().reset();
+////                            analiser();
+//                                    //mind.clear();
+//                                }
                             }
 
                             if (res == null) {
@@ -622,9 +629,9 @@ public class Analiser {
                             } else if (isInsertion) {
                                 mind.getLog().add(LogMode.ANALIZER, "Result: No predicates was deleted");
                             } else {
-                                if (!isInsertion) {
-                                    storeHypo();
-                                }
+//                                if (!isInsertion) {
+//                                    storeHypo();
+//                                }
 //                                mind.release();
                                 // Удаляем гипотезы,которые приведут к сходимости в случае анализа правил.
                                 // Гипотезв приводящие к сходимости на уровне базы данных отсеиваются в фазе добавления
