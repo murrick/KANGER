@@ -164,7 +164,7 @@ public class Linker {
 //    }
 
 
-    public void recurseLink(List<TVariable> tvars, int tIndex, Right query, Set<Tree> set, boolean logging) throws RuntimeErrorException {
+    public void recurseLink(List<TVariable> tvars, int tIndex, Set<Tree> set, boolean logging) throws RuntimeErrorException {
         if (tIndex >= tvars.size()) {
 
 
@@ -307,10 +307,10 @@ public class Linker {
 //                    if (logging) {
 //                        mind.getLog().add(LogMode.ANALIZER, "LINK Value selected: " + t.getVarName() + "=" + t.getValue());
 //                    }
-                    recurseLink(tvars, tIndex + 1, query, set, logging);
+                    recurseLink(tvars, tIndex + 1, set, logging);
                 } while (t.next());
             } else {
-                recurseLink(tvars, tIndex + 1, query, set, logging);
+                recurseLink(tvars, tIndex + 1, set, logging);
             }
         }
     }
@@ -374,7 +374,7 @@ public class Linker {
         do {
             mind.getSubstituted().clear();
             mind.getCalculated().clear();
-            
+
             if (logging) {
                 mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
             }
@@ -383,7 +383,7 @@ public class Linker {
             for (Tree t : set) {
                 tset.addAll(t.getTVariables(true));
 
-//                for(Function f: t.getFunctions()) {
+//                for(Function f: t.getFunctions()) {~
 //                    f.clearResult();
 //                }
             }
@@ -395,7 +395,7 @@ public class Linker {
 //            }
 
 
-            recurseLink(new ArrayList<>(tset), 0, r, set, logging);
+            recurseLink(new ArrayList<>(tset), 0, set, logging);
 //            for (Tree t: set) {
 //                for (Domain d : t.getSequence()) {
 //                    d.execSystem();
