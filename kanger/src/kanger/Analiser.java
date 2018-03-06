@@ -178,7 +178,7 @@ public class Analiser {
         if (result) {
             for (Domain d : sequence) {
 //                d.recalculate();
-                if (!d.isClosed() && !d.isDest() && !d.isSystem() && !d.isUsed()) {
+                if (!d.isClosed() && !d.isDest() && !d.isSystem() /*&& !d.isUsed()*/) {
                     result = false;
                     if (logging) {
                         mind.getLog().add(LogMode.ANALIZER, "NOT in condition: " + d.toString());
@@ -281,6 +281,25 @@ public class Analiser {
                 }
             }
         }
+
+//        int countUsed;
+//        int countClosed;
+//
+//        do {
+//            countUsed = mind.getUsedTrees().size();
+//            countClosed = mind.getClosedTrees().size();
+//            for (Tree t = mind.getTrees().getRoot(); t != null; t = t.getNext()) {
+//                for (Tree x = mind.getTrees().getRoot(); x != null; x = x.getNext()) {
+//                    if (t.getId() != x.getId() && !t.isClosed() && !x.isClosed() && t.isUsed() && x.isUsed()) {
+//                        t.getSequence().addAll(x.getSequence());
+//                        if (analiseTree(t, logging)) {
+//                            result = true;
+//                        }
+//                        t.getSequence().removeAll(x.getSequence());
+//                    }
+//                }
+//            }
+//        } while (countClosed != mind.getClosedTrees().size() || countUsed != mind.getUsedTrees().size());
 
         return result;
     }
