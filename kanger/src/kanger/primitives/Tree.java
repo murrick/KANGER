@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -22,9 +23,11 @@ public class Tree {
     private Tree next = null;
     private Right right = null;
 
+    private Set<Long> excludes = new HashSet<>();
+
     private Mind mind = null;
 
-//    private boolean closed = false;
+    //    private boolean closed = false;
 //    private boolean used = false;
     public Tree(Mind mind) {
         this.mind = mind;
@@ -39,6 +42,10 @@ public class Tree {
         }
     }
 
+    public Set<Long> getExcludes() {
+        return excludes;
+    }
+
     public List<Domain> getSequence() {
         return sequence;
     }
@@ -47,12 +54,8 @@ public class Tree {
         return mind.getUsedTrees().contains(id);
     }
 
-    public void setUsed(boolean used) {
-        if (used) {
-            mind.getUsedTrees().add(id);
-        } else {
-            mind.getUsedTrees().remove(id);
-        }
+    public void setUsed() {
+        mind.getUsedTrees().add(id);
     }
 
     public long getId() {
@@ -79,11 +82,13 @@ public class Tree {
         this.next = next;
     }
 
+
     @Override
     public Tree clone() {
         Tree t = mind.getTrees().add();
         t.setRight(right);
         t.sequence.addAll(sequence);
+        t.excludes.addAll(excludes);
         return t;
     }
 
@@ -105,6 +110,10 @@ public class Tree {
         for (Domain d : sequence) {
             dos.writeLong(d.getId());
         }
+    }
+
+    public boolean isExcluded(Tree t) {
+        return excludes.contains(t.getId());
     }
 
     public boolean equals(Object t) {

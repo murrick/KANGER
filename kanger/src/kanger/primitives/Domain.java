@@ -89,30 +89,6 @@ public class Domain {
         arguments.add(t);
     }
 
-    public boolean isUsed() {
-        return mind.getUsedDomains().contains(id);
-    }
-
-    public void setUsed(boolean used) {
-
-//        for(TVariable t : getTVariables(true)) {
-//            for(Domain d : t.getUsage()) {
-//                if (used) {
-//                    mind.getUsedDomains().add(d.getId());
-//                } else {
-//                    mind.getUsedDomains().remove(d.getId());
-//                }
-//
-//            }
-//        }
-
-        if (used) {
-            mind.getUsedDomains().add(id);
-        } else {
-            mind.getUsedDomains().remove(id);
-        }
-    }
-
 
     public boolean isQueued() {
         return mind.getQueuedDomains().contains(id);
@@ -131,12 +107,8 @@ public class Domain {
 //    }
 //
 
-    public void setQueued(boolean on) {
-        if (on) {
+    public void setQueued() {
             mind.getQueuedDomains().add(id);
-        } else {
-            mind.getQueuedDomains().remove(id);
-        }
     }
 
     public List<Domain> getCauses() {
@@ -226,8 +198,8 @@ public class Domain {
 
         String suffix = "";
         if ((mind.getDebugLevel() & Enums.DEBUG_OPTION_STATUS) != 0) {
-            suffix = isDest() || right.isQuery() || isUsed() || isClosed()
-                    ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + (isUsed() ? "U" : "") + (this.isClosed() ? "C" : "") + " "
+            suffix = isDest() || right.isQuery() || /*isUsed() ||*/ isClosed()
+                    ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + /*(isUsed() ? "U" : "") +*/ (this.isClosed() ? "C" : "") + " "
                     : "";
         }
         return s + ";" + suffix;
@@ -311,23 +283,69 @@ public class Domain {
 
     public List<Function> getFunctions() {
         List<Function> list = new ArrayList<>();
-        for(Argument a : arguments) {
-            if(a.isFSet()) {
+        for (Argument a : arguments) {
+            if (a.isFSet()) {
                 list.add(a.getF());
             }
         }
         return list;
     }
 
-    public boolean isClosed() {
-        return mind.getClosedDimains().contains(id);
+    private boolean isEqualsArguments(List<Long> params) {
+        for (int i = 0; i < predicate.getRange(); ++i) {
+            if (arguments.get(i).getValue().getId() != params.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public void setClosed(boolean closed) {
-        if (closed) {
-            mind.getClosedDimains().add(id);
-        } else {
-            mind.getClosedDimains().remove(id);
+    private List<Long> convertArguments() {
+        List<Long> list = new ArrayList<>();
+        for (int i = 0; i < predicate.getRange(); ++i) {
+            list.add(arguments.get(i).getValue().getId());
+        }
+        return list;
+    }
+
+    public boolean isClosed() {
+        if (mind.getClosedDomains().containsKey(id)) {
+            for (List<Long> list : mind.getClosedDomains().get(id)) {
+                if (isEqualsArguments(list)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setClosed() {
+        if (!mind.getClosedDomains().containsKey(id)) {
+            mind.getClosedDomains().put(id, new HashSet<>());
+        }
+        if (!isClosed()) {
+            mind.getClosedDomains().get(id).add(convertArguments());
+        }
+    }
+
+
+    public boolean isUsed() {
+        if (mind.getClosedDomains().containsKey(id)) {
+            for (List<Long> list : mind.getClosedDomains().get(id)) {
+                if (isEqualsArguments(list)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setUsed() {
+        if (!mind.getUsedDomains().containsKey(id)) {
+            mind.getUsedDomains().put(id, new HashSet<>());
+        }
+        if (!isClosed()) {
+            mind.getUsedDomains().get(id).add(convertArguments());
         }
     }
 
@@ -359,5 +377,14 @@ public class Domain {
             }
         }
         return occurrs;
+    }
+
+    public boolean isPairedWith(Domain d) {
+        for (TVariable t : getTVariables(false)) {
+            if(d.getTVariables(false).contains(t)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

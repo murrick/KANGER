@@ -18,7 +18,7 @@ public class Kanger {
 //        new LibraryMath(mind);
 
 //        mind.setText(new StringBuffer("!num(0);\r" +
-//                        "!@x num(x), x < 20 -> num(++x);\r"));
+//                        "!@x num(x), x < 20 -> num(++x);\r"));    
 //        mind.setText(new StringBuffer(
 //                "!@x $y father(y,x);\n" +
 //                        "!@x ~father(x,x);\n" +
@@ -98,7 +98,7 @@ public class Kanger {
 
         try {
 
-            mind.compile("!@x a(x) -> b(x), @y b(y) -> c(y), @z c(z) -> d(z); "
+            mind.compile("!(@x a(x) -> b(x)), (@y b(y) -> c(y)), (@z c(z) -> d(z)); "
                     + "!a(mmm); "
                     + "!a(nnn); "
                     + "!b(ooo); "
@@ -135,4 +135,6 @@ public class Kanger {
 //        Compiler c = new Compiler(mind);
 //        c.compileLine(new StringBuffer("!@(x) a(b);"), 0);
     }
-}
+} 
+
+

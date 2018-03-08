@@ -69,15 +69,23 @@ public class Compiler {
                 break;
 
             case Enums.AQN:
-            case Enums.PQN:
+            case Enums.PQN: {
                 compileQuantor(root, antc, replacements);
                 construct(r, t, root.getRight(), antc, replacements, list);
-                break;
+            }
+            break;
 
-            case Enums.CON:
-            case Enums.COMMA:
+            case Enums.COMMA: {
+                Tree x = r.cloneTree(t, false);
+                list.add(x);
+                construct(r, t, root.getLeft(), antc, replacements, list);
+                construct(r, x, root.getRight(), antc, replacements, list);
+            }
+            break;
+
+            case Enums.CON: {
                 if (antc) {
-                    Tree x = r.cloneTree(t);
+                    Tree x = r.cloneTree(t, true);
                     list.add(x);
                     construct(r, t, root.getLeft(), antc, replacements, list);
                     construct(r, x, root.getRight(), antc, replacements, list);
@@ -89,16 +97,18 @@ public class Compiler {
                     construct(r, t, root.getRight(), antc, replacements, tmp);
                     list.addAll(tmp);
                 }
-                break;
+            }
+            break;
 
-            case Enums.DIS:
-                Tree x = r.cloneTree(t);
+            case Enums.DIS: {
+                Tree x = r.cloneTree(t, !antc);
                 list.add(x);
                 construct(r, t, root.getLeft(), antc, replacements, list);
                 construct(r, x, root.getRight(), antc, replacements, list);
-                break;
+            }
+            break;
 
-            case Enums.IMP:
+            case Enums.IMP: {
                 if (antc) {
                     construct(r, t, root.getLeft(), !antc, replacements, list);
                     for (Tree z : list) {
@@ -107,20 +117,22 @@ public class Compiler {
                     construct(r, t, root.getRight(), antc, replacements, tmp);
                     list.addAll(tmp);
                 } else {
-                    x = r.cloneTree(t);
+                    Tree x = r.cloneTree(t, true);
                     list.add(x);
                     construct(r, t, root.getLeft(), !antc, replacements, list);
                     construct(r, x, root.getRight(), antc, replacements, list);
                 }
-                break;
+            }
+            break;
 
-            case Enums.LB:
+            case Enums.LB: {
                 if (root.getLeft() == null) {
                     construct(r, t, root.getRight(), antc, replacements, list);
                 } else {
                     compilePredicate(t, root, antc, replacements);
                 }
-                break;
+            }
+            break;
 
             default: {
                 compilePredicate(t, root, antc, replacements);

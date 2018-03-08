@@ -89,9 +89,13 @@ public class Right {
         return tree.size();
     }
 
-    public Tree cloneTree(Tree t) {
+    public Tree cloneTree(Tree t, boolean exclude) {
         Tree x = t.clone();
         tree.add(x);
+        if(exclude){
+            t.getExcludes().add(x.getId());
+            x.getExcludes().add(t.getId());
+        }
         return x;
     }
 

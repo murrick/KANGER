@@ -74,7 +74,7 @@ public class Linker {
                         TValue s = master.get(level).getT().setValue(slave.get(level).getValue());
                         s.setDstSolve(master);
                         s.setSrcSolve(slave);
-                        master.setUsed(true);
+//                        master.setUsed();
 //                        d1.setDestFor(d2);
                         occurrs = true;
 
@@ -96,7 +96,7 @@ public class Linker {
                         TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
                         s.setSrcSolve(master);
                         s.setDstSolve(slave);
-                        slave.setUsed(true);
+//                        slave.setUsed();
 //                        d2.setDestFor(d1);
                         occurrs = true;
 
@@ -195,7 +195,7 @@ public class Linker {
 //                boolean occurrs = false;
                 for (Tree slave : set) {
 
-                    if (slave.isExcluded() /*|| (slave.getTVariables(true).isEmpty() && master.getTVariables(true).isEmpty())*/) {
+                    if (slave.isExcluded() || slave.isExcluded(master) /*|| (slave.getTVariables(true).isEmpty() && master.getTVariables(true).isEmpty())*/) {
                         continue;
                     }
 

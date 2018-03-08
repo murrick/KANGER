@@ -57,12 +57,13 @@ public class Mind {
 
     private ScriptEngine scryptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-    private final Set<Long> usedDomains = new HashSet<>();
     private final Set<Long> queuedDomains = new HashSet<>();
     private final Set<Long> usedTrees = new HashSet<>();
-    private final Set<Long> closedDimains = new HashSet<>();
     private final Set<Long> closedTrees = new HashSet<>();
     private final Set<Long> excludedTrees = new HashSet<>();
+
+    private final Map<Long,Set<List<Long>>> closedDomains = new HashMap<>();
+    private final Map<Long,Set<List<Long>>> usedDomains = new HashMap<>();
 
     private Set<Long> activeRights = new HashSet<>();
 
@@ -218,7 +219,7 @@ public class Mind {
     public void clearQueryStatus() {
         usedDomains.clear();
         usedTrees.clear();
-        closedDimains.clear();
+        closedDomains.clear();
 //        acceptorDomains.clear();
         queuedDomains.clear();
 
@@ -527,7 +528,7 @@ public class Mind {
         return tVariableLinks;
     }
 
-    public Set<Long> getUsedDomains() {
+    public Map<Long,Set<List<Long>>> getUsedDomains() {
         return usedDomains;
     }
 
@@ -535,8 +536,8 @@ public class Mind {
         return usedTrees;
     }
 
-    public Set<Long> getClosedDimains() {
-        return closedDimains;
+    public Map<Long,Set<List<Long>>> getClosedDomains() {
+        return closedDomains;
     }
 
     public Set<Long> getClosedTrees() {
