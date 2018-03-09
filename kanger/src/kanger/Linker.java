@@ -62,7 +62,7 @@ public class Linker {
                     occurrs = true;
                 }
 
-                if (master.get(level).isTSet() && !slave.get(level).isEmpty() && (!slave.isDest() || slave.getRight().isQuery())
+                if (master.get(level).isTSet() && !slave.get(level).isEmpty() && (!slave.isDest() || slave.isQuery())
 //                        && !currentTargets.contains(master)
 //                && (master.get(level).isEmpty() || master.get(level).getValue().getId() != slave.get(level).getValue().getId())
                     && !master.get(level).getT().contains(slave.get(level).getValue())) {
@@ -74,6 +74,9 @@ public class Linker {
                         TValue s = master.get(level).getT().setValue(slave.get(level).getValue());
                         s.setDstSolve(master);
                         s.setSrcSolve(slave);
+                        if(slave.isQuery() || master.isQuery()) {
+                            master.get(level).getT().setQuery();
+                        }
 //                        master.setUsed();
 //                        d1.setDestFor(d2);
                         occurrs = true;
@@ -84,7 +87,7 @@ public class Linker {
                     }
                 }
                 
-                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && (!master.isDest() || master.getRight().isQuery())
+                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && (!master.isDest() || master.isQuery())
 //                    && !currentTargets.contains(slave)
 //                        && (slave.get(level).isEmpty() || slave.get(level).getValue().getId() != master.get(level).getValue().getId())
                     && !slave.get(level).getT().contains(master.get(level).getValue())) {
@@ -96,6 +99,9 @@ public class Linker {
                         TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
                         s.setSrcSolve(master);
                         s.setDstSolve(slave);
+                        if(master.isQuery() || slave.isQuery()) {
+                            slave.get(level).getT().setQuery();
+                        }
 //                        slave.setUsed();
 //                        d2.setDestFor(d1);
                         occurrs = true;
@@ -327,7 +333,6 @@ public class Linker {
 //            mind.getTValues().clear();
 //        }
 
-        mind.clearQueryStatus();
         mind.getExcludedTrees().clear();
         mind.getSubstituted().clear();
         mind.getCalculated().clear();
@@ -335,6 +340,7 @@ public class Linker {
         Set<Tree> set;
         if (r == null) {
             set = mind.getActualTrees();
+            mind.clearQueryStatus();
 //            mind.reset();
             //функции!
         } else {

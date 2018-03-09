@@ -108,7 +108,7 @@ public class Domain {
 //
 
     public void setQueued() {
-            mind.getQueuedDomains().add(id);
+        mind.getQueuedDomains().add(id);
     }
 
     public List<Domain> getCauses() {
@@ -198,8 +198,8 @@ public class Domain {
 
         String suffix = "";
         if ((mind.getDebugLevel() & Enums.DEBUG_OPTION_STATUS) != 0) {
-            suffix = isDest() || right.isQuery() || /*isUsed() ||*/ isClosed()
-                    ? " " + (this.isDest() ? "A" : "") + (right.isQuery() ? "Q" : "") + /*(isUsed() ? "U" : "") +*/ (this.isClosed() ? "C" : "") + " "
+            suffix = isDest() || isQuery() || /*isUsed() ||*/ isClosed()
+                    ? " " + (isDest() ? "A" : "") + (isQuery() ? "Q" : "") + /*(isUsed() ? "U" : "") +*/ (isClosed() ? "C" : "") + " "
                     : "";
         }
         return s + ";" + suffix;
@@ -220,26 +220,25 @@ public class Domain {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return o != null && o instanceof Domain && ((Domain) o).getId() == id;
-//        if (o == null || !(o instanceof Domain)) {
-//            return false;
-//        } else {
-//            Domain d = (Domain) o;
-//            if (!predicate.equals(d.predicate)) {
-//                return false;
-//            }
-//            if (arguments.size() != d.arguments.size()) {
-//                return false;
-//            }
-//            for (int i = 0; i < arguments.size(); ++i) {
-//                if (!arguments.get(i).equals(d.arguments.get(i))) {
-//                    return false;
-//                }
-//            }
-//            return true;
-//        }
+    public boolean equalsBase(Object o) {
+        if(o == null || !(o instanceof Domain)) {
+            return false;
+        }
+        if (!predicate.equals(((Domain) o).predicate)) {
+            return false;
+        }
+        if (arguments.size() != ((Domain) o).arguments.size()) {
+            return false;
+        }
+        for (int i = 0; i < arguments.size(); ++i) {
+            if (arguments.get(i).isEmpty() || ((Domain) o).arguments.get(i).isEmpty()) {
+                return false;
+            }
+            if (arguments.get(i).getValue().getId() != ((Domain) o).arguments.get(i).getValue().getId()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean contains(TVariable t) {
@@ -381,10 +380,34 @@ public class Domain {
 
     public boolean isPairedWith(Domain d) {
         for (TVariable t : getTVariables(false)) {
-            if(d.getTVariables(false).contains(t)) {
+            if (d.getTVariables(false).contains(t)) {
                 return true;
             }
         }
         return false;
     }
+
+    public boolean isQuery() {
+        if (right.isQuery()) {
+            return true;
+        } else {
+            for (TVariable t : getTVariables(true)) {
+                if (t.isQuery()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+//    public void setQuery() {
+//        if (!right.isQuery()) {
+//            for (TVariable t : getTVariables(true)) {
+//                if (!mind.getQueryValues().containsKey(t.getId())) {
+//                    mind.getQueryValues().put(t.getId(), new HashSet<>());
+//                }
+//                mind.getQueryValues().get(t.getId()).add(t.getValue().getId());
+//            }
+//        }
+//    }
 }

@@ -57,6 +57,10 @@ public class SolutionsStore {
         return root;
     }
 
+    public void remove(Solution s) {
+        root.remove(s);
+    }
+
     public void clear() {
         if (enableStore) {
             root = null;

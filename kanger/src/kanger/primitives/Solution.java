@@ -167,7 +167,10 @@ public class Solution {
 
     @Override
     public boolean equals(Object o) {
-        if ((o instanceof Solution) && ((Solution) o).isAntc() == isAntc() && ((Solution) o).getParameters().size() == parameters.size()) {
+        if ((o instanceof Solution)
+                && ((Solution) o).getPredicate().getId() == predicate.getId()
+                && ((Solution) o).isAntc() == isAntc()
+                && ((Solution) o).getParameters().size() == parameters.size()) {
             for (int i = 0; i < parameters.size(); ++i) {
                 if (parameters.get(i) != null && ((Solution) o).getParameters().get(i).getId() != parameters.get(i).getId()) {
                     return false;

@@ -311,4 +311,14 @@ public class TVariable {
         return mind.getSubstituted().contains(this);
     }
 
+    public void setQuery() {
+        if(!mind.getQueryValues().containsKey(id)) {
+            mind.getQueryValues().put(id, new HashSet<>());
+        }
+        mind.getQueryValues().get(id).add(getValue().getId());
+    }
+
+    public boolean isQuery() {
+        return !isEmpty() && mind.getQueryValues().containsKey(id) && mind.getQueryValues().get(id).contains(getValue().getId());
+    }
 }
