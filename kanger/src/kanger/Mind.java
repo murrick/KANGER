@@ -28,10 +28,13 @@ public class Mind {
 
     private final DictionaryFactory terms = new DictionaryFactory(this);                      // Словарь констант
     private final PredicateFactory predicates = new PredicateFactory(this);                   // Предикаты
-    private final TVariableFactory tVars = new TVariableFactory(this);                    // t-переменные
     private final DomainFactory domains = new DomainFactory(this);                            // Список доменов
     private final RightFactory rights = new RightFactory(this);                               // Список правил
     private final TreeFactory trees = new TreeFactory(this);                               // Список секвенций
+
+    private final TVariableFactory tVars = new TVariableFactory(this);                    // t-переменные
+    private final TValueFactory tValues = new TValueFactory(this);
+
 
     private final HypotesesStore hypoteses = new HypotesesStore();                    // Список гипотез
     private final LogStore log = new LogStore(this);                                      // Протокол вывода
@@ -40,7 +43,6 @@ public class Mind {
 
     private final LibraryStore library = new LibraryStore(this);
 
-    private final Map<TVariable, TValueFactory> tValues = new HashMap<>();
     private final Map<Domain, Set<Domain>> sources = new HashMap<>();
     private final Map<Domain, Set<Domain>> destinations = new HashMap<>();
     private final Set<TVariable> substituted = new HashSet<>();
@@ -137,7 +139,7 @@ public class Mind {
         return solves;
     }
 
-    public Map<TVariable, TValueFactory> getTValues() {
+    public TValueFactory getTValues() {
         return tValues;
     }
 
@@ -183,6 +185,7 @@ public class Mind {
         predicates.mark();
         domains.mark();
         tVars.mark();
+        tValues.mark();
         rights.mark();
         trees.mark();
     }
@@ -192,6 +195,7 @@ public class Mind {
         predicates.commit();
         domains.commit();
         tVars.commit();
+        tValues.commit();
         rights.commit();
         trees.commit();
     }
@@ -201,6 +205,7 @@ public class Mind {
         predicates.release();
         domains.release();
         tVars.release();
+        tValues.release();
         rights.release();
         trees.release();
 
@@ -233,6 +238,7 @@ public class Mind {
         predicates.reset();
         domains.reset();
         tVars.reset();
+        tValues.reset();
         rights.reset();
         trees.reset();
 
@@ -248,6 +254,7 @@ public class Mind {
         predicates.clear();
         domains.clear();
         tVars.clear();
+        tValues.clear();
         rights.clear();
         trees.clear();
 

@@ -79,7 +79,7 @@ public class Argument {
         if (o == null || o instanceof Term) {
             o = null;
         } else if (o instanceof TVariable) {
-            ((TVariable) o).delValue(d);
+            ((TVariable) o).delValue();
         } else if (o instanceof Function) {
             ((Function) o).clearResult();
         }

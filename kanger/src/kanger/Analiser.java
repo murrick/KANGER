@@ -306,18 +306,35 @@ public class Analiser {
         for (Domain d : ant) {
             if (contains(d, suc)) {
                 if (!hypotesis) {
-                    int sz = mind.getSolutions().size();
+//                    int sz = mind.getSolutions().size();
                     mind.getSolutions().add(d);
 
-                    if (sz != mind.getSolutions().size()) {
-                        for (TVariable tv : d.getTVariables(true)) {
-                            mind.getValues().add(tv, d);
-                        }
+//                    if (sz != mind.getSolutions().size()) {
+                    for (TVariable tv : d.getTVariables(true)) {
+                        mind.getValues().add(tv, d);
                     }
+//                    }
                 }
             } else if (hypotesis) {
                 mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
             }
+        }
+        for (Domain d : suc) {
+            if (contains(d, ant)) {
+                if (!hypotesis) {
+//                    int sz = mind.getSolutions().size();
+//                    mind.getSolutions().add(d);
+
+//                    if (sz != mind.getSolutions().size()) {
+                    for (TVariable tv : d.getTVariables(true)) {
+                        mind.getValues().add(tv, d);
+                    }
+//                    }
+                }
+            }
+//            else if (hypotesis) {
+//                mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
+//            }
         }
         if (hypotesis) {
             for (Domain d : suc) {

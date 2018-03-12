@@ -1,13 +1,15 @@
 package kanger.factory;
 
 import kanger.Mind;
-import kanger.enums.Enums;
 import kanger.primitives.TValue;
+import kanger.primitives.TVariable;
 import kanger.primitives.Term;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -16,7 +18,7 @@ import java.util.Stack;
 public class TValueFactory {
 
     private TValue root = null;
-    private long current = -1;
+    private Map<TVariable, Long> current = new HashMap<>();
     private long lastID = 0;
 
     private Stack<Object[]> stack = new Stack<>();
@@ -28,64 +30,67 @@ public class TValueFactory {
         reset();
     }
 
-    public TValue add(Term o) {
-        TValue t = find(o);
+    public TValue add(TVariable tv, Term o) {
+        TValue t = find(tv, o);
         if (t == null) {
-            t = new TValue(o, mind);
+            t = new TValue(tv, o, mind);
+            t.setTVar(tv);
             t.setNext(root);
             root = t;
             t.setId(lastID++);
         }
-        current = t.getId();
+        current.put(tv, t.getId());
         return t;
     }
 
-    public TValue get() {
-        if (root == null) {
+    public TValue get(TVariable tv) {
+        if (isEmpty(tv)) {
             return null;
         }
-        if (current == -1) {
-            current = root.getId();
-        }
-        TValue v = get(current);
-        if (v == null) {
-            v = root;
-            current = root.getId();
-        }
+        TValue v = get(current.get(tv));
         return v;
     }
 
-    public boolean isEmpty() {
-        return root == null;
+    public boolean isEmpty(TVariable tv) {
+        return root == null || !current.containsKey(tv);
     }
 
-    public boolean rewind() {
-        if (root == null) {
+    public boolean rewind(TVariable tv) {
+        if (isEmpty(tv)) {
             return false;
         }
-        current = root.getId();
-        return true;
-    }
-
-    public boolean next() {
-        if (root == null) {
-            return false;
-        }
-        TValue v = get(current);
-        if (v == null) {
-            current = root.getId();
-            return true;
-        } else if (v.getNext() != null) {
-            current = v.getNext().getId();
-            return true;
+        current.put(tv, root.getId());
+        if (root.getTVar().getId() != tv.getId()) {
+            if (!next(tv)) {
+                current.remove(tv);
+                return false;
+            } else {
+                return true;
+            }
         } else {
-            return false;
+            return true;
         }
     }
 
-    public TValue find(Term v) {
+    public boolean next(TVariable tv) {
+        if (isEmpty(tv)) {
+            return false;
+        }
+        TValue v = get(current.get(tv));
+        if (v != null) {
+            for (v = v.getNext(); v != null; v = v.getNext()) {
+                if (v.getTVar().getId() == tv.getId()) {
+                    current.put(tv, v.getId());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public TValue find(TVariable tv, Term v) {
         for (TValue t = root; t != null; t = t.getNext()) {
-            if (t.getValue().getId() == v.getId()) {
+            if (tv.getId() == t.getTVar().getId() && t.getValue().getId() == v.getId()) {
                 return t;
             }
         }
@@ -110,7 +115,7 @@ public class TValueFactory {
     }
 
     public void reset() {
-        while(stack.size() > 1) {
+        while (stack.size() > 1) {
             stack.pop();
         }
         release();
@@ -129,7 +134,12 @@ public class TValueFactory {
 
 
     public void commit() {
-        stack.clear();
+        if (!stack.empty()) {
+            stack.pop();
+        }
+        if (!stack.empty()) {
+            stack.pop();
+        }
         mark();
     }
 
@@ -148,8 +158,26 @@ public class TValueFactory {
             }
             root = saved;
         }
-        if(stack.isEmpty()) {
+        if (stack.isEmpty()) {
             mark();
+        }
+    }
+
+    public void remove(TVariable tv) {
+        TValue t = get(tv);
+        if (t != null) {
+            if (t.getId() == root.getId()) {
+                root = t.getNext();
+                t.setNext(null);
+            } else {
+                for (TValue x = root; x != null; x = x.getNext()) {
+                    if (x.getNext() != null && x.getNext().getId() == t.getId()) {
+                        x.setNext(t.getNext());
+                        t.setNext(null);
+                    }
+                }
+            }
+            rewind(tv);
         }
     }
 

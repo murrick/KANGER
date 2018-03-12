@@ -5,7 +5,6 @@ import kanger.Mind;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.*;
 
 /**
  * Created by murray on 13.12.16.
@@ -14,6 +13,7 @@ public class TValue {
 
     private long id = -1;                   // Идентификатор значения переменной
     private Term value = null;
+    private TVariable tVar = null;
     private Domain srcSolve = null;
     private Domain dstSolve = null;
 
@@ -27,13 +27,15 @@ public class TValue {
         this.mind = mind;
     }
 
-    public TValue(Term t, Mind mind) {
+    public TValue(TVariable tv, Term t, Mind mind) {
         this.mind = mind;
+        this.tVar = tv;
         this.value = t;
     }
 
     public TValue(DataInputStream dis, Mind mind) throws IOException {
         id = dis.readLong();
+        tVar = mind.getTVars().get(dis.readLong());
         value = mind.getTerms().get(dis.readLong());
         srcSolve = mind.getDomains().get(dis.readLong());
         dstSolve = mind.getDomains().get(dis.readLong());
@@ -80,6 +82,14 @@ public class TValue {
         this.id = id;
     }
 
+    public TVariable getTVar() {
+        return tVar;
+    }
+
+    public void setTVar(TVariable tVar) {
+        this.tVar = tVar;
+    }
+
     public TValue getNext() {
         return next;
     }
@@ -90,6 +100,7 @@ public class TValue {
 
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(id);
+        dos.writeLong(tVar.getId());
         dos.writeLong(value == null ? -1 : value.getId());
         dos.writeLong(srcSolve == null ? -1 : srcSolve.getId());
         dos.writeLong(dstSolve == null ? -1 : dstSolve.getId());

@@ -66,32 +66,30 @@ public class TVariable {
     }
 
     public Term getValue() {
-        if (mind.getTValues().containsKey(this) && !mind.getTValues().get(this).isEmpty()) {
-            return mind.getTValues().get(this).get().getValue();
+        if (mind.getTValues().get(this) != null) {
+            return mind.getTValues().get(this).getValue();
         } else {
             return null;
         }
     }
 
     public TValue setValue(Term value) throws TValueOutOfOrver {
-        if (!mind.getTValues().containsKey(this)) {
-            mind.getTValues().put(this, new TValueFactory(mind));
-        }
         if (!isInside(value)) {
-            if (mind.getTValues().get(this).find(value) == null) {
+            if (mind.getTValues().find(this, value) == null) {
                 mind.getSubstituted().add(this);
             }
-            return mind.getTValues().get(this).add(value);
+            return mind.getTValues().add(this, value);
         } else {
             throw new TValueOutOfOrver(value.toString());
         }
     }
 
-    public void delValue(Domain d) {
-        if (mind.getTValues().containsKey(this) && mind.getTValues().get(this).isEmpty()) {
-            mind.getTValues().get(this).setRoot(null);
-            mind.getSubstituted().add(this);
-        }
+    public void delValue() {
+        mind.getTValues().remove(this);
+//        if (mind.getTValues().get(this).isEmpty()) {
+//            mind.getTValues().get(this).setRoot(null);
+//            mind.getSubstituted().add(this);
+//        }
     }
 
     //    public TSubst addValue(Term value) throws TValueOutOfOrver {
@@ -139,8 +137,8 @@ public class TVariable {
     }
 
     public Domain getSrcSolve() {
-        if (mind.getTValues().containsKey(this) && !mind.getTValues().get(this).isEmpty()) {
-            return mind.getTValues().get(this).get().getSrcSolve();
+        if (mind.getTValues().get(this) != null) {
+            return mind.getTValues().get(this).getSrcSolve();
         } else {
             return null;
         }
@@ -163,8 +161,8 @@ public class TVariable {
 //    }
 //
     public Domain getDstSolve() {
-        if (mind.getTValues().containsKey(this) && !mind.getTValues().get(this).isEmpty()) {
-            return mind.getTValues().get(this).get().getDstSolve();
+        if (mind.getTValues().get(this) != null) {
+            return mind.getTValues().get(this).getDstSolve();
         } else {
             return null;
         }
@@ -241,35 +239,19 @@ public class TVariable {
     }
 
     public boolean contains(Term value) {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).find(value) != null;
-        } else {
-            return false;
-        }
+        return mind.getTValues().find(this, value) != null;
     }
 
     public boolean isEmpty() {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).size() == 0;
-        } else {
-            return true;
-        }
+        return mind.getTValues().isEmpty(this);
     }
 
     public boolean rewind() {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).rewind();
-        } else {
-            return false;
-        }
+        return mind.getTValues().rewind(this);
     }
 
     public boolean next() {
-        if (mind.getTValues().containsKey(this)) {
-            return mind.getTValues().get(this).next();
-        } else {
-            return false;
-        }
+        return mind.getTValues().next(this);
     }
 
     public Set<Domain> getUsage() {
@@ -282,37 +264,37 @@ public class TVariable {
         return set;
     }
 
-    public void mark() {
-        if (!mind.getTValues().containsKey(this)) {
-            mind.getTValues().put(this, new TValueFactory(mind));
-        }
-        mind.getTValues().get(this).mark();
-    }
-
-    public void release() {
-        if (mind.getTValues().containsKey(this)) {
-            mind.getTValues().get(this).release();
-        }
-    }
-
-    public void commit() {
-        if (mind.getTValues().containsKey(this)) {
-            mind.getTValues().get(this).commit();
-        }
-    }
-
-    public void clear() {
-        if (mind.getTValues().containsKey(this)) {
-            mind.getTValues().remove(this);
-        }
-    }
-
+    //    public void mark() {
+//        if (!mind.getTValues().containsKey(this)) {
+//            mind.getTValues().put(this, new TValueFactory(mind));
+//        }
+//        mind.getTValues().get(this).mark();
+//    }
+//
+//    public void release() {
+//        if (mind.getTValues().containsKey(this)) {
+//            mind.getTValues().get(this).release();
+//        }
+//    }
+//
+//    public void commit() {
+//        if (mind.getTValues().containsKey(this)) {
+//            mind.getTValues().get(this).commit();
+//        }
+//    }
+//
+//    public void clear() {
+//        if (mind.getTValues().containsKey(this)) {
+//            mind.getTValues().remove(this);
+//        }
+//    }
+//
     public boolean isSubstituted() {
         return mind.getSubstituted().contains(this);
     }
 
     public void setQuery() {
-        if(!mind.getQueryValues().containsKey(id)) {
+        if (!mind.getQueryValues().containsKey(id)) {
             mind.getQueryValues().put(id, new HashSet<>());
         }
         mind.getQueryValues().get(id).add(getValue().getId());

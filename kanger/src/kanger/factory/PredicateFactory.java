@@ -83,7 +83,12 @@ public class PredicateFactory {
     }
 
     public void commit() {
-        stack.clear();
+        if(!stack.empty()) {
+            stack.pop();
+        }
+        if(!stack.empty()) {
+            stack.pop();
+        }
         mark();
     }
 

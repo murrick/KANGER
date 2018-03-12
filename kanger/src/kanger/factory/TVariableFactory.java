@@ -85,7 +85,12 @@ public class TVariableFactory {
     }
 
     public void commit() {
-        stack.clear();
+        if(!stack.empty()) {
+            stack.pop();
+        }
+        if(!stack.empty()) {
+            stack.pop();
+        }
         mark();
     }
 
@@ -96,9 +101,6 @@ public class TVariableFactory {
             lastID = (long) pop[1];
             if (root != null && saved != null && root.getId() != saved.getId()) {
                 for (TVariable t = root; t != null; t = t.getNext()) {
-                    if (mind.getTValues().containsKey(t)) {
-                        mind.getTValues().remove(t);
-                    }
                     if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
                         t.setNext(null);
                         break;
