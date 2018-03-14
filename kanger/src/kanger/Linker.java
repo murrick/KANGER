@@ -110,7 +110,6 @@ public class Linker {
                     }
 
 
-
                     for (Domain d1 : master.getSequence()) {
                         fs.addAll(d1.getFunctions());
                         if (d1.isSystem()) {
@@ -140,8 +139,11 @@ public class Linker {
             for (Function f : fs) {
                 if (!f.isCalculable() || f.isSubstituted()) {
                     f.clearResult();
-                    if(mind.getCalculator().calculate(f) > 0){
-                        mind.getFValues().add(f);
+                    if (mind.getCalculator().calculate(f) > 0) {
+                        if(mind.getFValues().find(f) == null) {
+                            mind.getFValues().add(f);
+                            mind.getLog().add(LogMode.ANALIZER, "Shot function result: " + f.toString());
+                        }
                     }
                 }
             }
@@ -160,22 +162,21 @@ public class Linker {
 
             for (Function f : fs) {
                 if (f.isCalculable() && !f.isSubstituted()) {
-                    if(mind.getCalculator().calculate(f) > 0){
-                        mind.getFValues().add(f);
+                    if (mind.getCalculator().calculate(f) > 0) {
+                        if(mind.getFValues().find(f) == null) {
+                            mind.getFValues().add(f);
+                            mind.getLog().add(LogMode.ANALIZER, "Shot function result: " + f.toString());
+                        }
                     }
                 }
             }
 
 
-            if (!allowed) {
-                mind.getTValues().release();
-//                        mind.getSubstituted().clear();
-//                        mind.getCalculated().clear();
-//                master.setExcluded(true);
-            } else{
-
+            if (allowed) {
                 mind.getTValues().commit();
             }
+
+            mind.getTValues().release();
 
 
         } else {
@@ -192,7 +193,6 @@ public class Linker {
     }
 
     public void link(boolean logging) throws RuntimeErrorException {
-        mind.clearLinks();
         link(null, logging);
     }
 

@@ -252,10 +252,10 @@ public class Function {
                 }
             }
         }
-        Argument r = range < arguments.size() ? arguments.get(range) : null;
+        //Argument r = range < arguments.size() ? arguments.get(range) : null;
         return s + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0
             && (((isCalculable() && isCalculated()) || !isCalculable()))
-            && r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
+            && getResult() != null ? (" = " + getResult()) : "");
     }
 
     //    public void setResult(Term c) {
@@ -313,7 +313,7 @@ public class Function {
     }
 
 	public boolean isCalculated() {
-        return mind.getCalculated().contains(this);
+        return mind.getFValues().get(this) != null /*|| mind.getCalculated().contains(this)*/;
     }
 
 	public boolean isSubstituted() {
@@ -328,7 +328,5 @@ public class Function {
 	public boolean isCalculable() {
 		return Tools.getTVariables(arguments, true).size() > 0;
 	} 
-
-
 
 }

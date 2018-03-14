@@ -24,10 +24,10 @@ public class Mind {
     private final DomainFactory domains = new DomainFactory(this);                            // Список доменов
     private final RightFactory rights = new RightFactory(this);                               // Список правил
     private final TreeFactory trees = new TreeFactory(this);                               // Список секвенций
-    private final FunctionFactory functions = new FunctionFactory(this);
-    
+
     private final TVariableFactory tVars = new TVariableFactory(this);                    // t-переменные
     private final TValueFactory tValues = new TValueFactory(this);
+    private final FunctionFactory functions = new FunctionFactory(this);
     private final FValueFactory fValues = new FValueFactory(this);
 
 
@@ -38,8 +38,6 @@ public class Mind {
 
     private final LibraryStore library = new LibraryStore(this);
 
-    private final Map<Domain, Set<Domain>> sources = new HashMap<>();
-    private final Map<Domain, Set<Domain>> destinations = new HashMap<>();
     private final Set<TVariable> substituted = new HashSet<>();
     private final Set<Function> calculated = new HashSet<>();
 
@@ -54,7 +52,7 @@ public class Mind {
 
     private ScriptEngine scryptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-    private final Set<Long> queuedDomains = new HashSet<>();
+//    private final Set<Long> queuedDomains = new HashSet<>();
     private final Set<Long> usedTrees = new HashSet<>();
     private final Set<Long> closedTrees = new HashSet<>();
     private final Set<Long> excludedTrees = new HashSet<>();
@@ -81,14 +79,6 @@ public class Mind {
 
     public void setDebugLevel(int debugLevel) {
         this.debugLevel = debugLevel;
-    }
-
-    public Map<Domain, Set<Domain>> getDestinations() {
-        return destinations;
-    }
-
-    public Map<Domain, Set<Domain>> getSources() {
-        return sources;
     }
 
     public DictionaryFactory getTerms() {
@@ -188,10 +178,10 @@ public class Mind {
         terms.mark();
         predicates.mark();
         domains.mark();
+        rights.mark();
+        trees.mark();
         tVars.mark();
         tValues.mark();
-        rights.mark();
-        trees.mark(); 
         functions.mark();
         fValues.mark();
     }
@@ -223,21 +213,17 @@ public class Mind {
 //        clearQueryStatus();
     }
 
-    public void clearLinks() {
-        tValues.clear();
-        sources.clear();
-        destinations.clear();
-        substituted.clear();
-        calculated.clear();
-
-    }
-
     public void clearQueryStatus() {
-        usedDomains.clear();
         usedTrees.clear();
+        closedTrees.clear();
+        excludedTrees.clear();
+
+        usedDomains.clear();
         closedDomains.clear();
+        queryValues.clear();
+
 //        acceptorDomains.clear();
-        queuedDomains.clear();
+//        queuedDomains.clear();
 
 //        sources.clear();
 //        destinations.clear();
@@ -585,9 +571,9 @@ public class Mind {
 //        acceptorDomains.addAll(markAcceptor);
 //    }
 
-    public Set<Long> getQueuedDomains() {
-        return queuedDomains;
-    }
+//    public Set<Long> getQueuedDomains() {
+//        return queuedDomains;
+//    }
 
     public Set<Long> getActiveRights() {
         return activeRights;

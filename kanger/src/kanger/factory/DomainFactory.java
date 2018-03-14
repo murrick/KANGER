@@ -115,9 +115,6 @@ public class DomainFactory {
         if(!stack.empty()) {
             stack.pop();
         }
-        if(!stack.empty()) {
-            stack.pop();
-        }
         mark();
     }
 

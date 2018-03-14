@@ -90,9 +90,9 @@ public class Domain {
     }
 
 
-    public boolean isQueued() {
-        return mind.getQueuedDomains().contains(id);
-    }
+//    public boolean isQueued() {
+//        return mind.getQueuedDomains().contains(id);
+//    }
 
 //    public boolean isAcceptor() {
 //        return mind.getAcceptorDomains().contains(id);
@@ -107,9 +107,9 @@ public class Domain {
 //    }
 //
 
-    public void setQueued() {
-        mind.getQueuedDomains().add(id);
-    }
+//    public void setQueued() {
+//        mind.getQueuedDomains().add(id);
+//    }
 
     public List<Domain> getCauses() {
         List<Domain> list = new ArrayList<>();

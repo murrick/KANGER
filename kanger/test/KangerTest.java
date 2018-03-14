@@ -35,7 +35,7 @@ public class KangerTest {
                     System.out.println("\t" + s);
                 }
             }
-            if (!mind.getHypotesisStore().isEmpty()) {
+            if (assertResult == null && !mind.getHypotesisStore().isEmpty()) {
                 System.out.println("Hypotesis:");
                 for (Hypotese s : mind.getHypotesisStore().getRoot()) {
                     System.out.println("\t" + s);

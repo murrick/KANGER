@@ -285,7 +285,9 @@ public class Analiser {
                     occurrs = true;
                 } else if (res == 1) {
                     //TODO: Срабатывает временами неверно
-                    result = true;
+                    if (d.isQuery()) {
+                        result = true;
+                    }
                     occurrs = true;
                 }
             }
@@ -354,8 +356,8 @@ public class Analiser {
                     }
 //                    }
                 }
-            } else if (hypotesis) {
-                mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
+            } else if (hypotesis /*&& !d.getRight().isQuery()*/) {
+                mind.getHypotesisStore().add(true, d.getPredicate(), d.getArguments());
             }
         }
         for (Domain d : suc) {
@@ -377,8 +379,8 @@ public class Analiser {
         }
         if (hypotesis) {
             for (Domain d : suc) {
-                if (!contains(d, ant)) {
-                    mind.getHypotesisStore().add(d.getPredicate(), d.getArguments());
+                if (!contains(d, ant) /*&& !d.getRight().isQuery()*/) {
+                    mind.getHypotesisStore().add(true, d.getPredicate(), d.getArguments());
                 }
             }
         }
@@ -429,7 +431,7 @@ public class Analiser {
         }
 
 //        mind.getClosedDimains().clear();
-        mind.getQueuedDomains().clear();
+//        mind.getQueuedDomains().clear();
         mind.getUsedTrees().clear();
 
         result = recurseTree(new ArrayList<>(tvars), 0, set, logging);
@@ -488,7 +490,6 @@ public class Analiser {
         int flag = 0;
         mind.reset();
         mind.clearQueryStatus();
-        mind.clearLinks();
 
         List<Right> rr = new ArrayList<>();
 
@@ -575,6 +576,9 @@ public class Analiser {
 
         mind.getLog().add(LogMode.ANALIZER, "============= CHECKING ===================");
         mind.getLinker().link(true);
+        mind.mark();
+//        mind.mark();
+
         if (analiser(true)) {
             mind.getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
             res = null;
@@ -615,6 +619,14 @@ public class Analiser {
 //                    if (res != null) {
 //                        mind.release();
 //                        analiser();
+
+                    mind.clearQueryStatus();
+
+                    mind.getSolutions().clear();
+                    mind.getValues().clear();
+                    mind.getHypotesisStore().clear();
+
+                    mind.mark();
                     Right r = (Right) mind.compileLine(line);
 
                     if (r != null) {
@@ -625,6 +637,7 @@ public class Analiser {
                         mind.getLinker().link(r, true);
                         if (analiser(true)) {
                             mind.getLog().add(LogMode.ANALIZER, "ERROR: Conflict in new Right");
+                            mind.release();
                             res = null;
                         } else {
                             res = true;
@@ -653,6 +666,8 @@ public class Analiser {
                             mind.setChanged(true);
                             mind.commit();
                         }
+                    } else {
+//                        mind.release();
                     }
 //                    }
 
@@ -698,6 +713,13 @@ public class Analiser {
 
 //
 //                            analiser(false);
+                            mind.clearQueryStatus();
+
+                            mind.getSolutions().clear();
+                            mind.getValues().clear();
+                            mind.getHypotesisStore().clear();
+
+                            mind.mark();
                             Right r = (Right) mind.compileLine(invert(line));
 
                             if (r != null) {
@@ -707,9 +729,6 @@ public class Analiser {
                                 mind.getLog().add(LogMode.ANALIZER, r);
                                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
-                                mind.getSolutions().clear();
-                                mind.getValues().clear();
-                                mind.getHypotesisStore().clear();
 
 //                                mind.markAcceptors();
 //                                mind.getRights().release();
@@ -738,14 +757,17 @@ public class Analiser {
 //                                }
                             }
 
+//                            mind.release();
+
                             if (res == null) {
-                                mind.reset();
-                                mind.clearQueryStatus();
-                                mind.getLinker().link(false);
+                                mind.release();
+//                            }
+//                                mind.reset();
+//                                mind.clearQueryStatus();
+//                                mind.getLinker().link(false);
 //                                mind.releaseAcceptors();
                             }
 
-                        } else {
                         }
                     }
 
@@ -759,6 +781,17 @@ public class Analiser {
 //                                mind.release();
 //                                mind.clearQueryStatus();
 //                                mind.getLinker().link(true);
+
+                        mind.clearQueryStatus();
+
+                        mind.getSolutions().clear();
+                        mind.getValues().clear();
+                        //TODO: Нужно ли собирать гипотезы для отрицания? Видимо да!
+                        mind.getHypotesisStore().setAntc(false);
+                        //mind.getHypotesisStore().clear();
+
+                        mind.mark();
+
                         Right r = (Right) mind.compileLine(line);
                         if (r != null) {
 
@@ -769,9 +802,6 @@ public class Analiser {
                             mind.getLog().add(LogMode.ANALIZER, r);
                             mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
-                            mind.getSolutions().clear();
-                            mind.getValues().clear();
-                            mind.getHypotesisStore().clear();
 
 //                            mind.getRights().release();
 //                            mind.getTrees().release();
@@ -831,10 +861,9 @@ public class Analiser {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: WHO KNOWS? No Hypotheses.");
                                 }
                         }
+//                        mind.release();
 
                     }
-
-//                    mind.release();
                     break;
                 }
             }

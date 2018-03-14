@@ -24,9 +24,9 @@ public class Hypotese {
     private Set<Right> rights = new HashSet<>();
     private boolean deleted = false;
 
-    public Hypotese(Predicate predicate, List<Argument> arg) {
+    public Hypotese(boolean antc, Predicate predicate, List<Argument> arg) {
         this.predicate = predicate;
-//        this.antc = antc;
+        this.antc = antc;
         for (Argument a : arg) {
             this.solve.add(a.getValue());
         }
@@ -64,6 +64,15 @@ public class Hypotese {
 //        this.right = right;
 //    }
 
+
+    public boolean isAntc() {
+        return antc;
+    }
+
+    public void setAntc(boolean antc) {
+        this.antc = antc;
+    }
+
     @Override
     public String toString() {
         int i, j;
@@ -72,7 +81,7 @@ public class Hypotese {
 
         int ccnt = 0;
 
-        String line = ""; //(antc ? "" : String.format("%c",Enums.NOT));
+        String line = (antc ? "" : String.format("%c",Enums.NOT));
         String tmp = predicate.getName() + "(";
         for (i = 0; i < predicate.getRange(); ++i) {
             if (solve.get(i) != null && solve.get(i).isCVar()) {

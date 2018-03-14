@@ -88,9 +88,6 @@ public class TVariableFactory {
         if(!stack.empty()) {
             stack.pop();
         }
-        if(!stack.empty()) {
-            stack.pop();
-        }
         mark();
     }
 

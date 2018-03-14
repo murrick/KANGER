@@ -13,7 +13,7 @@ public class HypotesisStore {
     private List<Hypotese> root = null;
     private boolean enableStore = true;
 
-    public Hypotese add(Predicate pred, List<Argument> arg) {
+    public Hypotese add(boolean antc, Predicate pred, List<Argument> arg) {
         if (!enableStore) {
             return null;
         }
@@ -24,7 +24,7 @@ public class HypotesisStore {
         if (h != null) {
             return h;
         } else {
-            h = new Hypotese(pred, arg);
+            h = new Hypotese(antc, pred, arg);
             root.add(h);
             return h;
         }
@@ -92,6 +92,14 @@ public class HypotesisStore {
 
     public boolean isEmpty() {
         return root == null || root.isEmpty();
+    }
+
+    public void setAntc(boolean antc) {
+        if (root != null) {
+            for (Hypotese h : root) {
+                h.setAntc(antc);
+            }
+        }
     }
 
 }

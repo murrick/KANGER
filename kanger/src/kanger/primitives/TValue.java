@@ -112,4 +112,8 @@ public class TValue {
         dos.writeLong(dstSolve == null ? -1 : dstSolve.getId());
     }
 
+    @Override
+    public String toString() {
+        return tVar.getVarName() + ":" + value.toString();
+    }
 }
