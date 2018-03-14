@@ -2,16 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="4d378ebb-e889-4573-8a06-af13aa70b62e" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/kanger/factory/FValueFactory.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/kanger/factory/FunctionFactory.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/kanger/primitives/FValue.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/kanger/prototypes/EntryX.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/test/KangerTest.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/kanger.iml" afterPath="$PROJECT_DIR$/kanger.iml" />
       <change beforePath="$PROJECT_DIR$/src/kanger/Analiser.java" afterPath="$PROJECT_DIR$/src/kanger/Analiser.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/Kanger.java" afterPath="$PROJECT_DIR$/src/kanger/Kanger.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/Linker.java" afterPath="$PROJECT_DIR$/src/kanger/Linker.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/Mind.java" afterPath="$PROJECT_DIR$/src/kanger/Mind.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/Screen.java" afterPath="$PROJECT_DIR$/src/kanger/Screen.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" afterPath="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/calculator/Predicates.java" afterPath="$PROJECT_DIR$/src/kanger/calculator/Predicates.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/compiler/Compiler.java" afterPath="$PROJECT_DIR$/src/kanger/compiler/Compiler.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/compiler/SysOp.java" afterPath="$PROJECT_DIR$/src/kanger/compiler/SysOp.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/factory/TValueFactory.java" afterPath="$PROJECT_DIR$/src/kanger/factory/TValueFactory.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/interfaces/IFactory.java" afterPath="$PROJECT_DIR$/src/kanger/interfaces/IFactory.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
-      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Right.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Right.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Function.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Function.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/TMeaning.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/TMeaning.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/primitives/TValue.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/TValue.java" />
       <change beforePath="$PROJECT_DIR$/src/kanger/primitives/Tree.java" afterPath="$PROJECT_DIR$/src/kanger/primitives/Tree.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/prototypes/Entry.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/prototypes/Factory.java" afterPath="$PROJECT_DIR$/src/kanger/prototypes/Factory.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/stores/HypotesesStore.java" afterPath="$PROJECT_DIR$/src/kanger/stores/HypotesisStore.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java" afterPath="$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java" />
+      <change beforePath="$PROJECT_DIR$/src/kanger/stores/ValuesStore.java" afterPath="$PROJECT_DIR$/src/kanger/stores/ValuesStore.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,40 +40,18 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/kanger$KangerTest.coverage" NAME="KangerTest Coverage Results" MODIFIED="1520859224656" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>kanger.*</FILTER>
+    </SUITE>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="Linker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/Linker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="99" column="32" lean-forward="false" selection-start-line="99" selection-start-column="32" selection-end-line="99" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Analiser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="134" column="72" lean-forward="true" selection-start-line="134" selection-start-column="72" selection-end-line="134" selection-end-column="72" />
-              <folding>
-                <element signature="e#618#619#0" expanded="true" />
-                <element signature="e#650#651#0" expanded="true" />
-                <element signature="e#16206#16207#0" expanded="true" />
-                <element signature="e#16275#16276#0" expanded="true" />
-                <element signature="e#16311#16312#0" expanded="true" />
-                <element signature="e#16345#16346#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TVariable.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TVariable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1760">
-              <caret line="166" column="48" lean-forward="false" selection-start-line="166" selection-start-column="48" selection-end-line="166" selection-end-column="48" />
+            <state relative-caret-position="390">
+              <caret line="239" column="0" lean-forward="true" selection-start-line="239" selection-start-column="0" selection-end-line="239" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -63,43 +60,43 @@
       <file leaf-file-name="TValueFactory.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/factory/TValueFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="42" column="18" lean-forward="false" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
+            <state relative-caret-position="223">
+              <caret line="71" column="9" lean-forward="true" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
+              <folding>
+                <element signature="e#1208#1209#0" expanded="true" />
+                <element signature="e#1271#1272#0" expanded="true" />
+                <element signature="e#2640#2641#0" expanded="true" />
+                <element signature="e#2667#2668#0" expanded="true" />
+                <element signature="e#2704#2705#0" expanded="true" />
+                <element signature="e#2728#2729#0" expanded="true" />
+                <element signature="e#2989#2990#0" expanded="true" />
+                <element signature="e#3043#3044#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Analiser.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="328">
+              <caret line="288" column="35" lean-forward="true" selection-start-line="288" selection-start-column="35" selection-end-line="288" selection-end-column="35" />
+              <folding>
+                <element signature="e#20113#20114#0" expanded="true" />
+                <element signature="e#20182#20183#0" expanded="true" />
+                <element signature="e#20218#20219#0" expanded="true" />
+                <element signature="e#20252#20253#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KangerTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/KangerTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="84" column="28" lean-forward="true" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="58" column="18" lean-forward="false" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
-              <folding>
-                <element signature="e#1356#1357#0" expanded="true" />
-                <element signature="e#1387#1388#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Domain.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Domain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="383" column="12" lean-forward="false" selection-start-line="383" selection-start-column="12" selection-end-line="383" selection-end-column="12" />
-              <folding>
-                <element signature="e#1621#1622#0" expanded="true" />
-                <element signature="e#1653#1654#0" expanded="true" />
-                <element signature="e#2702#2703#0" expanded="true" />
-                <element signature="e#2753#2754#0" expanded="true" />
-                <element signature="e#3226#3227#0" expanded="true" />
-                <element signature="e#3253#3254#0" expanded="true" />
-                <element signature="e#8319#8320#0" expanded="true" />
-                <element signature="e#8378#8379#0" expanded="true" />
-                <element signature="e#10323#10324#0" expanded="true" />
-                <element signature="e#10387#10388#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -107,35 +104,51 @@
       <file leaf-file-name="Screen.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/Screen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="579" column="81" lean-forward="false" selection-start-line="579" selection-start-column="81" selection-end-line="579" selection-end-column="81" />
+            <state relative-caret-position="253">
+              <caret line="70" column="59" lean-forward="true" selection-start-line="70" selection-start-column="59" selection-end-line="70" selection-end-column="59" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Compiler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/compiler/Compiler.java">
+      <file leaf-file-name="Predicate.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Predicate.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="655">
-              <caret line="120" column="32" lean-forward="true" selection-start-line="120" selection-start-column="32" selection-end-line="120" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Tree.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Tree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="44" column="21" lean-forward="false" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
+            <state relative-caret-position="413">
+              <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding>
-                <element signature="e#1141#1142#0" expanded="true" />
-                <element signature="e#1172#1173#0" expanded="true" />
-                <element signature="e#1359#1360#0" expanded="true" />
-                <element signature="e#1402#1403#0" expanded="true" />
-                <element signature="e#2501#2502#0" expanded="true" />
-                <element signature="e#2552#2553#0" expanded="true" />
+                <element signature="e#1456#1457#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Domain.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Domain.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+              <folding>
+                <element signature="e#1653#1654#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TVariable.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TVariable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="199">
+              <caret line="140" column="0" lean-forward="false" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+              <folding>
+                <element signature="e#6729#6730#0" expanded="true" />
+                <element signature="e#6783#6784#0" expanded="true" />
+                <element signature="e#6814#6815#0" expanded="true" />
+                <element signature="e#6867#6868#0" expanded="true" />
+                <element signature="e#6896#6897#0" expanded="true" />
+                <element signature="e#6947#6948#0" expanded="true" />
+                <element signature="e#7950#7951#0" expanded="true" />
+                <element signature="e#8009#8010#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -144,9 +157,28 @@
       <file leaf-file-name="Kanger.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/kanger/Kanger.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="24" column="83" lean-forward="true" selection-start-line="24" selection-start-column="83" selection-end-line="24" selection-end-column="83" />
+            <state relative-caret-position="387">
+              <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Mind.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="154">
+              <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
+              <folding>
+                <element signature="e#4806#4807#0" expanded="true" />
+                <element signature="e#5319#5320#0" expanded="true" />
+                <element signature="e#5352#5353#0" expanded="true" />
+                <element signature="e#16207#16208#0" expanded="true" />
+                <element signature="e#16241#16242#0" expanded="true" />
+                <element signature="e#17441#17442#0" expanded="true" />
+                <element signature="e#17475#17476#0" expanded="true" />
+                <marker date="1521012031973" expanded="true" signature="7401:7542" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -157,32 +189,22 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>setR</find>
-      <find>substituted</find>
-      <find>arg.get(1).setValue((Domain)</find>
-      <find>Doma</find>
-      <find>arg.get(4).setValue((Domain) o,</find>
-      <find>linkDomains</find>
-      <find>calcFunctions</find>
-      <find>arg.get(2).delValue((Domain) o);</find>
       <find>delValue((Domain) o);</find>
       <find>setQ</find>
       <find>delValue</find>
       <find>delValue(((Function) o)</find>
       <find>.setValue(</find>
       <find>analiseTree</find>
-      <find>recurseTree</find>
       <find>_inc</find>
       <find>TVa</find>
       <find>isE</find>
-      <find>recurseLink</find>
       <find>mind.getTValues().containsKey(this)</find>
-      <find>tValues</find>
       <find>getSolutions</find>
       <find>release</find>
       <find>linker</find>
@@ -192,6 +214,17 @@
       <find>storeHypo</find>
       <find>cloneTree</find>
       <find>getTVariables</find>
+      <find>getSubstituted</find>
+      <find>tValues</find>
+      <find>recurseLink</find>
+      <find>recalculate</find>
+      <find>owner</find>
+      <find>recurseTree</find>
+      <find>collectResults</find>
+      <find>tvaria</find>
+      <find>tvars</find>
+      <find>Calculated f</find>
+      <find>result</find>
     </findStrings>
     <replaceStrings>
       <replace>((Domain) o).getArguments().</replace>
@@ -222,43 +255,47 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/kanger/interfaces/IRunnable.java" />
-        <option value="$PROJECT_DIR$/src/kanger/compiler/SysOp.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Predicate.java" />
         <option value="$PROJECT_DIR$/src/kanger/enums/Enums.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Term.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Right.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Solve.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Hypotese.java" />
-        <option value="$PROJECT_DIR$/src/kanger/calculator/Predicates.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/TSubst.java" />
         <option value="$PROJECT_DIR$/src/kanger/enums/Tools.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/TValue.java" />
-        <option value="$PROJECT_DIR$/src/kanger/stores/HypotesesStore.java" />
         <option value="$PROJECT_DIR$/src/kanger/stores/LogStore.java" />
-        <option value="$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java" />
-        <option value="$PROJECT_DIR$/src/kanger/stores/ValuesStore.java" />
         <option value="$PROJECT_DIR$/src/kanger/calculator/Functions.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/TVariable.java" />
-        <option value="$PROJECT_DIR$/src/kanger/factory/TVariableFactory.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Solution.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Tree.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/DictionaryFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/DomainFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/PredicateFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/RightFactory.java" />
         <option value="$PROJECT_DIR$/src/kanger/factory/TreeFactory.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Solution.java" />
+        <option value="$PROJECT_DIR$/src/kanger/factory/TVariableFactory.java" />
+        <option value="$PROJECT_DIR$/src/kanger/stores/ValuesStore.java" />
+        <option value="$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java" />
+        <option value="$PROJECT_DIR$/src/kanger/stores/HypotesesStore.java" />
+        <option value="$PROJECT_DIR$/src/kanger/stores/HypotesisStore.java" />
+        <option value="$PROJECT_DIR$/src/kanger/KangerTest.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/TMeaning.java" />
+        <option value="$PROJECT_DIR$/src/kanger/calculator/Predicates.java" />
+        <option value="$PROJECT_DIR$/src/kanger/compiler/SysOp.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/TValue.java" />
+        <option value="$PROJECT_DIR$/src/kanger/compiler/Compiler.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
         <option value="$PROJECT_DIR$/src/kanger/primitives/Function.java" />
         <option value="$PROJECT_DIR$/src/kanger/calculator/Calculator.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Argument.java" />
-        <option value="$PROJECT_DIR$/src/kanger/Screen.java" />
-        <option value="$PROJECT_DIR$/src/kanger/factory/TValueFactory.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Tree.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/FValue.java" />
         <option value="$PROJECT_DIR$/src/kanger/Mind.java" />
-        <option value="$PROJECT_DIR$/src/kanger/compiler/Compiler.java" />
-        <option value="$PROJECT_DIR$/src/kanger/Kanger.java" />
+        <option value="$PROJECT_DIR$/src/kanger/primitives/TVariable.java" />
+        <option value="$PROJECT_DIR$/src/kanger/factory/TValueFactory.java" />
+        <option value="$PROJECT_DIR$/src/kanger/Screen.java" />
         <option value="$PROJECT_DIR$/src/kanger/Linker.java" />
+        <option value="$PROJECT_DIR$/src/kanger/Kanger.java" />
+        <option value="$PROJECT_DIR$/test/KangerTest.java" />
         <option value="$PROJECT_DIR$/src/kanger/Analiser.java" />
-        <option value="$PROJECT_DIR$/src/kanger/primitives/Domain.java" />
       </list>
     </option>
   </component>
@@ -289,7 +326,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -297,11 +334,6 @@
             <path>
               <item name="$project_name$" type="b2602c69:ProjectViewProjectNode" />
               <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="$project_name$" type="b2602c69:ProjectViewProjectNode" />
-              <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
-              <item name="nbproject" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="$project_name$" type="b2602c69:ProjectViewProjectNode" />
@@ -354,6 +386,13 @@
               <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
+              <item name="interfaces" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="$project_name$" type="b2602c69:ProjectViewProjectNode" />
+              <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
               <item name="primitives" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -370,12 +409,17 @@
               <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
               <item name="stores" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="$project_name$" type="b2602c69:ProjectViewProjectNode" />
+              <item name="$project_name$" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -384,10 +428,21 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="create.test.in.the.same.root" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="$project_name$" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="kanger.factory" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -402,7 +457,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.KangerTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -437,6 +492,31 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="$project_name$" />
       <envs />
+    </configuration>
+    <configuration name="KangerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="kanger.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="$project_name$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="$project_name$" />
+      <option name="MAIN_CLASS_NAME" value="kanger.KangerTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -498,6 +578,15 @@
       <option name="PROGRAM_PARAMETERS" />
       <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="Application.kanger" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.KangerTest" />
+    </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.KangerTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -615,8 +704,47 @@
       <option name="project" value="LOCAL" />
       <updated>1520346861381</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="tValues теперь хранятся в списке на уровне mind.&#10;&#10;Это проходит:&#10;&#10;: ?$x a(x) &amp;&amp; d(x);&#9;&#9;// +&#10;: ?$x a(x) || d(x);&#9;&#9;// +&#10;: ?a(nnn);&#9;&#9;&#9;// +&#10;: ?a(nn);&#9;&#9;&#9;// +&#10;: ?d(nn);&#9;&#9;&#9;// +&#10;: ?c(n);&#9;&#9;&#9;// +&#10;: ?$x c(x);&#9;&#9;&#9;// +&#10;: ?a(nn) -&gt; c(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; b(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// +&#10;&#10;И это проходит, но надо оптимизировать:&#10;&#10;: ?$x $y (12+y)*2=256, x=5*y;">
+      <created>1520850219793</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1520850219793</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="KangerTest - 2018.03.14 at 10h 42m 14s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 11h 39m 01s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 11h 42m 12s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 10m 11s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 11m 12s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 11m 41s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 11m 49s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 13m 08s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 13m 35s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="KangerTest - 2018.03.14 at 13h 18m 58s.xml">
+      <configuration name="KangerTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -638,24 +766,25 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19903949" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20757738" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -710,19 +839,12 @@
     <MESSAGE value="Периодические бои за функции. Все глючит - 3. Уравнение с 2-мя неизвестными решил" />
     <MESSAGE value="Поправил сбор гипотез. Не до конца просмотр происходит." />
     <MESSAGE value=": b&#10;Predicate n(1) :&#10;&#9;?n(#4:nnn);&#10;&#9;?n(#4:mmm);&#10;&#10;Predicate d(1) :&#10;&#9;!d(v);&#10;&#9;!d(#3:ooo);&#10;&#9;!d(#3:nnn);&#10;&#9;!d(#3:mmm);&#10;&#10;Predicate c(1) :&#10;&#9;!c(#2:nnn);&#10;&#9;!c(#2:ooo);&#10;&#9;!c(#2:mmm);&#10;&#10;Predicate b(1) :&#10;&#9;!b(#1:nnn);&#10;&#9;!b(#1:mmm);&#10;&#9;!b(ooo);&#10;&#10;Predicate a(1) :&#10;&#9;!a(nnn);&#10;&#9;!a(mmm);&#10;&#10;&#10;: ?$x a(x) &amp;&amp; d(x);&#9;&#9;// +&#10;: ?a(nn);&#9;&#9;&#9;// +&#10;: ?a(nnn);&#9;&#9;&#9;// +&#10;: ?$x c(x);&#9;&#9;&#9;// +&#10;: ?a(nn) -&gt; c(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; b(nn);&#9;&#9;// +&#10;&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// -&#10;: ?d(nn);&#9;&#9;&#9;// -&#10;: ?c(n);&#9;&#9;&#9;// -&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// -&#10;&#10;Глючит повторный запрос!" />
-    <option name="LAST_COMMIT_MESSAGE" value=": b&#10;Predicate n(1) :&#10;&#9;?n(#4:nnn);&#10;&#9;?n(#4:mmm);&#10;&#10;Predicate d(1) :&#10;&#9;!d(v);&#10;&#9;!d(#3:ooo);&#10;&#9;!d(#3:nnn);&#10;&#9;!d(#3:mmm);&#10;&#10;Predicate c(1) :&#10;&#9;!c(#2:nnn);&#10;&#9;!c(#2:ooo);&#10;&#9;!c(#2:mmm);&#10;&#10;Predicate b(1) :&#10;&#9;!b(#1:nnn);&#10;&#9;!b(#1:mmm);&#10;&#9;!b(ooo);&#10;&#10;Predicate a(1) :&#10;&#9;!a(nnn);&#10;&#9;!a(mmm);&#10;&#10;&#10;: ?$x a(x) &amp;&amp; d(x);&#9;&#9;// +&#10;: ?a(nn);&#9;&#9;&#9;// +&#10;: ?a(nnn);&#9;&#9;&#9;// +&#10;: ?$x c(x);&#9;&#9;&#9;// +&#10;: ?a(nn) -&gt; c(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; b(nn);&#9;&#9;// +&#10;&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// -&#10;: ?d(nn);&#9;&#9;&#9;// -&#10;: ?c(n);&#9;&#9;&#9;// -&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// -&#10;&#10;Глючит повторный запрос!" />
+    <MESSAGE value="tValues теперь хранятся в списке на уровне mind.&#10;&#10;Это проходит:&#10;&#10;: ?$x a(x) &amp;&amp; d(x);&#9;&#9;// +&#10;: ?$x a(x) || d(x);&#9;&#9;// +&#10;: ?a(nnn);&#9;&#9;&#9;// +&#10;: ?a(nn);&#9;&#9;&#9;// +&#10;: ?d(nn);&#9;&#9;&#9;// +&#10;: ?c(n);&#9;&#9;&#9;// +&#10;: ?$x c(x);&#9;&#9;&#9;// +&#10;: ?a(nn) -&gt; c(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; b(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// +&#10;&#10;И это проходит, но надо оптимизировать:&#10;&#10;: ?$x $y (12+y)*2=256, x=5*y;" />
+    <option name="LAST_COMMIT_MESSAGE" value="tValues теперь хранятся в списке на уровне mind.&#10;&#10;Это проходит:&#10;&#10;: ?$x a(x) &amp;&amp; d(x);&#9;&#9;// +&#10;: ?$x a(x) || d(x);&#9;&#9;// +&#10;: ?a(nnn);&#9;&#9;&#9;// +&#10;: ?a(nn);&#9;&#9;&#9;// +&#10;: ?d(nn);&#9;&#9;&#9;// +&#10;: ?c(n);&#9;&#9;&#9;// +&#10;: ?$x c(x);&#9;&#9;&#9;// +&#10;: ?a(nn) -&gt; c(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; b(nn);&#9;&#9;// +&#10;: ?a(nn) -&gt; d(nn);&#9;&#9;// +&#10;&#10;И это проходит, но надо оптимизировать:&#10;&#10;: ?$x $y (12+y)*2=256, x=5*y;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/kanger/calculator/Functions.java</url>
-          <line>183</line>
-          <properties method="run">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/kanger/primitives/Solution.java</url>
           <line>29</line>
@@ -731,36 +853,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/kanger/primitives/TVariable.java</url>
-          <line>299</line>
+          <line>281</line>
           <properties />
           <option name="timeStamp" value="93" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/kanger/calculator/Functions.java</url>
-          <line>158</line>
+          <line>159</line>
           <properties />
-          <option name="timeStamp" value="102" />
+          <option name="timeStamp" value="179" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/kanger/calculator/Functions.java</url>
-          <line>214</line>
+          <url>file://$PROJECT_DIR$/src/kanger/Analiser.java</url>
+          <line>434</line>
           <properties />
-          <option name="timeStamp" value="103" />
+          <option name="timeStamp" value="214" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="131" />
+      <option name="time" value="215" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="isEmpty(o, 0)" />
-        <watch expression="isEmpty(o, 1)" />
-        <watch expression="arg.get(0).getT().getSrcSolve()" language="JAVA" />
-        <watch expression="((Function) d).getOwner()" />
-        <watch expression="((Function) d).getArguments().get(index).getT().getSrcSolve()" language="JAVA" />
-        <watch expression="mind.getSubstituted()" />
-        <watch expression="mind.getCalculated()" />
-        <watch expression="mind.getExcludedTrees()" language="JAVA" />
-        <watch expression="x.isExcluded(t)" language="JAVA" />
+        <watch expression="mind.tValues" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -770,6 +884,11 @@
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>mind.tValues</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>mind.getExcludedTrees()</expression-string>
         <language-id>JAVA</language-id>
@@ -805,12 +924,27 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
-        <expression-string>x.isExcluded(t)</expression-string>
+        <expression-string>t.getDstSolve()</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>mind.getSubstituted().size()</expression-string>
+        <expression-string>t.getSrcSolve()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>current.get(tv)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>current.containsKey(tv)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>tv.isEmpty()</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -820,106 +954,41 @@
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>slave.isDest()</expression-string>
+        <expression-string>t.isSubstituted()</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>master.isUsed()</expression-string>
+        <expression-string>f.isSubstituted()</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>slave.get(level).isEmpty()</expression-string>
+        <expression-string>substituted</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>arg.get(0).isDefined()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>arg.get(2).isDefined()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>arg.get(1).isDefined()</expression-string>
+        <expression-string>mind.getCalculated()</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-75">
-          <caret line="40" column="33" lean-forward="true" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#605#606#0" expanded="false" />
-            <element signature="e#637#638#0" expanded="false" />
-            <element signature="e#1065#1066#0" expanded="false" />
-            <element signature="e#1093#1094#0" expanded="false" />
-            <element signature="e#1133#1134#0" expanded="false" />
-            <element signature="e#1167#1168#0" expanded="false" />
-            <element signature="e#1202#1203#0" expanded="false" />
-            <element signature="e#1233#1234#0" expanded="false" />
-            <element signature="e#1281#1282#0" expanded="false" />
-            <element signature="e#1321#1322#0" expanded="false" />
-            <element signature="e#1356#1357#0" expanded="true" />
-            <element signature="e#1387#1388#0" expanded="true" />
-            <element signature="e#1435#1436#0" expanded="false" />
-            <element signature="e#1475#1476#0" expanded="false" />
-            <element signature="e#1506#1507#0" expanded="false" />
-            <element signature="e#1534#1535#0" expanded="false" />
-            <element signature="e#1575#1576#0" expanded="false" />
-            <element signature="e#1609#1610#0" expanded="false" />
-            <element signature="e#1636#1637#0" expanded="false" />
-            <element signature="e#1661#1662#0" expanded="false" />
-            <element signature="e#1695#1696#0" expanded="false" />
-            <element signature="e#1723#1724#0" expanded="false" />
-            <element signature="e#1754#1755#0" expanded="false" />
-            <element signature="e#1781#1782#0" expanded="false" />
-            <element signature="e#1821#1822#0" expanded="false" />
-            <element signature="e#1853#1854#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="104" column="70" lean-forward="true" selection-start-line="104" selection-start-column="70" selection-end-line="104" selection-end-column="70" />
-          <folding>
-            <element signature="e#618#619#0" expanded="true" />
-            <element signature="e#650#651#0" expanded="true" />
-            <element signature="e#16206#16207#0" expanded="true" />
-            <element signature="e#16275#16276#0" expanded="true" />
-            <element signature="e#16311#16312#0" expanded="true" />
-            <element signature="e#16345#16346#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Argument.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1315">
-          <caret line="149" column="0" lean-forward="false" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
           <caret line="396" column="5" lean-forward="true" selection-start-line="396" selection-start-column="5" selection-end-line="396" selection-end-column="5" />
           <folding>
-            <element signature="e#14780#14781#0" expanded="true" />
-            <element signature="e#14814#14815#0" expanded="true" />
-            <element signature="e#15683#15684#0" expanded="true" />
-            <element signature="e#15717#15718#0" expanded="true" />
+            <element signature="e#4806#4807#0" expanded="true" />
+            <element signature="e#5319#5320#0" expanded="true" />
+            <element signature="e#5352#5353#0" expanded="true" />
+            <element signature="e#16207#16208#0" expanded="true" />
+            <element signature="e#16241#16242#0" expanded="true" />
+            <element signature="e#17441#17442#0" expanded="true" />
+            <element signature="e#17475#17476#0" expanded="true" />
+            <marker date="1521012031973" expanded="true" signature="7401:7542" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -929,7 +998,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -955,17 +1023,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="533" column="19" lean-forward="false" selection-start-line="533" selection-start-column="19" selection-end-line="533" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/compiler/SysOp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
-          <caret line="98" column="9" lean-forward="false" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
-          <folding>
-            <element signature="e#4403#4404#0" expanded="false" />
-            <element signature="e#4430#4431#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -995,7 +1052,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="75" column="21" lean-forward="true" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1017,14 +1073,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Predicates.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="23" column="9" lean-forward="false" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TSubst.java" />
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Term.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1034,82 +1082,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/stores/HypotesesStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="507">
-          <caret line="70" column="21" lean-forward="false" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/stores/LibraryStore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="387">
           <caret line="70" column="21" lean-forward="false" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/stores/LogStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="104" column="21" lean-forward="false" selection-start-line="104" selection-start-column="21" selection-end-line="104" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="59" column="21" lean-forward="false" selection-start-line="59" selection-start-column="21" selection-end-line="59" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/stores/ValuesStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="61" column="21" lean-forward="false" selection-start-line="61" selection-start-column="21" selection-end-line="61" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/factory/DictionaryFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/factory/DomainFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/factory/PredicateFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/factory/RightFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/factory/TVariableFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="101" column="86" lean-forward="false" selection-start-line="101" selection-start-column="86" selection-end-line="101" selection-end-column="86" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1121,63 +1097,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/factory/TreeFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1170">
-          <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Solution.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
           <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TMeaning.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding>
-            <element signature="e#600#601#0" expanded="false" />
-            <element signature="e#692#693#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Function.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="102" column="46" lean-forward="true" selection-start-line="102" selection-start-column="46" selection-end-line="102" selection-end-column="46" />
-          <folding>
-            <element signature="e#2396#2397#0" expanded="false" />
-            <element signature="e#2428#2429#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Calculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1410">
-          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Argument.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2475">
-          <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Functions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3210">
-          <caret line="227" column="32" lean-forward="false" selection-start-line="227" selection-start-column="32" selection-end-line="227" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -1190,49 +1113,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Predicate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding>
-            <element signature="e#1456#1457#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="664">
-          <caret line="538" column="48" lean-forward="false" selection-start-line="538" selection-start-column="48" selection-end-line="538" selection-end-column="48" />
-          <folding>
-            <element signature="e#14780#14781#0" expanded="true" />
-            <element signature="e#14814#14815#0" expanded="true" />
-            <element signature="e#15683#15684#0" expanded="true" />
-            <element signature="e#15717#15718#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Right.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
           <caret line="91" column="46" lean-forward="true" selection-start-line="91" selection-start-column="46" selection-end-line="91" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/compiler/Compiler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="655">
-          <caret line="120" column="32" lean-forward="true" selection-start-line="120" selection-start-column="32" selection-end-line="120" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Screen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="579" column="81" lean-forward="false" selection-start-line="579" selection-start-column="81" selection-end-line="579" selection-end-column="81" />
           <folding />
         </state>
       </provider>
@@ -1242,89 +1126,324 @@
         <state relative-caret-position="163">
           <caret line="44" column="21" lean-forward="false" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
           <folding>
-            <element signature="e#1141#1142#0" expanded="true" />
-            <element signature="e#1172#1173#0" expanded="true" />
-            <element signature="e#1359#1360#0" expanded="true" />
-            <element signature="e#1402#1403#0" expanded="true" />
-            <element signature="e#2501#2502#0" expanded="true" />
-            <element signature="e#2552#2553#0" expanded="true" />
+            <element signature="e#1141#1142#0" expanded="false" />
+            <element signature="e#1172#1173#0" expanded="false" />
+            <element signature="e#1359#1360#0" expanded="false" />
+            <element signature="e#1402#1403#0" expanded="false" />
+            <element signature="e#2501#2502#0" expanded="false" />
+            <element signature="e#2552#2553#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Kanger.java">
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/PredicateFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="24" column="83" lean-forward="true" selection-start-line="24" selection-start-column="83" selection-end-line="24" selection-end-column="83" />
+        <state relative-caret-position="207">
+          <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Linker.java">
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/RightFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="99" column="32" lean-forward="false" selection-start-line="99" selection-start-column="32" selection-end-line="99" selection-end-column="32" />
+        <state relative-caret-position="308">
+          <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/TVariableFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1305">
+          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/stores/SolutionsStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/stores/LogStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="104" column="21" lean-forward="false" selection-start-line="104" selection-start-column="21" selection-end-line="104" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/stores/HypotesisStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TMeaning.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="44" column="32" lean-forward="true" selection-start-line="44" selection-start-column="32" selection-end-line="44" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/stores/ValuesStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/TreeFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="92" column="17" lean-forward="true" selection-start-line="92" selection-start-column="17" selection-end-line="92" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/DictionaryFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/DomainFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="121" column="0" lean-forward="false" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Predicates.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="34" column="48" lean-forward="false" selection-start-line="34" selection-start-column="48" selection-end-line="34" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TValue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="58" column="18" lean-forward="false" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
+        <state relative-caret-position="169">
+          <caret line="66" column="23" lean-forward="false" selection-start-line="66" selection-start-column="23" selection-end-line="66" selection-end-column="23" />
           <folding>
-            <element signature="e#1356#1357#0" expanded="true" />
-            <element signature="e#1387#1388#0" expanded="true" />
+            <element signature="e#1289#1290#0" expanded="false" />
+            <element signature="e#1317#1318#0" expanded="false" />
+            <element signature="e#1357#1358#0" expanded="false" />
+            <element signature="e#1391#1392#0" expanded="false" />
+            <element signature="e#1426#1427#0" expanded="false" />
+            <element signature="e#1457#1458#0" expanded="false" />
+            <element signature="e#1505#1506#0" expanded="false" />
+            <element signature="e#1545#1546#0" expanded="false" />
+            <element signature="e#1580#1581#0" expanded="false" />
+            <element signature="e#1611#1612#0" expanded="false" />
+            <element signature="e#1659#1660#0" expanded="false" />
+            <element signature="e#1699#1700#0" expanded="false" />
+            <element signature="e#1730#1731#0" expanded="false" />
+            <element signature="e#1758#1759#0" expanded="false" />
+            <element signature="e#1799#1800#0" expanded="false" />
+            <element signature="e#1833#1834#0" expanded="false" />
+            <element signature="e#1860#1861#0" expanded="false" />
+            <element signature="e#1885#1886#0" expanded="false" />
+            <element signature="e#1919#1920#0" expanded="false" />
+            <element signature="e#1947#1948#0" expanded="false" />
+            <element signature="e#1981#1982#0" expanded="false" />
+            <element signature="e#2008#2009#0" expanded="false" />
+            <element signature="e#2051#2052#0" expanded="false" />
+            <element signature="e#2083#2084#0" expanded="false" />
+            <element signature="e#2114#2115#0" expanded="false" />
+            <element signature="e#2141#2142#0" expanded="false" />
+            <element signature="e#2181#2182#0" expanded="false" />
+            <element signature="e#2213#2214#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/compiler/Compiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="732">
+          <caret line="217" column="5" lean-forward="true" selection-start-line="217" selection-start-column="5" selection-end-line="217" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/compiler/SysOp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1710">
+          <caret line="134" column="0" lean-forward="false" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+          <folding>
+            <element signature="e#4304#4305#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Functions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="49" column="32" lean-forward="true" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Function.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+          <folding>
+            <element signature="e#8902#8903#0" expanded="false" />
+            <element signature="e#8963#8964#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Argument.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding>
+            <element signature="e#2520#2521#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/FValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/calculator/Calculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1290">
+          <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/factory/FValueFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/factory/TValueFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="42" column="18" lean-forward="false" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
-          <folding />
+        <state relative-caret-position="223">
+          <caret line="71" column="9" lean-forward="true" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
+          <folding>
+            <element signature="e#1208#1209#0" expanded="true" />
+            <element signature="e#1271#1272#0" expanded="true" />
+            <element signature="e#2640#2641#0" expanded="true" />
+            <element signature="e#2667#2668#0" expanded="true" />
+            <element signature="e#2704#2705#0" expanded="true" />
+            <element signature="e#2728#2729#0" expanded="true" />
+            <element signature="e#2989#2990#0" expanded="true" />
+            <element signature="e#3043#3044#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/TVariable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1760">
-          <caret line="166" column="48" lean-forward="false" selection-start-line="166" selection-start-column="48" selection-end-line="166" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="134" column="72" lean-forward="true" selection-start-line="134" selection-start-column="72" selection-end-line="134" selection-end-column="72" />
+        <state relative-caret-position="199">
+          <caret line="140" column="0" lean-forward="false" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
           <folding>
-            <element signature="e#618#619#0" expanded="true" />
-            <element signature="e#650#651#0" expanded="true" />
-            <element signature="e#16206#16207#0" expanded="true" />
-            <element signature="e#16275#16276#0" expanded="true" />
-            <element signature="e#16311#16312#0" expanded="true" />
-            <element signature="e#16345#16346#0" expanded="true" />
+            <element signature="e#6729#6730#0" expanded="true" />
+            <element signature="e#6783#6784#0" expanded="true" />
+            <element signature="e#6814#6815#0" expanded="true" />
+            <element signature="e#6867#6868#0" expanded="true" />
+            <element signature="e#6896#6897#0" expanded="true" />
+            <element signature="e#6947#6948#0" expanded="true" />
+            <element signature="e#7950#7951#0" expanded="true" />
+            <element signature="e#8009#8010#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Domain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="383" column="12" lean-forward="false" selection-start-line="383" selection-start-column="12" selection-end-line="383" selection-end-column="12" />
+        <state relative-caret-position="192">
+          <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
-            <element signature="e#1621#1622#0" expanded="true" />
             <element signature="e#1653#1654#0" expanded="true" />
-            <element signature="e#2702#2703#0" expanded="true" />
-            <element signature="e#2753#2754#0" expanded="true" />
-            <element signature="e#3226#3227#0" expanded="true" />
-            <element signature="e#3253#3254#0" expanded="true" />
-            <element signature="e#8319#8320#0" expanded="true" />
-            <element signature="e#8378#8379#0" expanded="true" />
-            <element signature="e#10323#10324#0" expanded="true" />
-            <element signature="e#10387#10388#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/primitives/Predicate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding>
+            <element signature="e#1456#1457#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Mind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
+          <folding>
+            <element signature="e#4806#4807#0" expanded="true" />
+            <element signature="e#5319#5320#0" expanded="true" />
+            <element signature="e#5352#5353#0" expanded="true" />
+            <element signature="e#16207#16208#0" expanded="true" />
+            <element signature="e#16241#16242#0" expanded="true" />
+            <element signature="e#17441#17442#0" expanded="true" />
+            <element signature="e#17475#17476#0" expanded="true" />
+            <marker date="1521012031973" expanded="true" signature="7401:7542" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Screen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="70" column="59" lean-forward="true" selection-start-line="70" selection-start-column="59" selection-end-line="70" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Linker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="239" column="0" lean-forward="true" selection-start-line="239" selection-start-column="0" selection-end-line="239" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Kanger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/KangerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="84" column="28" lean-forward="true" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/kanger/Analiser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="288" column="35" lean-forward="true" selection-start-line="288" selection-start-column="35" selection-end-line="288" selection-end-column="35" />
+          <folding>
+            <element signature="e#20113#20114#0" expanded="true" />
+            <element signature="e#20182#20183#0" expanded="true" />
+            <element signature="e#20218#20219#0" expanded="true" />
+            <element signature="e#20252#20253#0" expanded="true" />
           </folding>
         </state>
       </provider>

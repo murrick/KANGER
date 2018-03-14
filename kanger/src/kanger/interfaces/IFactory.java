@@ -1,6 +1,6 @@
 package kanger.interfaces;
 
-import kanger.prototypes.Entry;
+import kanger.prototypes.EntryX;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

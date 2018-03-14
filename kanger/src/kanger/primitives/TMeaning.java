@@ -41,6 +41,10 @@ public class TMeaning {
 
     @Override
     public boolean equals(Object o) {
-        return o != null && value != null && (o instanceof TMeaning) && ((TMeaning) o).getVariable().getId() == variable.getId() && ((TMeaning) o).getValue().getId() == value.getId();
+        return o != null
+                && value != null
+                && (o instanceof TMeaning)
+                && ((TMeaning) o).getVariable().getId() == variable.getId()
+                && ((TMeaning) o).getValue().getId() == value.getId();
     }
 }

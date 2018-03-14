@@ -56,7 +56,7 @@ public class TValueFactory {
     }
 
     public boolean rewind(TVariable tv) {
-        if (isEmpty(tv)) {
+        if (root == null) {
             return false;
         }
         current.put(tv, root.getId());
@@ -150,6 +150,7 @@ public class TValueFactory {
             lastID = (long) pop[1];
             if (root != null && saved != null && root.getId() != saved.getId()) {
                 for (TValue t = root; t != null; t = t.getNext()) {
+                    current.remove(t.getTVar());
                     if (t.getNext() != null && t.getNext().getId() == saved.getId()) {
                         t.setNext(null);
                         break;

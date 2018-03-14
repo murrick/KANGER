@@ -1,25 +1,18 @@
 package kanger;
 
-import kanger.calculator.Calculator;
-import kanger.compiler.Compiler;
-import kanger.compiler.PTree;
-import kanger.compiler.Parser;
-import kanger.compiler.SysOp;
-import kanger.enums.Enums;
-import kanger.enums.LogMode;
-import kanger.enums.Tools;
-import kanger.exception.ParseErrorException;
-import kanger.exception.RuntimeErrorException;
+import java.io.*;
+import java.util.*;
+import java.util.zip.*;
+import javax.script.*;
+import kanger.calculator.*;
+import kanger.compiler.*;
+import kanger.enums.*;
+import kanger.exception.*;
 import kanger.factory.*;
 import kanger.primitives.*;
 import kanger.stores.*;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import java.io.*;
-import java.util.*;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+import kanger.compiler.Compiler;
 
 /**
  * Created by Dmitry G. Qusnetsov on 20.05.15.
@@ -31,12 +24,14 @@ public class Mind {
     private final DomainFactory domains = new DomainFactory(this);                            // Список доменов
     private final RightFactory rights = new RightFactory(this);                               // Список правил
     private final TreeFactory trees = new TreeFactory(this);                               // Список секвенций
-
+    private final FunctionFactory functions = new FunctionFactory(this);
+    
     private final TVariableFactory tVars = new TVariableFactory(this);                    // t-переменные
     private final TValueFactory tValues = new TValueFactory(this);
+    private final FValueFactory fValues = new FValueFactory(this);
 
 
-    private final HypotesesStore hypoteses = new HypotesesStore();                    // Список гипотез
+    private final HypotesisStore hypotesis = new HypotesisStore();                    // Список гипотез
     private final LogStore log = new LogStore(this);                                      // Протокол вывода
     private final SolutionsStore solves = new SolutionsStore(this);                             // Список пешений
     private final ValuesStore values = new ValuesStore(this);                             // Список величин
@@ -64,18 +59,19 @@ public class Mind {
     private final Set<Long> closedTrees = new HashSet<>();
     private final Set<Long> excludedTrees = new HashSet<>();
 
-    private final Map<Long,Set<List<Long>>> closedDomains = new HashMap<>();
-    private final Map<Long,Set<List<Long>>> usedDomains = new HashMap<>();
-    private final Map<Long,Set<Long>> queryValues = new HashMap<>();
+    private final Map<Long, Set<List<Long>>> closedDomains = new HashMap<>();
+    private final Map<Long, Set<List<Long>>> usedDomains = new HashMap<>();
+    private final Map<Long, Set<Long>> queryValues = new HashMap<>();
 
     private Set<Long> activeRights = new HashSet<>();
 
-//    private Set<Long> acceptorDomains = new HashSet<>();
+    //    private Set<Long> acceptorDomains = new HashSet<>();
 //    private Set<Long> markAcceptor = new HashSet<>();
     private transient Map<Term, Long> dictionaryLinks = null;
     private transient Map<Domain, Long> domainLinks = null;
     private transient Map<TVariable, Long> tVariableLinks = null;
 
+    private Boolean queryResult = null;
     private transient volatile int currentLevel = 0;
     private int debugLevel = Enums.DEBUG_LEVEL_DEBUG | (Enums.DEBUG_OPTION_STATUS | Enums.DEBUG_OPTION_VALUES);
 
@@ -121,14 +117,18 @@ public class Mind {
 
     public TVariableFactory getTVars() {
         return tVars;
+    } 
+    
+    public FunctionFactory getFunctions() {
+        return functions;
     }
 
     public LibraryStore getLibrary() {
         return library;
     }
 
-    public HypotesesStore getHypotesisStore() {
-        return hypoteses;
+    public HypotesisStore getHypotesisStore() {
+        return hypotesis;
     }
 
     public LogStore getLog() {
@@ -141,6 +141,10 @@ public class Mind {
 
     public TValueFactory getTValues() {
         return tValues;
+    }
+    
+    public FValueFactory getFValues() {
+        return fValues;
     }
 
     public int getCurrentLevel() {
@@ -187,7 +191,9 @@ public class Mind {
         tVars.mark();
         tValues.mark();
         rights.mark();
-        trees.mark();
+        trees.mark(); 
+        functions.mark();
+        fValues.mark();
     }
 
     public void commit() {
@@ -197,7 +203,9 @@ public class Mind {
         tVars.commit();
         tValues.commit();
         rights.commit();
-        trees.commit();
+        trees.commit(); 
+        functions.commit();
+        fValues.commit();
     }
 
     public void release() {
@@ -207,7 +215,9 @@ public class Mind {
         tVars.release();
         tValues.release();
         rights.release();
-        trees.release();
+        trees.release(); 
+        functions.release();
+        fValues.release();
 
 //        clearLinks();
 //        clearQueryStatus();
@@ -240,11 +250,13 @@ public class Mind {
         tVars.reset();
         tValues.reset();
         rights.reset();
-        trees.reset();
+        trees.reset(); 
+        functions.reset();
+        fValues.reset();
 
         solves.clear();
         values.clear();
-        hypoteses.clear();
+        hypotesis.clear();
 //        log.clear();
 
     }
@@ -256,9 +268,11 @@ public class Mind {
         tVars.clear();
         tValues.clear();
         rights.clear();
-        trees.clear();
+        trees.clear(); 
+        functions.clear();
+        fValues.clear();
 
-        hypoteses.clear();
+        hypotesis.clear();
 //        log.clear();
         solves.clear();
         values.clear();
@@ -514,7 +528,8 @@ public class Mind {
     }
 
     public Boolean query(String line) throws ParseErrorException, RuntimeErrorException {
-        return analiser.query(line, false);
+        queryResult = analiser.query(line, false);
+        return queryResult;
     }
 
     public String getVersion() {
@@ -536,7 +551,7 @@ public class Mind {
         return tVariableLinks;
     }
 
-    public Map<Long,Set<List<Long>>> getUsedDomains() {
+    public Map<Long, Set<List<Long>>> getUsedDomains() {
         return usedDomains;
     }
 
@@ -544,7 +559,7 @@ public class Mind {
         return usedTrees;
     }
 
-    public Map<Long,Set<List<Long>>> getClosedDomains() {
+    public Map<Long, Set<List<Long>>> getClosedDomains() {
         return closedDomains;
     }
 
@@ -610,19 +625,32 @@ public class Mind {
 
                 }
             }
-            for (Function f : calculated) {
-                set.addAll(f.getOwner().getPredicate().getRights());
-            }
+//            for (Function f : calculated) {
+//                set.addAll(f.getOwner().getPredicate().getRights());
+//            }
         }
         return set;
     }
 
+    public Right getQuery() {
+        for (Right r = rights.getRoot(); r != null; r = r.getNext()) {
+            if (r.isQuery()) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    public Boolean getQueryResult() {
+        return queryResult;
+    }
+
     public Set<Tree> getActualTrees() {
         Set<Tree> set = new HashSet<>();
-//        for (Right r : getActualRights()) {
+        for (Right r : getActualRights()) {
 //            if (!r.isQuery()) {
-for(Right r = getRights().getRoot(); r != null; r=r.getNext()) {
-                set.addAll(r.getTree());
+//for(Right r = getRights().getRoot(); r != null; r=r.getNext()) {
+            set.addAll(r.getTree());
 //            }
         }
         return set;

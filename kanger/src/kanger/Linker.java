@@ -51,8 +51,12 @@ public class Linker {
                     occurrs = true;
                 }
 
-                if (master.get(level).isTSet() && !slave.get(level).isEmpty() && (!slave.isDest() || slave.isQuery())
-                        && !master.get(level).getT().contains(slave.get(level).getValue())) {
+                if (master.get(level).isTSet()
+//                        && !master.get(level).isDefined()
+                        && !slave.get(level).isEmpty()
+                        && (!slave.isDest() || slave.getRight().isQuery())
+                        && !master.get(level).getT().contains(slave.get(level).getValue())
+                        ) {
                     try {
                         TValue s = master.get(level).getT().setValue(slave.get(level).getValue());
                         s.setDstSolve(master);
@@ -65,8 +69,12 @@ public class Linker {
                     }
                 }
 
-                if (slave.get(level).isTSet() && !master.get(level).isEmpty() && (!master.isDest() || master.isQuery())
-                        && !slave.get(level).getT().contains(master.get(level).getValue())) {
+                if (slave.get(level).isTSet()
+//                        && !slave.get(level).isDefined()
+                        && !master.get(level).isEmpty()
+                        && (!master.isDest() || master.getRight().isQuery())
+                        && !slave.get(level).getT().contains(master.get(level).getValue())
+                        ) {
                     try {
                         TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
                         s.setSrcSolve(master);
@@ -89,6 +97,7 @@ public class Linker {
 
             Set<Function> fs = new HashSet<>();
             Set<Domain> sd = new HashSet<>();
+            mind.getTValues().mark();
 
             for (Tree master : set) { //query == null ? set : query.getTree()) {
                 if (master.isExcluded()) {
@@ -101,7 +110,6 @@ public class Linker {
                     }
 
 
-                    mind.getTValues().mark();
 
                     for (Domain d1 : master.getSequence()) {
                         fs.addAll(d1.getFunctions());
@@ -122,41 +130,64 @@ public class Linker {
                             }
                         }
                     }
+                }
+            }
 
-                    boolean allowed = true;
+            boolean allowed = true;
 
-                    for (Function f : fs) {
-                        mind.getCalculator().calculate(f);
-                    }
-                    for (Domain d : sd) {
-                        int res = d.execSystem();
-                        if ((res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
-                            allowed = false;
-                        }
-                    }
+            mind.getCalculated().clear();
 
-                    if (!allowed) {
-                        mind.getTValues().release();
-//                        master.setExcluded(true);
-                    } else {
-                        mind.getTValues().commit();
-//                        master.recalculate();
+            for (Function f : fs) {
+                if (!f.isCalculable() || f.isSubstituted()) {
+                    f.clearResult();
+                    if(mind.getCalculator().calculate(f) > 0){
+                        mind.getFValues().add(f);
                     }
                 }
             }
 
+//            mind.getSubstituted().clear();
+
+            for (Domain d : sd) {
+                int res = d.execSystem();
+                if (res == 0) { //(res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
+                    allowed = false;
+                }
+//                else if (res == 1) {
+//                    allowed = true;
+//                }
+            }
+
+            for (Function f : fs) {
+                if (f.isCalculable() && !f.isSubstituted()) {
+                    if(mind.getCalculator().calculate(f) > 0){
+                        mind.getFValues().add(f);
+                    }
+                }
+            }
+
+
+            if (!allowed) {
+                mind.getTValues().release();
+//                        mind.getSubstituted().clear();
+//                        mind.getCalculated().clear();
+//                master.setExcluded(true);
+            } else{
+
+                mind.getTValues().commit();
+            }
+
+
         } else {
             TVariable t = tvars.get(tIndex);
             if (t.rewind()) {
+                mind.getSubstituted().add(t);
                 do {
-                    mind.getSubstituted().add(t);
                     recurseLink(tvars, tIndex + 1, set, logging);
                 } while (t.next());
                 mind.getSubstituted().remove(t);
-                recurseLink(tvars, tIndex + 1, set, logging);
-            } else {
-                recurseLink(tvars, tIndex + 1, set, logging);
             }
+            recurseLink(tvars, tIndex + 1, set, logging);
         }
     }
 
@@ -216,12 +247,14 @@ public class Linker {
 //        }
 
 
+        TValue save = null;
         do {
             mind.getSubstituted().clear();
             mind.getCalculated().clear();
+            save = mind.getTValues().getRoot();
 
             if (logging) {
-                mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03x =============", ++pass));
+                mind.getLog().add(LogMode.ANALIZER, String.format("============= LINKER PASS %03d =============", ++pass));
             }
 
             Set<TVariable> tset = new HashSet<>();
@@ -267,7 +300,8 @@ public class Linker {
 
 //            set = mind.getActualTrees();
 
-        } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
+        } while (save != mind.getTValues().getRoot());
+//        } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 
     }
 
@@ -298,5 +332,4 @@ public class Linker {
             return false;
         }
     }
-
 }

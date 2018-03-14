@@ -37,8 +37,14 @@ public class TValue {
         id = dis.readLong();
         tVar = mind.getTVars().get(dis.readLong());
         value = mind.getTerms().get(dis.readLong());
-        srcSolve = mind.getDomains().get(dis.readLong());
-        dstSolve = mind.getDomains().get(dis.readLong());
+        long sid = dis.readLong();
+        if(sid != -1) {
+            srcSolve = mind.getDomains().get(sid);
+        }
+        sid = dis.readLong();
+        if(sid != -1) {
+            dstSolve = mind.getDomains().get(sid);
+        }
         this.mind = mind;
     }
 

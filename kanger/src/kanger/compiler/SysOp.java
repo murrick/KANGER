@@ -69,9 +69,9 @@ public class SysOp {
                             Object val = mind.getScryptEngine().get(var);
                             if (val == null) {
                                 result = 0;
-                                arg.get(i++).delValue((o instanceof Domain) ? (Domain) o : ((Function) o).getOwner());
+                                arg.get(i++).delValue();
                             } else {
-                                arg.get(i++).setValue((o instanceof Domain) ? (Domain) o : ((Function) o).getOwner(), mind.getTerms().add(val));
+                                arg.get(i++).setValue(mind.getTerms().add(val));
                             }
                         }
 //                        if (result != 0 && rval != null) {

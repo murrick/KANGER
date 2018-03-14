@@ -68,4 +68,8 @@ public class ValuesStore {
     public int size() {
         return root == null ? 0 : root.size();
     }
+
+    public boolean isEmpty() {
+        return root == null || root.isEmpty();
+    }
 }

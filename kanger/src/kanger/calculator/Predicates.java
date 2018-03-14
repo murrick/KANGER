@@ -28,17 +28,17 @@ public class Predicates {
                     int i = -1;
                     List<Argument> arg = ((Domain) o).getArguments();
                     if (arg.get(0).isDefined() && !arg.get(1).isDefined()) {
-                        if (arg.get(1).setValue((Domain) o, arg.get(0).getValue())) {
+                        if (arg.get(1).setValue(arg.get(0).getValue())) {
                             i = 1;
                         }
                     } else if (!arg.get(0).isDefined() && arg.get(1).isDefined()) {
-                        if (arg.get(0).setValue((Domain) o, arg.get(1).getValue())) {
+                        if (arg.get(0).setValue(arg.get(1).getValue())) {
                             i = 1;
                         }
                 } else if (!arg.get(0).isEmpty() && !arg.get(1).isEmpty()) {
                         if (arg.get(0).getValue().compareTo(arg.get(1).getValue()) == 0) {
                             i = 1;
-                        } else if ((arg.get(0).getValue().isCVar() && arg.get(1).getValue().isCVar()) || (!arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar())) {
+                        } else { //if ((arg.get(0).getValue().isCVar() && arg.get(1).getValue().isCVar()) || (!arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar())) {
                             i = 0;
                         }
 //                        else //if(!arg.get(0).getValue().isCVar() && !arg.get(1).getValue().isCVar())

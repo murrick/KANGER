@@ -151,6 +151,14 @@ public class Calculator {
             if (op.getRange() + 1 > fu.getArguments().size()) {
                 fu.getArguments().add(new Argument());
             }
+
+            for(Argument a : fu.getArguments()) {
+                if(!a.isEmpty() && a.getValue().isCVar()) {
+                    fu.setResult(mind.getTerms().add("%%"));
+                    return -1;
+                }
+            }
+
             k = (Integer) op.getProc().run(fu);
 //            fu.getArguments().remove(op.getRange());
         }

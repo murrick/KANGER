@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by murray on 02.12.16.
  */
-public class Entry implements IEntry {
+public class EntryX implements IEntry {
     protected long id = -1;
     protected IEntry next;
 

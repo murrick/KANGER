@@ -132,11 +132,11 @@ public class Tree {
         return list;
     }
 
-    public void recalculate() throws RuntimeErrorException {
-        for (Domain d : sequence) {
-            d.recalculate();
-        }
-    }
+//    public void recalculate() throws RuntimeErrorException {
+//        for (Domain d : sequence) {
+//            d.recalculate();
+//        }
+//    }
 
     public List<Domain> getSystem() {
         List<Domain> list = new ArrayList<>();

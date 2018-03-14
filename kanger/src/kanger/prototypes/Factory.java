@@ -148,7 +148,7 @@ public class Factory implements IFactory {
     public void writeCompiledData(DataOutputStream dos) throws IOException {
         int count = size();
         dos.writeInt(count);
-        for (Entry d = (Entry) applied.getRoot(); d != null; d = (Entry) d.getNext()) {
+        for (EntryX d = (EntryX) applied.getRoot(); d != null; d = (EntryX) d.getNext()) {
             d.writeCompiledData(dos);
         }
         dos.writeLong(applied.getLastID());
@@ -161,7 +161,7 @@ public class Factory implements IFactory {
         int count = dis.readInt();
         while (count-- > 0) {
             try {
-                Entry e = (Entry) baseClass.newInstance();
+                EntryX e = (EntryX) baseClass.newInstance();
                 e.readCompiledData(dis);
             } catch (InstantiationException | IllegalAccessException e1) {
                 e1.printStackTrace();

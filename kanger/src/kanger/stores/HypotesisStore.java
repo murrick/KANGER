@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by murray on 28.05.15.
  */
-public class HypotesesStore {
+public class HypotesisStore {
 
     private List<Hypotese> root = null;
     private boolean enableStore = true;
@@ -89,4 +89,9 @@ public class HypotesesStore {
             root = temp;
         }
     }
+
+    public boolean isEmpty() {
+        return root == null || root.isEmpty();
+    }
+
 }

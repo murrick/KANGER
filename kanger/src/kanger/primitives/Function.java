@@ -25,12 +25,13 @@ public class Function {
     private final List<Argument> arguments = new ArrayList<>();     // Параметры
     private boolean busy = false;                       // Предотвращение бесконечной рекурсии
 
+    private long id = -1; 
+    private Function next = null;
     private Domain owner = null;
-
+    private int index = -1;
     private Mind mind = null;
 
-    public Function(Domain d, Mind mind) {
-        this.owner = d;
+    public Function(Mind mind) {
         this.mind = mind;
     }
 
@@ -54,7 +55,39 @@ public class Function {
             arguments.add(a);
         }
     }
-	
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setNext(Function next) {
+        this.next = next;
+    }
+
+    public Function getNext() {
+        return next;
+    }
+
+    public void setOwner(Domain owner) {
+        this.owner = owner;
+    }
+
+    public Domain getOwner() {
+        return owner;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
 
 //    public FunctionDescriptor getF() {
 //        return f;
@@ -103,7 +136,12 @@ public class Function {
         while (range + 1 > arguments.size()) {
             arguments.add(new Argument());
         }
-        return arguments.get(range).getValue();
+        FValue f = mind.getFValues().get(this);
+        if (f != null) {
+            return f.getValue();
+        } else {
+            return arguments.get(range).getValue();
+        }
     }
 
 //    public void setResult(Domain d, Argument r) {
@@ -120,13 +158,13 @@ public class Function {
         while (range + 1 > arguments.size()) {
             arguments.add(new Argument());
         }
-        if((r == null && arguments.get(range).getValue() != null)
+        if ((r == null && arguments.get(range).getValue() != null)
             || (r != null && arguments.get(range).getValue() == null)
             || (r != null && arguments.get(range).getValue() != null
-                && r.getId() != arguments.get(range).getValue().getId())) {
+            && r.getId() != arguments.get(range).getValue().getId())) {
             mind.getCalculated().add(this);
         }
-        arguments.get(range).setValue(owner, r);
+        arguments.get(range).setValue(r);
     }
 
     public boolean setParameter(int i, Term r) {
@@ -135,12 +173,12 @@ public class Function {
 //            s.setSolves(owner, owner);
 //            return true;
 //        } else {
-            if ((arguments.get(i).isEmpty() && r != null)
-                    || !arguments.get(i).isEmpty() && r == null
-                    || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
-                mind.getCalculated().add(this);
-            }
-            return arguments.get(i).setValue(owner, r);
+        if ((arguments.get(i).isEmpty() && r != null)
+            || !arguments.get(i).isEmpty() && r == null
+            || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
+            mind.getCalculated().add(this);
+        }
+        return arguments.get(i).setValue(r);
 //        }
     }
 
@@ -154,7 +192,7 @@ public class Function {
 //        return true;
 //    }
 
-    
+
 
     private String formatParam(Argument t) {
         Operation op = Parser.getOp(name.toString());
@@ -188,14 +226,6 @@ public class Function {
         this.busy = busy;
     }
 
-    public Domain getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Domain owner) {
-        this.owner = owner;
-    }
-
     public String toString() {
         Operation op = Parser.getOp(name.toString());
         String s = "";
@@ -224,8 +254,8 @@ public class Function {
         }
         Argument r = range < arguments.size() ? arguments.get(range) : null;
         return s + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0
-        && (((isCalculable() && isCalculated()) || !isCalculable()))
-        && r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
+            && (((isCalculable() && isCalculated()) || !isCalculable()))
+            && r != null && r.getValue() != null ? (" = " + r.getValue()) : "");
     }
 
     //    public void setResult(Term c) {
@@ -237,7 +267,7 @@ public class Function {
 //        }
 //
 //    }
-    void writeCompiledData(DataOutputStream dos) throws IOException {
+    public void writeCompiledData(DataOutputStream dos) throws IOException {
         dos.writeLong(name.getId());
 //        dos.writeInt(line.size());
 //        for (Argument a : line) {
@@ -287,16 +317,18 @@ public class Function {
     }
 
 	public boolean isSubstituted() {
-		for(TVariable t: getTVariables()) {
-			if(t.isSubstituted()) {
-				return true;
+		for (TVariable t: getTVariables()) {
+			if (!t.isSubstituted() || t.isEmpty()) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public boolean isCalculable() {
 		return Tools.getTVariables(arguments, true).size() > 0;
-	}
-	
+	} 
+
+
+
 }

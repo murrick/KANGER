@@ -267,7 +267,7 @@ public class Domain {
 
     public boolean isDest() {
         for (TVariable t : getTVariables(false)) {
-            if (!t.isEmpty() && /*contains(t)) {*/ t.getDstSolve().getId() == id) {
+            if (!t.isEmpty() && (t.getDstSolve() == null || /*contains(t)) {*/ t.getDstSolve().getId() == id)) {
                 return true;
             }
         }
@@ -365,18 +365,18 @@ public class Domain {
         return -1;
     }
 
-    public boolean recalculate() throws RuntimeErrorException {
-        boolean occurrs = false;
-        for (Argument a : arguments) {
-            if (a.isFSet() /*&& a.getF().isSubstituted()*/) {
-//                a.getF().clearResult();
-                if (mind.getCalculator().calculate(a.getF()) > 0) {
-                    occurrs = true;
-                }
-            }
-        }
-        return occurrs;
-    }
+//    public boolean recalculate() throws RuntimeErrorException {
+//        boolean occurrs = false;
+//        for (Argument a : arguments) {
+//            if (a.isFSet() /*&& a.getF().isSubstituted()*/) {
+////                a.getF().clearResult();
+//                if (mind.getCalculator().calculate(a.getF()) > 0) {
+//                    occurrs = true;
+//                }
+//            }
+//        }
+//        return occurrs;
+//    }
 
     public boolean isPairedWith(Domain d) {
         for (TVariable t : getTVariables(false)) {

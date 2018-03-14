@@ -31,10 +31,10 @@ public class Argument {
         int flags = dis.readInt();
         if (flags == 1) {
             long id = dis.readLong();
-            o = (Term) mind.getTerms().get(id);
+            o = mind.getTerms().get(id);
         } else if (flags == 2) {
             long id = dis.readLong();
-            o = (TVariable) mind.getTVars().get(id);
+            o = mind.getTVars().get(id);
         } else if (flags == 3) {
             o = new Function(dis, mind);
         }
@@ -52,19 +52,18 @@ public class Argument {
         }
     }
 
-    public boolean setValue(Function f, Term t) {
-        return setValue(f.getOwner(), t);
-    }
+//    public boolean setValue(Function f, Term t) {
+//        return setValue(f.getOwner(), t);
+//    }
+//
 
-    public boolean setValue(Domain d, Term t) {
+    public boolean setValue(Term t) {
         boolean result = true;
         if (o == null || o instanceof Term) {
             o = t;
         } else if (o instanceof TVariable) {
             try {
                 TValue s = ((TVariable) o).setValue(t);
-                s.setSrcSolve(d);
-                s.setDstSolve(d);
             } catch (TValueOutOfOrver tValueOutOfOrver) {
                 result = false;
             }
@@ -75,7 +74,7 @@ public class Argument {
         return result;
     }
 
-    public void delValue(Domain d) {
+    public void delValue() {
         if (o == null || o instanceof Term) {
             o = null;
         } else if (o instanceof TVariable) {
@@ -184,7 +183,7 @@ public class Argument {
 				return getF().getResult() != null;
 //			}
 		} else {
-			return !isEmpty();
+			return !isEmpty() /*&& !getValue().isCVar()*/;
 		}
 	}
 
