@@ -120,6 +120,9 @@ public class Screen {
                         case 'X':
                             showLog(mind, LogMode.ALL);
                             break;
+                        case 'T':
+                            showTValues(mind);
+                            break;
 //                    case 'A':
 //                        lastQuery = savedQuery;
 //                        break;
@@ -358,37 +361,54 @@ public class Screen {
     public static void showHelp() {
         System.out.printf(
                 "Available KEYWORDS:\n\n"
-                + "   HELP    - Get this message\n"
-                + "\n"
-                + "   ?       - Check for Rights Collisions\n"
-                + "   BASE    - View DataBase contents\n"
-                + "   RIGHTS  - View compiled-structured Rights list\n"
-                + "   FUNCS   - View defined Functions list\n"
-                + "   KILL    - Remove right\n"
-                + "   LIST    - View Hypotheses list after last work\n"
-                + "   INSERT  - Insert Hypotheses as right\n"
-                + "   AGAIN   - Repeat last question\n"
-                + "   XPLAIN  - Show explanation log\n"
-                + "   SOLVES  - Show solves list\n"
-                + "   VALUES  - Show values list\n"
-                //                        + "   TEXT    - Show source text\n"
-                + "   CLEAR   - Clear workspace\n"
-                //                        + "   ERASE   - Clear all working memory\n"
-                + "\n"
-                //                        + "   PUT     - Save Source file\n"
-                + "   GET     - Load Source file from disk\n"
-                + "   ZIP     - Save compiled code\n"
-                + "   UNZIP   - Load compiled code from file\n"
-                + "\n"
-                + "   QUIT    - Quit KANGER\n"
-                + "\n"
-                + "You can use just FIRST letter of keywords.\n"
+                        + "   HELP    - Get this message\n"
+                        + "\n"
+                        + "   ?       - Check for Rights Collisions\n"
+                        + "   BASE    - View DataBase contents\n"
+                        + "   RIGHTS  - View compiled-structured Rights list\n"
+                        + "   FUNCS   - View defined Functions list\n"
+                        + "   KILL    - Remove right\n"
+                        + "   LIST    - View Hypotheses list after last work\n"
+                        + "   INSERT  - Insert Hypotheses as right\n"
+                        + "   AGAIN   - Repeat last question\n"
+                        + "   XPLAIN  - Show explanation log\n"
+                        + "   SOLVES  - Show solves list\n"
+                        + "   VALUES  - Show values list\n"
+                        //                        + "   TEXT    - Show source text\n"
+                        + "   CLEAR   - Clear workspace\n"
+                        //                        + "   ERASE   - Clear all working memory\n"
+                        + "\n"
+                        //                        + "   PUT     - Save Source file\n"
+                        + "   GET     - Load Source file from disk\n"
+                        + "   ZIP     - Save compiled code\n"
+                        + "   UNZIP   - Load compiled code from file\n"
+                        + "\n"
+                        + "   QUIT    - Quit KANGER\n"
+                        + "\n"
+                        + "You can use just FIRST letter of keywords.\n"
         );
     }
 
     //    public static void showFunc(FArg f) {
 //        System.out.printf(formatFunc(f));
 //    }
+
+    public static void showTValues(Mind mind) {
+        for (Right r = mind.getRights().getRoot(); r != null; r = r.getNext()) {
+            List<TVariable> tvs = r.getTVariables(true);
+            if (!tvs.isEmpty()) {
+                System.out.printf("Right %03d: %s;\n", r.getId(), r.getOrig());
+                for (TVariable tv : tvs) {
+                    if (tv.rewind()) {
+                        do {
+                            System.out.println("\t" + tv.getVarName() + "=" + tv.getValue());
+                        } while (tv.next());
+                    }
+                }
+            }
+        }
+    }
+
     public static void showFunctions(Mind mind, boolean showSys) {
 
         if (mind.getLibrary().getRoot() != null) {
@@ -471,9 +491,9 @@ public class Screen {
         if (tIndex >= tvars.size()) {
 //            if (!d.isDest()) {
 //                d.recalculate();
-                System.out.printf("\t%s\n", d.toString());
-                if (showCauses) {
-                    showCauses(mind, d, 0);
+            System.out.printf("\t%s\n", d.toString());
+            if (showCauses) {
+                showCauses(mind, d, 0);
 //                }
             }
         } else {
@@ -482,7 +502,7 @@ public class Screen {
                 do {
 //                    if (t.getSrcSolve() != null && t.getSrcSolve().getPredicate().getId() != d.getPredicate().getId()) {
 //                        mind.getSubstituted().add(t);
-                    if(!d.isDest()) {
+                    if (!d.isDest()) {
                         showPredRecurse(mind, tvars, tIndex + 1, d, showCauses);
                     }
                 } while (t.next());
@@ -501,7 +521,7 @@ public class Screen {
             for (Domain s : set) {
 //                if (!s.isDest()) {
 //                    mind.getSubstituted().clear();
-                    showPredRecurse(mind, s.getTVariables(true), 0, s, showCauses);
+                showPredRecurse(mind, s.getTVariables(true), 0, s, showCauses);
 //                }
             }
         }

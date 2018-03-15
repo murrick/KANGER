@@ -31,7 +31,8 @@ public class Function {
     private int index = -1;
     private Mind mind = null;
 
-    public Function(Mind mind) {
+    public Function(Domain owner, Mind mind) {
+        this.owner = owner;
         this.mind = mind;
     }
 

@@ -97,7 +97,6 @@ public class FValueFactory {
         if (!stack.empty()) {
             stack.pop();
         }
-        mark();
     }
 
     public void release() {

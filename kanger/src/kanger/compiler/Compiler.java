@@ -189,7 +189,7 @@ public class Compiler {
             } else {
                 // системная функция
 
-                Function f = mind.getFunctions().add(); //new Function(mind);
+                Function f = mind.getFunctions().add(d); //new Function(mind);
                 parseArgs(d, f.getArguments(), root.getLeft(), level + 1, replacements);
                 parseArgs(d, f.getArguments(), root.getRight(), level + 1, replacements);
                 f.setName(mind.getTerms().add(root.getName()));
@@ -202,7 +202,7 @@ public class Compiler {
             parseArgs(d, arg, root.getRight(), level + 1, replacements);
         } else if (root.getName().charAt(0) == Enums.LB) {
             // вложенная функция
-            Function f = mind.getFunctions().add(); //new Function(mind);
+            Function f = mind.getFunctions().add(d); //new Function(mind);
             parseArgs(d, f.getArguments(), root.getRight(), level + 1, replacements);
             f.setName(mind.getTerms().add(root.getLeft().getName()));
             f.setRange(f.getArguments().size());

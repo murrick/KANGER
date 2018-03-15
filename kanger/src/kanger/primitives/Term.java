@@ -177,7 +177,10 @@ public class Term implements Comparable {
     }
 
     public boolean isCVar() {
-        return value != null && type == DataType.STRING && !value.toString().isEmpty() && value.toString().charAt(0) == Enums.CVC;
+        return value != null
+                && type == DataType.STRING
+                && !value.toString().isEmpty()
+                && value.toString().charAt(0) == Enums.CVC;
     }
 
     public String toString() {

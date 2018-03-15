@@ -74,7 +74,7 @@ public class TVariable {
     }
 
     public TValue setValue(Term value) throws TValueOutOfOrver {
-        if (!isInside(value)) {
+        if (!isInside(value) && !"$$".equals(value.toString())) {
             if (mind.getTValues().find(this, value) == null) {
                 mind.getSubstituted().add(this);
             }

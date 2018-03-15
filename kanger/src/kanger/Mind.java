@@ -271,6 +271,7 @@ public class Mind {
         int pos = 0;
         Object[] t = null;
         reset();
+//        mark();
         while ((t = Tools.extractLine(src, pos)) != null) {
             pos = (int) t[1];
             String line = (String) t[0];
@@ -426,7 +427,7 @@ public class Mind {
         removeTreeRecords(r);
         removeRightRecord(r);
 
-        mark();
+//        mark();
     }
 
     public String getSourceFileName() {

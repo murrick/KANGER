@@ -21,7 +21,7 @@ public class KangerTest {
         if (mind.getQueryResult() != assertResult) {
             fail(mind.getQuery().getOrig());
         } else {
-            System.out.println("Query: " + mind.getQuery().getOrig());
+            System.out.println("Query: " + mind.getRights().getRoot().getOrig());
             System.out.println("Result: " + mind.getQueryResult());
             if (!mind.getSolutions().isEmpty()) {
                 System.out.println("Solves:");
@@ -91,6 +91,19 @@ public class KangerTest {
         mind.query("?$x $y (12+y)*2=256, x=5*y;");
         showResult(true);
 
+
+        mind.query("!num(0);");
+        showResult(true);
+        mind.query("!@x num(x) && x < 10 -> num(++x);");
+        showResult(true);
+
+        mind.compile("!num(0);");
+        mind.compile("!@x num(x) && x < 10 -> num(++x);");
+
+        Screen.showBase(mind, false, null);
+
+        mind.query("?$x num(x);");
+        showResult(true);
 
     }
 }

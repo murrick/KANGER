@@ -111,17 +111,17 @@ public class Kanger {
 //            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //
-        try {
-            mind.compile(
-                    "!num(0); "
-                            + "!@x num(x) && x < 10 -> num(++x);");
-
-
-        } catch (ParseErrorException ex) {
-            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RuntimeErrorException ex) {
-            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            mind.compile(
+//                    "!num(0); "
+//                            + "!@x num(x) && x < 10 -> num(++x);");
+//
+//
+//        } catch (ParseErrorException ex) {
+//            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (RuntimeErrorException ex) {
+//            Logger.getLogger(Kanger.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
         Screen.session(mind);
 

@@ -73,7 +73,6 @@ public class TreeFactory {
         if(!stack.empty()) {
             stack.pop();
         }
-        mark();
     }
 
     public void release() {

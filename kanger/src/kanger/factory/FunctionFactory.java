@@ -19,8 +19,8 @@ public class FunctionFactory {
         reset();
     } 
     
-    public Function add() {
-        Function p = new Function(mind);
+    public Function add(Domain owner) {
+        Function p = new Function(owner, mind);
         p.setId(++lastID);
         p.setNext(root);
         root = p;
@@ -67,7 +67,6 @@ public class FunctionFactory {
         if(!stack.empty()) {
             stack.pop();
         }
-        mark();
     }
 
     public void release() {

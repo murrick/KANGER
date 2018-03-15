@@ -86,7 +86,6 @@ public class PredicateFactory {
         if(!stack.empty()) {
             stack.pop();
         }
-        mark();
     }
 
     public void release() {

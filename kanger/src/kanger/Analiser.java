@@ -634,7 +634,8 @@ public class Analiser {
                         mind.getLog().add(LogMode.ANALIZER, r);
                         mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
 
-                        mind.getLinker().link(r, true);
+                        //mind.getLinker().link(r, true);
+                        mind.getLinker().link(true);
                         if (analiser(true)) {
                             mind.getLog().add(LogMode.ANALIZER, "ERROR: Conflict in new Right");
                             mind.release();
@@ -761,12 +762,13 @@ public class Analiser {
 
                             if (res == null) {
                                 mind.release();
-//                            }
+//                                Screen.showTValues(mind);
+                            }
 //                                mind.reset();
 //                                mind.clearQueryStatus();
 //                                mind.getLinker().link(false);
 //                                mind.releaseAcceptors();
-                            }
+//                            }
 
                         }
                     }
@@ -810,6 +812,7 @@ public class Analiser {
 //                                isHypotheses = true;
 //                            }
                             mind.getLinker().link(r, true);
+
                             if (analiser(true)) {
                                 if (isInsertion) {
                                     mind.removeInsertionRight(r);

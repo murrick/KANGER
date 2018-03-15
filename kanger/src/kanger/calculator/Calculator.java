@@ -137,6 +137,13 @@ public class Calculator {
         String n = d.getPredicate().getName() + "(" + d.getPredicate().getRange() + ")";
         SysOp op = predicates.getSysOps().get(n) != null ? predicates.getSysOps().get(n) : mind.getLibrary().find(n);
         if (op != null) {
+
+            for(Argument a : d.getArguments()) {
+                if(!a.isEmpty() && "$$".equals(a.getValue())) {
+                    return -1;
+                }
+            }
+
             k = (Integer) op.getProc().run(d);
         }
         return k;
@@ -153,10 +160,14 @@ public class Calculator {
             }
 
             for(Argument a : fu.getArguments()) {
-                if(!a.isEmpty() && a.getValue().isCVar()) {
-                    fu.setResult(mind.getTerms().add("%%"));
+                if(!a.isEmpty() && (a.getValue().isCVar() || "$$".equals(a.getValue()))) {
+                    fu.setResult(mind.getTerms().add("$$"));
                     return -1;
                 }
+            }
+
+            if("$$".equals(fu.getResult())) {
+                return -1;
             }
 
             k = (Integer) op.getProc().run(fu);
