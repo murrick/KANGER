@@ -19,9 +19,9 @@ public class KangerTest {
 
     private void showResult(Boolean assertResult) {
         if (mind.getQueryResult() != assertResult) {
-            fail(mind.getQuery().getOrig());
+            fail(mind.getQuerySource());
         } else {
-            System.out.println("Query: " + mind.getRights().getRoot().getOrig());
+            System.out.println("Query: " + mind.getQuerySource());
             System.out.println("Result: " + mind.getQueryResult());
             if (!mind.getSolutions().isEmpty()) {
                 System.out.println("Solves:");
@@ -92,15 +92,16 @@ public class KangerTest {
         showResult(true);
 
 
+        mind.clear();
         mind.query("!num(0);");
         showResult(true);
         mind.query("!@x num(x) && x < 10 -> num(++x);");
         showResult(true);
 
-        mind.compile("!num(0);");
-        mind.compile("!@x num(x) && x < 10 -> num(++x);");
+//        mind.compile("!num(0);");
+//        mind.compile("!@x num(x) && x < 10 -> num(++x);");
 
-        Screen.showBase(mind, false, null);
+//        Screen.showBase(mind, false, null);
 
         mind.query("?$x num(x);");
         showResult(true);

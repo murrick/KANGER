@@ -250,7 +250,7 @@ public class Linker {
 //            mind.getTValues().clear();
 //        }
 
-        mind.getExcludedTrees().clear();
+//        mind.getExcludedTrees().clear();
         mind.getSubstituted().clear();
         mind.getCalculated().clear();
 

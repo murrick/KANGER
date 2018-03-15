@@ -70,8 +70,13 @@ public class Mind {
     private transient Map<TVariable, Long> tVariableLinks = null;
 
     private Boolean queryResult = null;
+    private String querySource = "";
     private transient volatile int currentLevel = 0;
     private int debugLevel = Enums.DEBUG_LEVEL_DEBUG | (Enums.DEBUG_OPTION_STATUS | Enums.DEBUG_OPTION_VALUES);
+
+    public Mind() {
+        reset();
+    }
 
     public int getDebugLevel() {
         return debugLevel;
@@ -258,10 +263,10 @@ public class Mind {
         functions.clear();
         fValues.clear();
 
-        hypotesis.clear();
 //        log.clear();
         solves.clear();
         values.clear();
+        hypotesis.clear();
 
     }
 
@@ -270,8 +275,8 @@ public class Mind {
 
         int pos = 0;
         Object[] t = null;
-        reset();
-//        mark();
+//        reset();
+        mark();
         while ((t = Tools.extractLine(src, pos)) != null) {
             pos = (int) t[1];
             String line = (String) t[0];
@@ -280,6 +285,7 @@ public class Mind {
         linker.link(true);
         if (analiser.analiser(true)) {
             getLog().add(LogMode.ANALIZER, "ERROR: Collisions in Program");
+            release();
         } else {
             commit();
         }
@@ -515,6 +521,7 @@ public class Mind {
     }
 
     public Boolean query(String line) throws ParseErrorException, RuntimeErrorException {
+        querySource = line;
         queryResult = analiser.query(line, false);
         return queryResult;
     }
@@ -619,17 +626,21 @@ public class Mind {
         return set;
     }
 
-    public Right getQuery() {
-        for (Right r = rights.getRoot(); r != null; r = r.getNext()) {
-            if (r.isQuery()) {
-                return r;
-            }
-        }
-        return null;
+    public String getQuerySource() {
+        return querySource;
     }
 
     public Boolean getQueryResult() {
         return queryResult;
+    }
+
+    public Right getQuery() {
+        for(Right r = rights.getRoot(); r != null; r = r.getNext()) {
+            if(r.isQuery()) {
+                return r;
+            }
+        }
+        return null;
     }
 
     public Set<Tree> getActualTrees() {

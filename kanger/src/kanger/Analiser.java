@@ -564,7 +564,7 @@ public class Analiser {
         mind.getValues().clear();
         mind.getHypotesisStore().clear();
 
-        mind.reset();
+//        mind.reset();
         mind.clearQueryStatus();
 //        mind.clearLinks();
 //        mind.mark();
@@ -628,6 +628,7 @@ public class Analiser {
 
                     mind.mark();
                     Right r = (Right) mind.compileLine(line);
+//                    r.setQuery(true);
 
                     if (r != null) {
                         mind.getLog().add(LogMode.ANALIZER, "Compiled: " + r.getOrig());
@@ -668,7 +669,7 @@ public class Analiser {
                             mind.commit();
                         }
                     } else {
-//                        mind.release();
+                        mind.release();
                     }
 //                    }
 
@@ -760,10 +761,10 @@ public class Analiser {
 
 //                            mind.release();
 
-                            if (res == null) {
+//                            if (res == null) {
                                 mind.release();
 //                                Screen.showTValues(mind);
-                            }
+//                            }
 //                                mind.reset();
 //                                mind.clearQueryStatus();
 //                                mind.getLinker().link(false);
@@ -864,7 +865,7 @@ public class Analiser {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: WHO KNOWS? No Hypotheses.");
                                 }
                         }
-//                        mind.release();
+                        mind.release();
 
                     }
                     break;
