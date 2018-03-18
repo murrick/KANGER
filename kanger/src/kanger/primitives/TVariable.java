@@ -75,9 +75,9 @@ public class TVariable {
 
     public TValue setValue(Term value) throws TValueOutOfOrver {
         if (!isInside(value) && !"$$".equals(value.toString())) {
-            if (mind.getTValues().find(this, value) == null) {
-                mind.getSubstituted().add(this);
-            }
+//            if (mind.getTValues().find(this, value) == null) {
+//                mind.getSubstituted().add(this);
+//            }
             return mind.getTValues().add(this, value);
         } else {
             throw new TValueOutOfOrver(value.toString());
@@ -290,7 +290,7 @@ public class TVariable {
 //    }
 //
     public boolean isSubstituted() {
-        return mind.getSubstituted().contains(this);
+        return mind.getSubstituted().contains(this) /*|| mind.getUsed().contains(this)*/;
     }
 
     public void setQuery() {

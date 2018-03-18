@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class Analiser {
 
-    private static final boolean DEBUG_DISABLE_FALSE_CHECK = false;
+    private static final boolean DEBUG_DISABLE_FALSE_CHECK = true;
 
     private final Mind mind;
     private boolean isInsertion = false;
@@ -286,7 +286,7 @@ public class Analiser {
                 } else if (res == 1) {
                     //TODO: Срабатывает временами неверно
                     if (d.isQuery()) {
-                        result = true;
+//                        result = true;
                     }
                     occurrs = true;
                 }
@@ -333,9 +333,9 @@ public class Analiser {
 
         for (Domain d : sequence) {
             if (d.isSystem()) {
-                for (TVariable tv : d.getTVariables(true)) {
-                    mind.getValues().add(tv, d);
-                }
+//                for (TVariable tv : d.getTVariables(true)) {
+//                    mind.getValues().add(tv, d);
+//                }
             } else if (d.isClosed() || d.isQuery()) {
                 if (d.isAntc()) {
                     ant.add(d);
@@ -865,6 +865,8 @@ public class Analiser {
                                     mind.getLog().add(LogMode.ANALIZER, "Result: WHO KNOWS? No Hypotheses.");
                                 }
                         }
+
+
                         mind.release();
 
                     }

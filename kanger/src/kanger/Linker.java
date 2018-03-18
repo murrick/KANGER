@@ -26,6 +26,46 @@ public class Linker {
         this.mind = mind;
     }
 
+    private boolean linkFunctions(Domain master, Domain slave, int level, boolean logging, boolean occurrs) {
+
+        if (level >= master.getPredicate().getRange()) {
+
+            if (logging && occurrs) {
+                logComparsion(master);
+                logComparsion(slave);
+                mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
+            }
+            return occurrs;
+
+        } else {
+
+            boolean isQuery = mind.getQuery() != null;
+            //ПОДСТАНОВКИ Результатов функций
+            for (int i = 0; i <= level; ++i) {
+
+                if (master.get(level).isFSet()
+                        && !slave.get(level).isEmpty()
+                        && !master.get(level).getF().isSubstituted()
+                        && !master.get(level).getF().isCalculated()) {
+                    master.get(level).getF().setResult(slave.get(level).getValue());
+                    occurrs = true;
+                }
+
+                if (slave.get(level).isFSet()
+                        && !master.get(level).isEmpty()
+                        && !slave.get(level).getF().isSubstituted()
+                        && !slave.get(level).getF().isCalculated()) {
+                    slave.get(level).getF().setResult(master.get(level).getValue());
+                    occurrs = true;
+                }
+
+            }
+            return linkDomains(master, slave, level + 1, logging, occurrs);
+        }
+
+    }
+
+
     private boolean linkDomains(Domain master, Domain slave, int level, boolean logging, boolean occurrs) {
 
         if (level >= master.getPredicate().getRange()) {
@@ -35,25 +75,16 @@ public class Linker {
                 logComparsion(slave);
                 mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
             }
-            return true;
+            return occurrs;
 
         } else {
 
             boolean isQuery = mind.getQuery() != null;
-            //ПОДСТАНОВКИ
+            //ПОДСТАНОВКИ T-переменных
             for (int i = 0; i <= level; ++i) {
 
-                if (master.get(level).isFSet() && !slave.get(level).isEmpty() && !master.get(level).getF().isCalculable() && !master.get(level).getF().isCalculated()) {
-                    master.get(level).getF().setResult(slave.get(level).getValue());
-                    occurrs = true;
-                }
-
-                if (slave.get(level).isFSet() && !master.get(level).isEmpty() && !slave.get(level).getF().isCalculable() && !slave.get(level).getF().isCalculated()) {
-                    slave.get(level).getF().setResult(master.get(level).getValue());
-                    occurrs = true;
-                }
-
                 if (master.get(level).isTSet()
+//                        && !master.get(level).getT().isSubstituted()
 //                        && !master.get(level).isDefined()
                         && !slave.get(level).isEmpty()
                         && (!slave.isDest() || slave.getRight().isQuery())
@@ -61,6 +92,7 @@ public class Linker {
                         ) {
                     try {
                         TValue s = master.get(level).getT().setValue(slave.get(level).getValue());
+//                        mind.getUsed().add(master.get(level).getT());
                         s.setDstSolve(master);
                         s.setSrcSolve(slave);
                         if (slave.isQuery() || master.isQuery()) {
@@ -72,6 +104,7 @@ public class Linker {
                 }
 
                 if (slave.get(level).isTSet()
+//                        && !slave.get(level).getT().isSubstituted()
 //                        && !slave.get(level).isDefined()
                         && !master.get(level).isEmpty()
                         && (!master.isDest() || master.getRight().isQuery())
@@ -79,6 +112,7 @@ public class Linker {
                         ) {
                     try {
                         TValue s = slave.get(level).getT().setValue(master.get(level).getValue());
+//                        mind.getUsed().add(slave.get(level).getT());
                         s.setSrcSolve(master);
                         s.setDstSolve(slave);
                         if (master.isQuery() || slave.isQuery()) {
@@ -91,153 +125,221 @@ public class Linker {
             }
             return linkDomains(master, slave, level + 1, logging, occurrs);
         }
-
     }
 
-    public void recurseLink(List<TVariable> tvars, int tIndex, Set<Tree> set, boolean logging) throws RuntimeErrorException {
+    public boolean updateDomains(List<TVariable> tvars, int tIndex, Set<Tree> set, boolean logging) {
+        boolean result = true;
         if (tIndex >= tvars.size()) {
 
-            boolean isQuery = mind.getQuery() != null;
-            Set<Function> fs = new HashSet<>();
-            Set<Domain> sd = new HashSet<>();
-
+            Set<Domain> sp = new HashSet<>();
             mind.getTValues().mark();
             mind.getFValues().mark();
 
+            TValue saveT = mind.getTValues().getRoot();
+
             for (Tree master : set) { //query == null ? set : query.getTree()) {
-                if (master.isExcluded()) {
-                    continue;
-                }
-
                 for (Tree slave : set) {
-                    if (slave.isExcluded() || slave.isExcluded(master)) {
-                        continue;
-                    }
-
-
                     for (Domain d1 : master.getSequence()) {
-                        if ((isQuery && d1.isQuery()) || !isQuery) {
-                            fs.addAll(d1.getFunctions());
-                            if (d1.isSystem()) {
-                                sd.add(d1);
-                            }
+                        if (d1.isSystem()) {
+                            sp.add(d1);
                         }
-
                         for (Domain d2 : slave.getSequence()) {
-                            if ((isQuery && d2.isQuery()) || !isQuery) {
-                                fs.addAll(d2.getFunctions());
-                                if (d2.isSystem()) {
-                                    sd.add(d2);
-                                }
+                            if (d2.isSystem()) {
+                                sp.add(d1);
                             }
+                            if (d1.getId() != d2.getId()
+                                    && d1.isAntc() != d2.isAntc()
+                                    && d1.getPredicate().getId() == d2.getPredicate().getId()
+                                    && saveT == mind.getTValues().getRoot()) {
+                                linkDomains(d1, d2, 0, logging, false);
 
-                            if (d1.getId() != d2.getId()) {
-                                if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
-                                    linkDomains(d1, d2, 0, logging, false);
-                                }
                             }
                         }
                     }
                 }
             }
 
-            boolean allowed = true;
-
-
-//            mind.getCalculated().clear();
-
-
-//            TValue saveT = null;
-//            FValue saveF = null;
-//
-//            do {
-//                saveT = mind.getTValues().getRoot();
-//                saveF = mind.getFValues().getRoot();
-//
-                for (Domain d : sd) {
+            for (Domain d : sp) {
+                if (d.isSystem()) {
                     int res = d.execSystem();
                     if (res == 0) { //(res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
-                        allowed = false;
+                        result = false;
                     }
                 }
-
-                if(allowed) {
-                    for (Function f : fs) {
-                        if (!f.isCalculable() || f.isSubstituted()) {
-                            f.clearResult();
-                        }
-                        if (mind.getCalculator().calculate(f) > 0) {
-                            if (mind.getFValues().find(f) == null) {
-                                mind.getFValues().add(f);
-                                mind.getLog().add(LogMode.ANALIZER, "Shot function result: " + f.toString());
-                            }
-                        }
-                    }
-
-                    for (Domain d : sd) {
-                        int res = d.execSystem();
-                        if (res == 0) { //(res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
-                            allowed = false;
-                        }
-//                else if (res == 1) {
-//                    allowed = true;
-//                }
-                    }
-//
-//                    if (allowed) {
-//
-//                        for (Function f : fs) {
-//                            if (f.isCalculable() && !f.isSubstituted() && mind.getFValues().find(f) == null) {
-//                                if (mind.getCalculator().calculate(f) > 0) {
-//                                    if (mind.getFValues().find(f) == null) {
-//                                        mind.getFValues().add(f);
-//                                        mind.getLog().add(LogMode.ANALIZER, "Shot function result: " + f.toString());
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                        for (Domain d : sd) {
-//                            int res = d.execSystem();
-//                            if (res == 0) { //(res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
-//                                allowed = false;
-//                            }
-////                else if (res == 1) {
-////                    allowed = true;
-////                }
-//                        }
-//
-//                    }
-                }
-
-
-//            mind.getSubstituted().clear();
-
-
-                if (allowed) {
-                    mind.getTValues().commit();
-                    mind.getFValues().commit();
-                } else {
-                    mind.getTValues().release();
-                    mind.getFValues().release();
-                }
-
-
-//            } while (allowed && (saveT != mind.getTValues().getRoot() || saveF != mind.getFValues().getRoot()));
-
+            }
+            if (result) {
+                logCommit("COMMIT (D):", logging);
+                mind.getTValues().commit();
+                mind.getFValues().commit();
+            } else {
+                logCommit("RELEASE (D):", logging);
+                mind.getTValues().release();
+                mind.getFValues().release();
+            }
 
         } else {
             TVariable t = tvars.get(tIndex);
             if (t.rewind()) {
                 mind.getSubstituted().add(t);
                 do {
-                    recurseLink(tvars, tIndex + 1, set, logging);
+                    if (!updateDomains(tvars, tIndex + 1, set, logging)) {
+                        result = false;
+                    }
                 } while (t.next());
                 mind.getSubstituted().remove(t);
             }
-            recurseLink(tvars, tIndex + 1, set, logging);
+            if (!updateDomains(tvars, tIndex + 1, set, logging)) {
+                result = false;
+            }
         }
+        return result;
     }
+
+    public boolean updateResults(List<TVariable> tvars, int tIndex, Set<Tree> set, boolean logging) throws RuntimeErrorException {
+        boolean result = true;
+        if (tIndex >= tvars.size()) {
+
+            Set<Domain> sp = new HashSet<>();
+            mind.getTValues().mark();
+            mind.getFValues().mark();
+
+            TValue saveT = mind.getTValues().getRoot();
+            FValue saveF = mind.getFValues().getRoot();
+
+            for (Tree master : set) { //query == null ? set : query.getTree()) {
+                for (Tree slave : set) {
+                    for (Domain d1 : master.getSequence()) {
+                        for (Domain d2 : slave.getSequence()) {
+                            if (d1.getId() != d2.getId()) {
+                                if (d1.isAntc() != d2.isAntc() && d1.getPredicate().getId() == d2.getPredicate().getId()) {
+                                    linkFunctions(d1, d2, 0, logging, false);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (Tree master : set) { //query == null ? set : query.getTree()) {
+                for (Domain d : master.getSequence()) {
+                    if (d.isSystem()) {
+                        sp.add(d);
+                    }
+                    if(saveT == mind.getTValues().getRoot() && saveF == mind.getFValues().getRoot()) {
+                        for (Function f : d.getFunctions()) {
+                            if (!f.isCalculated() && f.isCalculable() && !f.isSubstituted()) {
+                                if (mind.getCalculator().calculate(f) > 0) {
+                                    mind.getFValues().add(f);
+                                    mind.getLog().add(LogMode.ANALIZER, "Shot function result: " + f.toString());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (Domain d : sp) {
+                if (d.isSystem()) {
+                    int res = d.execSystem();
+                    if (res == 0) { //(res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
+                        result = false;
+                    }
+                }
+            }
+            if (result) {
+                logCommit("COMMIT (R):", logging);
+                mind.getTValues().commit();
+                mind.getFValues().commit();
+            } else {
+                logCommit("RELEASE (R):", logging);
+                mind.getTValues().release();
+                mind.getFValues().release();
+            }
+
+        } else {
+            TVariable t = tvars.get(tIndex);
+            if (t.rewind()) {
+                mind.getSubstituted().add(t);
+                do {
+                    if (!updateResults(tvars, tIndex + 1, set, logging)) {
+                        result = false;
+                    }
+                } while (t.next());
+                mind.getSubstituted().remove(t);
+            }
+            if (!updateResults(tvars, tIndex + 1, set, logging)) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public boolean calcFunctions(List<TVariable> tvars, int tIndex, Set<Tree> set, boolean logging) throws RuntimeErrorException {
+        boolean result = true;
+        if (tIndex >= tvars.size()) {
+
+            Set<Domain> sp = new HashSet<>();
+            mind.getTValues().mark();
+            mind.getFValues().mark();
+
+            FValue saveF = mind.getFValues().getRoot();
+
+            for (Tree master : set) { //query == null ? set : query.getTree()) {
+                for (Domain d : master.getSequence()) {
+                    if (d.isSystem()) {
+                        sp.add(d);
+                    }
+                    if(saveF == mind.getFValues().getRoot()) {
+                        for (Function f : d.getFunctions()) {
+                            if (!f.isCalculated() && (!f.isCalculable() || f.isSubstituted())) {
+                                f.clearResult();
+                                if (mind.getCalculator().calculate(f) > 0) {
+                                    mind.getFValues().add(f);
+                                    mind.getLog().add(LogMode.ANALIZER, "Shot function result: " + f.toString());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (Domain d : sp) {
+                if (d.isSystem()) {
+                    int res = d.execSystem();
+                    if (res == 0) { //(res == 0 && !d.isAntc()) || (res == 1 && d.isAntc())) {
+                        result = false;
+                    }
+                }
+            }
+            if (result) {
+                logCommit("COMMIT (F):", logging);
+                mind.getTValues().commit();
+                mind.getFValues().commit();
+            } else {
+                logCommit("RELEASE (F):", logging);
+                mind.getTValues().release();
+                mind.getFValues().release();
+            }
+
+            return result;
+
+        } else {
+            TVariable t = tvars.get(tIndex);
+            if (t.rewind()) {
+                mind.getSubstituted().add(t);
+                do {
+                    if (!calcFunctions(tvars, tIndex + 1, set, logging)) {
+                        result = false;
+                    }
+                } while (t.next());
+                mind.getSubstituted().remove(t);
+            }
+            if (!calcFunctions(tvars, tIndex + 1, set, logging)) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
 
     public void link(boolean logging) throws RuntimeErrorException {
         link(null, logging);
@@ -299,6 +401,7 @@ public class Linker {
         do {
             mind.getSubstituted().clear();
             mind.getCalculated().clear();
+
             saveT = mind.getTValues().getRoot();
             saveF = mind.getFValues().getRoot();
 
@@ -321,8 +424,11 @@ public class Linker {
 //                }
 //            }
 
+            if (updateDomains(new ArrayList<>(tset), 0, set, logging))
+                if (calcFunctions(new ArrayList<>(tset), 0, set, logging))
+                    updateResults(new ArrayList<>(tset), 0, set, logging);
 
-            recurseLink(new ArrayList<>(tset), 0, set, logging);
+
 //            for (Tree t: set) {
 //                for (Domain d : t.getSequence()) {
 //                    d.execSystem();
@@ -349,7 +455,9 @@ public class Linker {
 
 //            set = mind.getActualTrees();
 
-        } while (saveT != mind.getTValues().getRoot() || saveF != mind.getFValues().getRoot());
+        } while (saveT != mind.getTValues().getRoot()
+                || saveF != mind.getFValues().getRoot()
+                || mind.getCalculated().size() > 0);
 //        } while (mind.getSubstituted().size() > 0 || mind.getCalculated().size() > 0);
 
     }
@@ -379,6 +487,16 @@ public class Linker {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void logCommit(String title, boolean logging) {
+        if (logging && mind.getTValues().getRoot() != mind.getTValues().getMark()) {
+            mind.getLog().add(LogMode.ANALIZER, title);
+            for (TValue t = mind.getTValues().getRoot(); t != mind.getTValues().getMark(); t = t.getNext()) {
+                mind.getLog().add(LogMode.ANALIZER, "\t" + t.toString());
+            }
+            mind.getLog().add(LogMode.ANALIZER, "-------------------------------------------");
         }
     }
 }

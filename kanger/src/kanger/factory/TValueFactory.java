@@ -160,6 +160,15 @@ public class TValueFactory {
         }
     }
 
+    public TValue getMark() {
+        if (!stack.empty()) {
+            Object[] pop = stack.peek();
+            return (TValue) pop[0];
+        } else {
+            return null;
+        }
+    }
+
     public void remove(TVariable tv) {
         TValue t = get(tv);
         if (t != null) {

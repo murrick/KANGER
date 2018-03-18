@@ -25,7 +25,7 @@ public class Function {
     private final List<Argument> arguments = new ArrayList<>();     // Параметры
     private boolean busy = false;                       // Предотвращение бесконечной рекурсии
 
-    private long id = -1; 
+    private long id = -1;
     private Function next = null;
     private Domain owner = null;
     private int index = -1;
@@ -141,6 +141,7 @@ public class Function {
         if (f != null) {
             return f.getValue();
         } else {
+//            return null;
             return arguments.get(range).getValue();
         }
     }
@@ -160,9 +161,9 @@ public class Function {
             arguments.add(new Argument());
         }
         if ((r == null && arguments.get(range).getValue() != null)
-            || (r != null && arguments.get(range).getValue() == null)
-            || (r != null && arguments.get(range).getValue() != null
-            && r.getId() != arguments.get(range).getValue().getId())) {
+                || (r != null && arguments.get(range).getValue() == null)
+                || (r != null && arguments.get(range).getValue() != null
+                && r.getId() != arguments.get(range).getValue().getId())) {
             mind.getCalculated().add(this);
         }
         arguments.get(range).setValue(r);
@@ -174,11 +175,13 @@ public class Function {
 //            s.setSolves(owner, owner);
 //            return true;
 //        } else {
+
         if ((arguments.get(i).isEmpty() && r != null)
-            || !arguments.get(i).isEmpty() && r == null
-            || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
+                || !arguments.get(i).isEmpty() && r == null
+                || (!arguments.get(i).isEmpty() && r != null && arguments.get(i).getValue().getId() != r.getId())) {
             mind.getCalculated().add(this);
         }
+
         return arguments.get(i).setValue(r);
 //        }
     }
@@ -192,7 +195,6 @@ public class Function {
 //        }
 //        return true;
 //    }
-
 
 
     private String formatParam(Argument t) {
@@ -255,8 +257,8 @@ public class Function {
         }
         //Argument r = range < arguments.size() ? arguments.get(range) : null;
         return s + ((mind.getDebugLevel() & Enums.DEBUG_OPTION_VALUES) != 0
-            && (((isCalculable() && isCalculated()) || !isCalculable()))
-            && getResult() != null ? (" = " + getResult()) : "");
+                && (((isCalculable() && isCalculated()) || !isCalculable()))
+                && getResult() != null ? (" = " + getResult()) : "");
     }
 
     //    public void setResult(Term c) {
@@ -313,21 +315,22 @@ public class Function {
         return Tools.getTVariables(arguments, true);
     }
 
-	public boolean isCalculated() {
-        return mind.getFValues().get(this) != null /*|| mind.getCalculated().contains(this)*/;
+    public boolean isCalculated() {
+        FValue f = mind.getFValues().get(this);
+        return f != null && f.getValue() != null; //mind.getFValues().get(this) != null /*|| mind.getCalculated().contains(this)*/;
     }
 
-	public boolean isSubstituted() {
-		for (TVariable t: getTVariables()) {
-			if (!t.isSubstituted() || t.isEmpty()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    public boolean isSubstituted() {
+        for (TVariable t : getTVariables()) {
+            if (!t.isSubstituted() || /*!mind.getUsed().contains(t) ||*/ t.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	public boolean isCalculable() {
-		return Tools.getTVariables(arguments, true).size() > 0;
-	} 
+    public boolean isCalculable() {
+        return Tools.getTVariables(arguments, true).size() > 0;
+    }
 
 }

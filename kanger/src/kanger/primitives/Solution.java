@@ -172,7 +172,9 @@ public class Solution {
                 && ((Solution) o).isAntc() == isAntc()
                 && ((Solution) o).getParameters().size() == parameters.size()) {
             for (int i = 0; i < parameters.size(); ++i) {
-                if (parameters.get(i) != null && ((Solution) o).getParameters().get(i).getId() != parameters.get(i).getId()) {
+                if (parameters.get(i) != null
+                        && ((Solution) o).getParameters().get(i) != null
+                        && ((Solution) o).getParameters().get(i).getId() != parameters.get(i).getId()) {
                     return false;
                 }
                 return true;

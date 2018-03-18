@@ -39,6 +39,7 @@ public class Mind {
     private final LibraryStore library = new LibraryStore(this);
 
     private final Set<TVariable> substituted = new HashSet<>();
+    private final Set<TVariable> used = new HashSet<>();
     private final Set<Function> calculated = new HashSet<>();
 
     private final Calculator calculator = new Calculator(this);
@@ -588,6 +589,10 @@ public class Mind {
     }
 
     public Set<TVariable> getSubstituted() {
+        return substituted;
+    }
+
+    public Set<TVariable> getUsed() {
         return substituted;
     }
 
